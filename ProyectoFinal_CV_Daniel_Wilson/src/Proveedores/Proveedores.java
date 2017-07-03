@@ -45,8 +45,6 @@ public class Proveedores extends javax.swing.JDialog {
         jPanel3 = new javax.swing.JPanel();
         jButton_Nue_Prov = new javax.swing.JButton();
         jButton_Gua_Prov = new javax.swing.JButton();
-        jButton_Edi_Prov = new javax.swing.JButton();
-        jButton_Eli_Prov = new javax.swing.JButton();
         jButton_Can_Prov = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -144,10 +142,6 @@ public class Proveedores extends javax.swing.JDialog {
 
         jButton_Gua_Prov.setText("Guardar");
 
-        jButton_Edi_Prov.setText("Editar");
-
-        jButton_Eli_Prov.setText("Eliminar");
-
         jButton_Can_Prov.setText("Cancelar");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -156,15 +150,11 @@ public class Proveedores extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton_Nue_Prov, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton_Nue_Prov, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton_Gua_Prov, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(19, 19, 19)
-                .addComponent(jButton_Edi_Prov, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton_Eli_Prov, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton_Can_Prov, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton_Gua_Prov, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addGap(210, 210, 210)
+                .addComponent(jButton_Can_Prov, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
                 .addGap(9, 9, 9))
         );
         jPanel3Layout.setVerticalGroup(
@@ -174,10 +164,8 @@ public class Proveedores extends javax.swing.JDialog {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Nue_Prov)
                     .addComponent(jButton_Gua_Prov)
-                    .addComponent(jButton_Edi_Prov)
-                    .addComponent(jButton_Eli_Prov)
                     .addComponent(jButton_Can_Prov))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -262,8 +250,6 @@ public class Proveedores extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Can_Prov;
-    private javax.swing.JButton jButton_Edi_Prov;
-    private javax.swing.JButton jButton_Eli_Prov;
     private javax.swing.JButton jButton_Gua_Prov;
     private javax.swing.JButton jButton_Nue_Prov;
     private javax.swing.JLabel jLabel1;

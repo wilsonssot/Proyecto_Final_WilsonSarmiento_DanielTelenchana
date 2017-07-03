@@ -5,9 +5,10 @@
  */
 package Formularios;
 
-import BasesDatos.Clientes;
-import BasesDatos.Inventario;
-import BasesDatos.Usuarios;
+import ParaBDD.Clientes;
+import ParaBDD.Inventario;
+import ParaBDD.Usuarios;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -116,6 +117,11 @@ public class FramePrincipal extends javax.swing.JFrame {
         jMenu1.setText("Menu");
 
         jMenuItem1.setText("Salir");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem1);
 
         jMenuBar1.add(jMenu1);
@@ -162,24 +168,29 @@ public class FramePrincipal extends javax.swing.JFrame {
 
     private void btn_ClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ClientesActionPerformed
         // TODO add your handling code here:
-        new Clientes(this,true).setVisible(true);
-        
+        new Clientes(this, true).setVisible(true);
+
     }//GEN-LAST:event_btn_ClientesActionPerformed
 
     private void btn_VentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_VentasActionPerformed
         // TODO add your handling code here:
-        new Ventas(this,true).setVisible(true);
+        new Ventas(this, true).setVisible(true);
     }//GEN-LAST:event_btn_VentasActionPerformed
 
     private void btn_InventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_InventoryActionPerformed
         // TODO add your handling code here:
-        new Inventario(this,true).setVisible(true);
+        new Inventario(this, true).setVisible(true);
     }//GEN-LAST:event_btn_InventoryActionPerformed
 
     private void btn_AdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AdminActionPerformed
         // TODO add your handling code here:
-        new Usuarios(this,true).setVisible(true);
+        new Usuarios(this, true).setVisible(true);
     }//GEN-LAST:event_btn_AdminActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showInputDialog(this, "Vuelva a ingresar la contraseña", "Confirme Salida", JOptionPane.WARNING_MESSAGE);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
