@@ -49,6 +49,11 @@ public class Clientes extends javax.swing.JDialog {
         btnAgregarCliente.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_1.png"))); // NOI18N
         btnAgregarCliente.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnAgregarCliente.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAgregarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarClienteActionPerformed(evt);
+            }
+        });
 
         btnModificarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_2.png"))); // NOI18N
         btnModificarCliente.setText("MODIFICAR");
@@ -145,6 +150,10 @@ public class Clientes extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarClienteActionPerformed
 
     /**
      * @param args the command line arguments

@@ -19,6 +19,8 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
+    protected String Usario = "admin";
+    protected String Contraseña = "tutia";
     
     public Login() {
         initComponents();
@@ -29,7 +31,7 @@ public class Login extends javax.swing.JFrame {
     private void PonerImagenFondo() {
         // setIconImage(new ImageIcon(getClass().getResource("/imagenes/fondo_login.jpg")).getImage());
         ((JPanel)getContentPane()).setOpaque(false); 
-        ImageIcon uno=new ImageIcon(this.getClass().getResource("/imagenes/login.png"));
+        ImageIcon uno=new ImageIcon(this.getClass().getResource("/Imagenes/login.png"));
         JLabel fondo= new JLabel();
         fondo.setIcon(uno);
         getLayeredPane().add(fondo,JLayeredPane.FRAME_CONTENT_LAYER);
@@ -135,8 +137,7 @@ public class Login extends javax.swing.JFrame {
 
     private void btn_AceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AceptarActionPerformed
         // TODO add your handling code here:}
-        String Usario = "admin";
-        String Contraseña = "tutia";
+        
         String Pass = new String(txtPas_Password.getPassword());
         if(txt_User.getText().equals(Usario) && Pass.equals(Contraseña) ){
             FramePrincipal principal = new FramePrincipal();
