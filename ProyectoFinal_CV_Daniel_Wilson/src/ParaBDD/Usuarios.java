@@ -48,6 +48,11 @@ public class Usuarios extends javax.swing.JDialog {
         btnAgregarUsuario.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_1.png"))); // NOI18N
         btnAgregarUsuario.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnAgregarUsuario.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAgregarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarUsuarioActionPerformed(evt);
+            }
+        });
 
         btnModificarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_2.png"))); // NOI18N
         btnModificarUsuario.setText("MODIFICAR");
@@ -142,6 +147,10 @@ public class Usuarios extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAgregarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarUsuarioActionPerformed
 
     /**
      * @param args the command line arguments

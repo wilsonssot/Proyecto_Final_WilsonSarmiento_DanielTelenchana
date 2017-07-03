@@ -5,6 +5,8 @@
  */
 package ParaBDD;
 
+import Formularios.ClientesIngreso;
+
 /**
  *
  * @author Usuario
@@ -153,6 +155,7 @@ public class Clientes extends javax.swing.JDialog {
 
     private void btnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarClienteActionPerformed
         // TODO add your handling code here:
+        new ClientesIngreso(null,true).setVisible(true);
     }//GEN-LAST:event_btnAgregarClienteActionPerformed
 
     /**
