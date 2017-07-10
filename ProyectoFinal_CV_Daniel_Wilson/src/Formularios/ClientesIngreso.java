@@ -5,11 +5,27 @@
  */
 package Formularios;
 
+import ClasesSecundarias.Coneccion;
+import ClasesSecundarias.Metodos;
+import java.awt.event.KeyEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
 /**
  *
  * @author USER-12
  */
 public class ClientesIngreso extends javax.swing.JDialog {
+
+    Coneccion cn = null;
+    ResultSet rs = null;
+    Statement st = null;
+    String cedula, nombre, apellido, direccion, telefono;
+    ArrayList listaCedulas = new ArrayList();
 
     /**
      * Creates new form ClientesIngreso
@@ -17,6 +33,64 @@ public class ClientesIngreso extends javax.swing.JDialog {
     public ClientesIngreso(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+
+    }
+
+    public boolean existeCedula() throws SQLException {
+        cn.Conectar();
+        String usu = "";
+        String cedula = jTextFieldCedulaCli.getText();
+        String query = "select * from clientes where ced_cli = " + cedula + " ";
+        st = cn.getConexion().createStatement();
+        rs = st.executeQuery(query);
+        while (rs.next()) {
+            usu = rs.getString("CED_CLI");
+        }
+        if (cedula.equals(usu)) {
+            JOptionPane.showMessageDialog(null, "Cliente ya EXISTE");
+        } else {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean validarDatos() throws SQLException {
+        if (Metodos.verificadorCédula(jTextFieldCedulaCli.getText())) {
+            if (existeCedula()) {
+
+            }
+        }
+    }
+
+    public void limpiarDatos() {
+        jTextFieldCedulaCli.setText("");
+        jTextField_ApeCli.setText("");
+        jTextField_DirCli.setText("");
+        jTextField_NomCli.setText("");
+        jTextField_TelCli.setText("");
+    }
+    
+    public void setearVariables(){
+        cedula = jTextFieldCedulaCli.getText();
+        nombre = jTextField_NomCli.getText();
+        apellido = jTextField_ApeCli.getText();
+        direccion = jTextField_DirCli.getText();
+        telefono = jTextField_TelCli.getText();
+    }
+
+    public void ingresoClientesBase() throws SQLException {
+        if (validarDatos()) {
+            setearVariables();
+            try {
+                cn.Conectar();
+                String query = "INSERT INTO CLIENTES VALUES('"
+                        + cedula + "','"
+                        + nombre + "','"
+                        + apellido + "','"
+                        + direccion + "','"
+                        + telefono + "')";
+            }
+        }
     }
 
     /**
@@ -39,7 +113,7 @@ public class ClientesIngreso extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         jTextField_DirCli = new javax.swing.JTextField();
         jTextField_TelCli = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        jButton_Guardar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -52,11 +126,40 @@ public class ClientesIngreso extends javax.swing.JDialog {
 
         jLabel3.setText("Apellido:");
 
+        jTextField_NomCli.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_NomCliKeyTyped(evt);
+            }
+        });
+
+        jTextField_ApeCli.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_ApeCliKeyTyped(evt);
+            }
+        });
+
         jLabel5.setText("Telèfono:");
 
         jLabel6.setText("Direccion:");
 
-        jButton1.setText("Guardar");
+        jTextField_DirCli.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_DirCliKeyTyped(evt);
+            }
+        });
+
+        jTextField_TelCli.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_TelCliKeyTyped(evt);
+            }
+        });
+
+        jButton_Guardar.setText("Guardar");
+        jButton_Guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_GuardarActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Cancelar");
 
@@ -86,7 +189,7 @@ public class ClientesIngreso extends javax.swing.JDialog {
                             .addComponent(jTextField_DirCli, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
                             .addComponent(jTextField_TelCli)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(jButton_Guardar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -113,7 +216,7 @@ public class ClientesIngreso extends javax.swing.JDialog {
                     .addComponent(jTextField_TelCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(jButton_Guardar)
                     .addComponent(jButton2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -139,6 +242,29 @@ public class ClientesIngreso extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton_GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GuardarActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jButton_GuardarActionPerformed
+
+    private void jTextField_NomCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_NomCliKeyTyped
+        Metodos.validarLetras(evt, jTextField_NomCli);
+    }//GEN-LAST:event_jTextField_NomCliKeyTyped
+
+    private void jTextField_ApeCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_ApeCliKeyTyped
+        // TODO add your handling code here:
+        Metodos.validarLetras(evt, jTextField_ApeCli);
+    }//GEN-LAST:event_jTextField_ApeCliKeyTyped
+
+    private void jTextField_DirCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_DirCliKeyTyped
+        // TODO add your handling code here:
+        Metodos.validarLetras(evt, jTextField_DirCli);
+    }//GEN-LAST:event_jTextField_DirCliKeyTyped
+
+    private void jTextField_TelCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_TelCliKeyTyped
+        Metodos.validarTelefono(evt, jTextField_TelCli);
+    }//GEN-LAST:event_jTextField_TelCliKeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -153,16 +279,24 @@ public class ClientesIngreso extends javax.swing.JDialog {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ClientesIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClientesIngreso.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ClientesIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClientesIngreso.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ClientesIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClientesIngreso.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ClientesIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClientesIngreso.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -182,8 +316,8 @@ public class ClientesIngreso extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton_Guardar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
