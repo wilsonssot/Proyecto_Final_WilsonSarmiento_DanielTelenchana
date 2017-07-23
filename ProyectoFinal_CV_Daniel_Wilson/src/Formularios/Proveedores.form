@@ -140,12 +140,16 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_Gua_ProvActionPerformed"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jButton_Gua_ProvKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton_Can_Prov">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cancelar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_Can_ProvActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
@@ -153,6 +157,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField_Cod_Prov">
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_Cod_ProvKeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
@@ -160,6 +167,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField_Nom_Prov">
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_Nom_ProvKeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
@@ -167,6 +177,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField_Dir_Prov">
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_Dir_ProvKeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
@@ -174,6 +187,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextField_Tel_Prov">
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_Tel_ProvKeyTyped"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
