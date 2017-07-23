@@ -5,22 +5,31 @@
  */
 package Formularios;
 
+import ClasesSecundarias.Calzado;
 import ClasesSecundarias.Coneccion;
 import ClasesSecundarias.Metodos;
+import java.awt.List;
+import java.sql.Array;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Vector;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Usuario
  */
 public class Ventas extends javax.swing.JDialog {
+
+    DefaultTableModel modeloTabla = new DefaultTableModel();
 
     Coneccion cn = new Coneccion();
     PreparedStatement pst = null;
@@ -37,6 +46,16 @@ public class Ventas extends javax.swing.JDialog {
         deshabilitarComponentes();
         deshabilitarCancelar();
         llenarComboBox();
+        establecerModeloTabla();
+    }
+
+    public void establecerModeloTabla() {
+        jTable_CarritoCompra.setModel(modeloTabla);
+        modeloTabla.addColumn("Código");
+        modeloTabla.addColumn("Descripción");
+        modeloTabla.addColumn("Cantidad");
+        modeloTabla.addColumn("Valor/U");
+        modeloTabla.addColumn("Valor/T");
     }
 
     public void CargarDatosCedula() {
@@ -60,6 +79,8 @@ public class Ventas extends javax.swing.JDialog {
                 }
 
             }
+            st.close();
+            rs.close();
             if (cont == 0) {
                 JOptionPane.showMessageDialog(null, "Cliente no existe", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
@@ -68,31 +89,55 @@ public class Ventas extends javax.swing.JDialog {
         }
     }
 
-    public void llenarComboBox() {
+    public Vector<Calzado> datosParaComboBox() {
+        Vector<Calzado> zapatos = new Vector<Calzado>();
+        Calzado cal;
+        float precio = 0, cont = 0;
+        jComboBox_Marcas.removeAllItems();
         try {
+
             cn.Conectar();
             st = cn.getConexion().createStatement();
-            String sql = "select mar_pro from producto_calzado";
+            String sql = "select * from producto_calzado";
             rs = st.executeQuery(sql);
             while (rs.next()) {
-                rs.getString("nom_pro");
-                jComboBox_Marcas.addItem(rs.getString("nom_pro"));
+                cal = new Calzado();
+                cal.setId(rs.getInt(1));
+                cal.setNombre(rs.getString(2));
+                cal.setMarca(rs.getString(3));
+                cal.setModelo(rs.getString(4));
+                cal.setTalla(rs.getString(5));
+                cal.setPrecio(rs.getFloat(6));
+                zapatos.add(cal);
             }
+            st.close();
+            rs.close();
+
         } catch (SQLException ex) {
 
         }
+        return zapatos;
 
+    }
+
+    public void llenarComboBox() {
+        DefaultComboBoxModel modeloProductos = new DefaultComboBoxModel();
+        Vector<Calzado> cal = datosParaComboBox();
+        for (int i = 0; i < cal.size(); i++) {
+            modeloProductos.addElement(cal.get(i).toString());
+        }
+        jComboBox_Marcas.setModel(modeloProductos);
     }
 
     public void habilitarComponentes() {
         jComboBox_Marcas.setEnabled(true);
-        jTextField_Talla.setEnabled(true);
-        jTextField_Modelo.setEnabled(true);
-        jTextField_TipoZapato.setEnabled(true);
+        //jTextField_Talla.setEnabled(true);
+        //jTextField_Modelo.setEnabled(true);
+        //jTextField_TipoZapato.setEnabled(true);
         jTextField_Cantidad.setEnabled(true);
         jTextField_Total.setEnabled(true);
         jButton_Añadir.setEnabled(true);
-        jTable_CarritoCompra.setEnabled(true);
+        //jTable_CarritoCompra.setEnabled(true);
         jButtonFacturar.setEnabled(true);
         jButtonLimpiarDatos.setEnabled(true);
 
@@ -100,10 +145,9 @@ public class Ventas extends javax.swing.JDialog {
 
     public void deshabilitarComponentes() {
         jComboBox_Marcas.setEnabled(false);
-        jTextField_Talla.setEnabled(false);
-        jTextField_Modelo.setEnabled(false);
-        jTextField_TipoZapato.setEnabled(false);
-
+        //jTextField_Talla.setEnabled(false);
+        //jTextField_Modelo.setEnabled(false);
+        //jTextField_TipoZapato.setEnabled(false);
         jTextField_Cantidad.setEnabled(false);
         jTextField_Total.setEnabled(false);
         jButton_Añadir.setEnabled(false);
@@ -185,16 +229,12 @@ public class Ventas extends javax.swing.JDialog {
         jButton_Limpiar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jComboBox_Marcas = new javax.swing.JComboBox<>();
-        jLabel8 = new javax.swing.JLabel();
         jButton_Añadir = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jTextField_Cantidad = new javax.swing.JTextField();
-        jTextField_Modelo = new javax.swing.JTextField();
-        jTextField_Talla = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
-        jTextField_TipoZapato = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jTextField_Precio = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_CarritoCompra = new javax.swing.JTable();
@@ -331,12 +371,8 @@ public class Ventas extends javax.swing.JDialog {
 
         jLabel6.setText("Marca:");
 
-        jLabel7.setText("Modelo:");
-
         jComboBox_Marcas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox_Marcas.setEnabled(false);
-
-        jLabel8.setText("Talla:");
 
         jButton_Añadir.setText("Añadir >>");
         jButton_Añadir.setEnabled(false);
@@ -344,14 +380,15 @@ public class Ventas extends javax.swing.JDialog {
         jLabel9.setText("Cantidad:");
 
         jTextField_Cantidad.setEnabled(false);
+        jTextField_Cantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_CantidadKeyTyped(evt);
+            }
+        });
 
-        jTextField_Modelo.setEditable(false);
+        jLabel7.setText("Precio:");
 
-        jTextField_Talla.setEditable(false);
-
-        jLabel11.setText("Tipo:");
-
-        jTextField_TipoZapato.setEditable(false);
+        jTextField_Precio.setEditable(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -362,28 +399,23 @@ public class Ventas extends javax.swing.JDialog {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox_Marcas, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
+                            .addComponent(jLabel6)
+                            .addComponent(jComboBox_Marcas, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11)
-                            .addComponent(jTextField_TipoZapato, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jTextField_Modelo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(jTextField_Talla, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(41, 41, 41))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jTextField_Precio)
+                                .addGap(18, 18, 18)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jTextField_Cantidad)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(227, 227, 227)
                         .addComponent(jButton_Añadir)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -391,17 +423,13 @@ public class Ventas extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8)
                     .addComponent(jLabel9)
-                    .addComponent(jLabel11))
+                    .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox_Marcas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField_Cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_Modelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_Talla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_TipoZapato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField_Precio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton_Añadir)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -541,7 +569,7 @@ public class Ventas extends javax.swing.JDialog {
 
     private void jButton_CargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CargarActionPerformed
         // TODO add your handling code here:
-        
+
         CargarDatosCedula();
     }//GEN-LAST:event_jButton_CargarActionPerformed
 
@@ -551,6 +579,11 @@ public class Ventas extends javax.swing.JDialog {
         limpiarValores();
         deshabilitarCancelar();
     }//GEN-LAST:event_jButton_LimpiarActionPerformed
+
+    private void jTextField_CantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_CantidadKeyTyped
+        // TODO add your handling code here:
+        Metodos.validarTelefono(evt, jTextField_Cantidad);
+    }//GEN-LAST:event_jTextField_CantidadKeyTyped
 
     /**
      * @param args the command line arguments
@@ -603,14 +636,12 @@ public class Ventas extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> jComboBox_Marcas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -622,11 +653,9 @@ public class Ventas extends javax.swing.JDialog {
     private javax.swing.JTextField jTextField_Cantidad;
     private javax.swing.JTextField jTextField_CedCli;
     private javax.swing.JTextField jTextField_DirCli;
-    private javax.swing.JTextField jTextField_Modelo;
     private javax.swing.JTextField jTextField_NomCli;
-    private javax.swing.JTextField jTextField_Talla;
+    private javax.swing.JTextField jTextField_Precio;
     private javax.swing.JTextField jTextField_TelCli;
-    private javax.swing.JTextField jTextField_TipoZapato;
     private javax.swing.JTextField jTextField_Total;
     // End of variables declaration//GEN-END:variables
 }

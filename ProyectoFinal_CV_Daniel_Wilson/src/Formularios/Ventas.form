@@ -252,25 +252,20 @@
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jComboBox_Marcas" alignment="0" min="-2" pref="85" max="-2" attributes="0"/>
-                                  <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jComboBox_Marcas" min="-2" pref="401" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField_TipoZapato" min="-2" pref="81" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jTextField_Precio" max="32767" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField_Modelo" min="-2" pref="200" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField_Talla" min="-2" pref="56" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="jLabel9" max="32767" attributes="0"/>
                                   <Component id="jTextField_Cantidad" max="32767" attributes="0"/>
@@ -281,7 +276,7 @@
                               <Component id="jButton_Añadir" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="11" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -291,18 +286,14 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jComboBox_Marcas" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextField_Cantidad" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField_Modelo" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField_Talla" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField_TipoZapato" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jTextField_Precio" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jButton_Añadir" min="-2" max="-2" attributes="0"/>
@@ -315,11 +306,6 @@
             <Component class="javax.swing.JLabel" name="jLabel6">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Marca:"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="jLabel7">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Modelo:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JComboBox" name="jComboBox_Marcas">
@@ -338,11 +324,6 @@
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel8">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Talla:"/>
-              </Properties>
-            </Component>
             <Component class="javax.swing.JButton" name="jButton_A&#xf1;adir">
               <Properties>
                 <Property name="text" type="java.lang.String" value="A&#xf1;adir &gt;&gt;"/>
@@ -358,23 +339,16 @@
               <Properties>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_CantidadKeyTyped"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField_Modelo">
+            <Component class="javax.swing.JLabel" name="jLabel7">
               <Properties>
-                <Property name="editable" type="boolean" value="false"/>
+                <Property name="text" type="java.lang.String" value="Precio:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField_Talla">
-              <Properties>
-                <Property name="editable" type="boolean" value="false"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="jLabel11">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Tipo:"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="jTextField_TipoZapato">
+            <Component class="javax.swing.JTextField" name="jTextField_Precio">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
               </Properties>
