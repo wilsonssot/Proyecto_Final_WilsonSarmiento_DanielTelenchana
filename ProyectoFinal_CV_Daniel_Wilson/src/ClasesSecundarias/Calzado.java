@@ -13,7 +13,15 @@ public class Calzado {
 
     private String nombre, modelo, marca, talla;
     private float precio;
-    private int id;
+    private int id, existencia;
+
+    public int getExistencia() {
+        return existencia;
+    }
+
+    public void setExistencia(int existencia) {
+        this.existencia = existencia;
+    }
 
     public int getId() {
         return id;

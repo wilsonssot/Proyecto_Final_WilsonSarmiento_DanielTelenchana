@@ -380,7 +380,7 @@
                           <Group type="102" attributes="0">
                               <Component id="jButtonFacturar" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jButtonLimpiarDatos" min="-2" max="-2" attributes="0"/>
+                              <Component id="jButton_Cancelar" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -400,7 +400,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButtonFacturar" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButtonLimpiarDatos" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButton_Cancelar" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextField_Total" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
@@ -427,7 +427,6 @@
                         <Column editable="true" title="V/T" type="java.lang.Float"/>
                       </Table>
                     </Property>
-                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -442,12 +441,18 @@
                 <Property name="text" type="java.lang.String" value="Facturar"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonFacturarActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButtonLimpiarDatos">
+            <Component class="javax.swing.JButton" name="jButton_Cancelar">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Limpiar Datos"/>
+                <Property name="text" type="java.lang.String" value="Cancelar"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_CancelarActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField_Total">
               <Properties>

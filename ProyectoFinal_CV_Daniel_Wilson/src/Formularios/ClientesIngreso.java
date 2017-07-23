@@ -161,6 +161,8 @@ public class ClientesIngreso extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Vuelva a ingresar la cédula", "Cédula Errónea", JOptionPane.ERROR_MESSAGE);
             jTextFieldCedulaCli.setText("");
         }
+        pst.close();
+        
     }
 
     /**
