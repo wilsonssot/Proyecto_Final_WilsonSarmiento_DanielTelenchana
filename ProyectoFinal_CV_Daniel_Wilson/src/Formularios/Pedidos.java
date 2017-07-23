@@ -5,11 +5,23 @@
  */
 package Formularios;
 
+/*import ClasesSecundarias.Coneccion;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;*/
+
 /**
  *
  * @author Usuario
  */
 public class Pedidos extends javax.swing.JDialog {
+    
+   /* Coneccion cn = new Coneccion();
+    ResultSet rs = null;
+    PreparedStatement pst = null;
+    Statement st = null;
+    String codigo, nombre, telefono, direccion;*/
+    
 
     /**
      * Creates new form Ventas

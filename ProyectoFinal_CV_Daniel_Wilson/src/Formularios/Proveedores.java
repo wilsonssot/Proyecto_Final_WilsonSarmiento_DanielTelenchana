@@ -5,6 +5,16 @@
  */
 package Formularios;
 
+import ClasesSecundarias.Coneccion;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author PC
@@ -14,9 +24,87 @@ public class Proveedores extends javax.swing.JDialog {
     /**
      * Creates new form Proveedores
      */
+    Coneccion cn = new Coneccion();
+    ResultSet rs = null;
+    PreparedStatement pst = null;
+    Statement st = null;
+    String codigo, nombre, direccion, telefono;
+    ArrayList ListadoCodigosProveedores = new ArrayList();
+
     public Proveedores(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+    }
+
+    public boolean existeCodigoProveedor() throws SQLException {
+        cn.Conectar();
+        String usu = "";
+        String codigo = jTextField_Cod_Prov.getText();
+        String query = "Select * proveedores where ced_cli" + codigo + "";
+        st = cn.getConexion().createStatement();
+        rs = st.executeQuery(query);
+        while (rs.next()) {
+            usu = rs.getString("COD_PROV");
+        }
+        if (codigo.equalsIgnoreCase(usu)) {
+            JOptionPane.showMessageDialog(null, "Proveedor ya EXITE");
+            return false;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean validarDatos() {
+        if (jTextField_Cod_Prov.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese el código", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        if (jTextField_Nom_Prov.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese el nombre", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (jTextField_Dir_Prov.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese la direccion", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (jTextField_Tel_Prov.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese el número de teléfono ", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
+    public void limpiarDatos() {
+        jTextField_Cod_Prov.setText("");
+        jTextField_Nom_Prov.setText("");
+        jTextField_Dir_Prov.setText("");
+        jTextField_Tel_Prov.setText("");
+    }
+
+    public void setearVariables() {
+        codigo = jTextField_Cod_Prov.getText();
+        nombre = jTextField_Nom_Prov.getText();
+        direccion = jTextField_Dir_Prov.getText();
+        telefono = jTextField_Tel_Prov.getText();
+    }
+
+    public void ingresoProveedoresBase() throws SQLException {
+        if (validarDatos()) {
+            setearVariables();
+            cn.Conectar();
+            pst = cn.getConexion().prepareStatement("insert into proveedores (COD_PROV,NOM_PROV,DIR_PROV, TEL_PROV) values(?,?.?.?)");
+            pst.setString(1, codigo);
+            pst.setString(2, nombre);
+            pst.setString(3, direccion);
+            pst.setString(4, telefono);
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Datos ingresados correctamente");
+            limpiarDatos();
+        } else {
+            JOptionPane.showMessageDialog(null, "");
+        }
+
     }
 
     /**
@@ -60,6 +148,11 @@ public class Proveedores extends javax.swing.JDialog {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("PROVEEDORES"));
 
         jButton_Gua_Prov.setText("Guardar");
+        jButton_Gua_Prov.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_Gua_ProvActionPerformed(evt);
+            }
+        });
 
         jButton_Can_Prov.setText("Cancelar");
 
@@ -140,6 +233,22 @@ public class Proveedores extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton_Gua_ProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Gua_ProvActionPerformed
+
+        try {
+
+            if (validarDatos()) {
+                ingresoProveedoresBase();
+            } else {
+
+            }
+
+        } catch (SQLException ex) {
+            //Logger.getLogger(Proveedores.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jButton_Gua_ProvActionPerformed
 
     /**
      * @param args the command line arguments
