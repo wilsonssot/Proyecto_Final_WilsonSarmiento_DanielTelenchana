@@ -126,7 +126,7 @@ public class Proveedores extends javax.swing.JDialog {
         if (validarDatos()) {
             setearVariables();
             cn.Conectar();
-            pst = cn.getConexion().prepareStatement("insert into proveedores (COD_PROV,NOM_PROV,DIR_PROV, TEL_PROV) values(?,?.?.?)");
+            pst = cn.getConexion().prepareStatement("insert into proveedores (COD_PROV,NOM_PROV,DIR_PROV, TEL_PROV) values(?,?,?,?)");
             pst.setString(1, codigo);
             pst.setString(2, nombre);
             pst.setString(3, direccion);
