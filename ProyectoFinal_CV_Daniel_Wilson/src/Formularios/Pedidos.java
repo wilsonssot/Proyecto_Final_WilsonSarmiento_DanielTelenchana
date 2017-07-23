@@ -70,6 +70,10 @@ public class Pedidos extends javax.swing.JDialog {
 
     }
 
+    public void mostrarProveedores() {
+        cn.Conectar();
+    }
+
     public boolean ValidarControlesIngresoPedidos() {
         if ("".equals(jTextField_Cod_Prov.getText())) {
             JOptionPane.showMessageDialog(this, "Por favor ingrese el código", "ERROR", HEIGHT);

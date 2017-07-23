@@ -73,7 +73,7 @@ public class Proveedores extends javax.swing.JDialog {
         cn.Conectar();
         String usu = "";
         String codigo = jTextField_Cod_Prov.getText();
-        String query = "Select * proveedores where ced_cli" + codigo + "";
+        String query = "Select * from proveedores where ced_cli" + codigo + "";
         st = cn.getConexion().createStatement();
         rs = st.executeQuery(query);
         while (rs.next()) {
