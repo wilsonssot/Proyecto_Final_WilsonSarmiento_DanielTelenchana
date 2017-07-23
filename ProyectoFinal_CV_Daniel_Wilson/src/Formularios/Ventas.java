@@ -9,6 +9,7 @@ import ClasesSecundarias.Calzado;
 import ClasesSecundarias.Coneccion;
 import ClasesSecundarias.Metodos;
 import java.awt.List;
+import java.awt.event.ItemEvent;
 import java.sql.Array;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
@@ -121,11 +122,12 @@ public class Ventas extends javax.swing.JDialog {
     }
 
     public void llenarComboBox() {
-        DefaultComboBoxModel modeloProductos = new DefaultComboBoxModel();
+
         Vector<Calzado> cal = datosParaComboBox();
-        for (int i = 0; i < cal.size(); i++) {
-            modeloProductos.addElement(cal.get(i).toString());
-        }
+        DefaultComboBoxModel modeloProductos = new DefaultComboBoxModel(cal);
+//        for (int i = 0; i < cal.size(); i++) {
+//            modeloProductos.addElement(cal.get(i).toString());
+//        }
         jComboBox_Marcas.setModel(modeloProductos);
     }
 
@@ -373,9 +375,19 @@ public class Ventas extends javax.swing.JDialog {
 
         jComboBox_Marcas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox_Marcas.setEnabled(false);
+        jComboBox_Marcas.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox_MarcasItemStateChanged(evt);
+            }
+        });
 
         jButton_Añadir.setText("Añadir >>");
         jButton_Añadir.setEnabled(false);
+        jButton_Añadir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_AñadirActionPerformed(evt);
+            }
+        });
 
         jLabel9.setText("Cantidad:");
 
@@ -584,6 +596,19 @@ public class Ventas extends javax.swing.JDialog {
         // TODO add your handling code here:
         Metodos.validarTelefono(evt, jTextField_Cantidad);
     }//GEN-LAST:event_jTextField_CantidadKeyTyped
+
+    private void jComboBox_MarcasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_MarcasItemStateChanged
+        // TODO add your handling code here:
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            Calzado zapato = (Calzado) jComboBox_Marcas.getSelectedItem();
+            jTextField_Precio.setText(String.valueOf(zapato.getPrecio()));
+        }
+    }//GEN-LAST:event_jComboBox_MarcasItemStateChanged
+
+    private void jButton_AñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AñadirActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jButton_AñadirActionPerformed
 
     /**
      * @param args the command line arguments
