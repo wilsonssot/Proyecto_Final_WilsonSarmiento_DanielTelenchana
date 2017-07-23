@@ -8,10 +8,13 @@ package Formularios;
 import ClasesSecundarias.Coneccion;
 import ClasesSecundarias.Metodos;
 import java.awt.event.KeyEvent;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -21,8 +24,9 @@ import javax.swing.JTextField;
  */
 public class ClientesIngreso extends javax.swing.JDialog {
 
-    Coneccion cn = null;
+    Coneccion cn = new Coneccion();
     ResultSet rs = null;
+    PreparedStatement pst = null;
     Statement st = null;
     String cedula, nombre, apellido, direccion, telefono;
     ArrayList listaCedulas = new ArrayList();
@@ -48,18 +52,42 @@ public class ClientesIngreso extends javax.swing.JDialog {
         }
         if (cedula.equals(usu)) {
             JOptionPane.showMessageDialog(null, "Cliente ya EXISTE");
+            return false;
         } else {
             return true;
         }
-        return false;
+
     }
 
     public boolean validarDatos() throws SQLException {
-        if (Metodos.verificadorCédula(jTextFieldCedulaCli.getText())) {
-            if (existeCedula()) {
-
-            }
+        if (!Metodos.verificadorCédula(jTextFieldCedulaCli.getText())) {
+            JOptionPane.showMessageDialog(null, "Cédula Incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
+
+        if (jTextField_NomCli.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese el nombre", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (jTextField_ApeCli.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese el apellido", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (jTextField_DirCli.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese la dirección", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (jTextField_TelCli.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese número celular", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (existeCedula()) {
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
     public void limpiarDatos() {
@@ -69,8 +97,8 @@ public class ClientesIngreso extends javax.swing.JDialog {
         jTextField_NomCli.setText("");
         jTextField_TelCli.setText("");
     }
-    
-    public void setearVariables(){
+
+    public void setearVariables() {
         cedula = jTextFieldCedulaCli.getText();
         nombre = jTextField_NomCli.getText();
         apellido = jTextField_ApeCli.getText();
@@ -81,15 +109,19 @@ public class ClientesIngreso extends javax.swing.JDialog {
     public void ingresoClientesBase() throws SQLException {
         if (validarDatos()) {
             setearVariables();
-            try {
-                cn.Conectar();
-                String query = "INSERT INTO CLIENTES VALUES('"
-                        + cedula + "','"
-                        + nombre + "','"
-                        + apellido + "','"
-                        + direccion + "','"
-                        + telefono + "')";
-            }
+            cn.Conectar();
+            pst = cn.getConexion().prepareStatement("insert into clientes(CED_CLI,NOM_CLI,APE_CLI,DIR_CLI,TEL_CLI) values (?,?,?,?,?)");
+            pst.setString(1, cedula);
+            pst.setString(2, nombre);
+            pst.setString(3, apellido);
+            pst.setString(4, direccion);
+            pst.setString(5, telefono);
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Datos ingresados correctamente");
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Vuelva a ingresar la cédula", "Cédula Errónea", JOptionPane.ERROR_MESSAGE);
+            jTextFieldCedulaCli.setText("");
         }
     }
 
@@ -125,6 +157,12 @@ public class ClientesIngreso extends javax.swing.JDialog {
         jLabel2.setText("Nombre:");
 
         jLabel3.setText("Apellido:");
+
+        jTextFieldCedulaCli.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldCedulaCliKeyTyped(evt);
+            }
+        });
 
         jTextField_NomCli.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -162,6 +200,11 @@ public class ClientesIngreso extends javax.swing.JDialog {
         });
 
         jButton2.setText("Cancelar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -243,7 +286,17 @@ public class ClientesIngreso extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GuardarActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            if (validarDatos()) {
+                ingresoClientesBase();
+            } else {
+
+            }
+        } catch (SQLException ex) {
+
+            //Logger.getLogger(ClientesIngreso.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }//GEN-LAST:event_jButton_GuardarActionPerformed
 
@@ -264,6 +317,16 @@ public class ClientesIngreso extends javax.swing.JDialog {
     private void jTextField_TelCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_TelCliKeyTyped
         Metodos.validarTelefono(evt, jTextField_TelCli);
     }//GEN-LAST:event_jTextField_TelCliKeyTyped
+
+    private void jTextFieldCedulaCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldCedulaCliKeyTyped
+        // TODO add your handling code here:
+        Metodos.validarTelefono(evt, jTextFieldCedulaCli);
+    }//GEN-LAST:event_jTextFieldCedulaCliKeyTyped
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        limpiarDatos();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
