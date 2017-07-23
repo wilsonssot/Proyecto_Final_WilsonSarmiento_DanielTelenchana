@@ -5,12 +5,14 @@
  */
 package ClasesSecundarias;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+
 /**
  *
  * @author USER-11
  */
-import java.sql.Connection;
-import java.sql.DriverManager;
+
 
 /**
  *
