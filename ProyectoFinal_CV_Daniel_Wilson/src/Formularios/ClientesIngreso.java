@@ -37,7 +37,44 @@ public class ClientesIngreso extends javax.swing.JDialog {
     public ClientesIngreso(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        deshabilitarCancelar();
 
+    }
+
+    public void deshabilitarCancelar() {
+        boolean res;
+
+        if (jTextField_NomCli.getText().equals("")) {
+            res = true;
+        } else {
+            res = false;
+        }
+        if (jTextField_ApeCli.getText().equals("")) {
+            res = true;
+        } else {
+            res = false;
+        }
+        if (jTextField_DirCli.getText().equals("")) {
+            res = true;
+        } else {
+            res = false;
+        }
+        if (jTextField_TelCli.getText().equals("")) {
+            res = true;
+        } else {
+            res = false;
+        }
+        if (jTextFieldCedulaCli.getText().equals("")) {
+            res = true;
+        } else {
+            res = false;
+        }
+
+        if (res) {
+            jButtonCancelar.setEnabled(false);
+        } else {
+            jButtonCancelar.setEnabled(true);
+        }
     }
 
     public boolean existeCedula() throws SQLException {
@@ -84,7 +121,7 @@ public class ClientesIngreso extends javax.swing.JDialog {
 
         if (existeCedula()) {
             return true;
-        }else{
+        } else {
             return false;
         }
 
@@ -118,7 +155,8 @@ public class ClientesIngreso extends javax.swing.JDialog {
             pst.setString(5, telefono);
             pst.executeUpdate();
             JOptionPane.showMessageDialog(null, "Datos ingresados correctamente");
-
+            limpiarDatos();
+            deshabilitarCancelar();
         } else {
             JOptionPane.showMessageDialog(null, "Vuelva a ingresar la cédula", "Cédula Errónea", JOptionPane.ERROR_MESSAGE);
             jTextFieldCedulaCli.setText("");
@@ -146,7 +184,7 @@ public class ClientesIngreso extends javax.swing.JDialog {
         jTextField_DirCli = new javax.swing.JTextField();
         jTextField_TelCli = new javax.swing.JTextField();
         jButton_Guardar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButtonCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -199,10 +237,10 @@ public class ClientesIngreso extends javax.swing.JDialog {
             }
         });
 
-        jButton2.setText("Cancelar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonCancelar.setText("Cancelar");
+        jButtonCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonCancelarActionPerformed(evt);
             }
         });
 
@@ -234,7 +272,7 @@ public class ClientesIngreso extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton_Guardar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(jButtonCancelar)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -260,7 +298,7 @@ public class ClientesIngreso extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Guardar)
-                    .addComponent(jButton2))
+                    .addComponent(jButtonCancelar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -301,32 +339,36 @@ public class ClientesIngreso extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton_GuardarActionPerformed
 
     private void jTextField_NomCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_NomCliKeyTyped
+        deshabilitarCancelar();
         Metodos.validarLetras(evt, jTextField_NomCli);
     }//GEN-LAST:event_jTextField_NomCliKeyTyped
 
     private void jTextField_ApeCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_ApeCliKeyTyped
-        // TODO add your handling code here:
+        deshabilitarCancelar();
         Metodos.validarLetras(evt, jTextField_ApeCli);
     }//GEN-LAST:event_jTextField_ApeCliKeyTyped
 
     private void jTextField_DirCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_DirCliKeyTyped
-        // TODO add your handling code here:
+        deshabilitarCancelar();
         Metodos.validarLetras(evt, jTextField_DirCli);
     }//GEN-LAST:event_jTextField_DirCliKeyTyped
 
     private void jTextField_TelCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_TelCliKeyTyped
+        deshabilitarCancelar();
         Metodos.validarTelefono(evt, jTextField_TelCli);
     }//GEN-LAST:event_jTextField_TelCliKeyTyped
 
     private void jTextFieldCedulaCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldCedulaCliKeyTyped
         // TODO add your handling code here:
+        deshabilitarCancelar();
         Metodos.validarTelefono(evt, jTextFieldCedulaCli);
     }//GEN-LAST:event_jTextFieldCedulaCliKeyTyped
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         // TODO add your handling code here:
         limpiarDatos();
-    }//GEN-LAST:event_jButton2ActionPerformed
+        deshabilitarCancelar();
+    }//GEN-LAST:event_jButtonCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -379,7 +421,7 @@ public class ClientesIngreso extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButton_Guardar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
