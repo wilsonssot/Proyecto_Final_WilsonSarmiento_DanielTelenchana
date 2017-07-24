@@ -70,11 +70,12 @@ public class ClientesIngreso extends javax.swing.JDialog {
             res = false;
         }
 
-        if (res) {
-            jButtonCancelar.setEnabled(false);
-        } else {
-            jButtonCancelar.setEnabled(true);
-        }
+//        if (res) {
+//            jButtonCancelar.setEnabled(false);
+//        } else {
+//            jButtonCancelar.setEnabled(true);
+//        }
+        jButtonCancelar.setEnabled(!res);
     }
 
     public boolean existeCedula() throws SQLException {
