@@ -11,6 +11,28 @@ package ClasesSecundarias;
  */
 public class Usuario {
 
+    /**
+     * @return the conectado
+     */
+    private String cedula;
+    private String nombre;
+    private String apellido;
+    private String direccion;
+    private String telefono;
+    private double sueldo;
+    private String contraseña;
+    private boolean conectado;
+    public boolean isConectado() {
+        return conectado;
+    }
+
+    /**
+     * @param conectado the conectado to set
+     */
+    public void setConectado(boolean conectado) {
+        this.conectado = conectado;
+    }
+
     public String getContraseña() {
         return contraseña;
     }
@@ -19,13 +41,7 @@ public class Usuario {
         this.contraseña = contraseña;
     }
 
-    private String cedula;
-    private String nombre;
-    private String apellido;
-    private String direccion;
-    private String telefono;
-    private double sueldo;
-    private String contraseña;
+    
 
     public String getCedula() {
         return cedula;

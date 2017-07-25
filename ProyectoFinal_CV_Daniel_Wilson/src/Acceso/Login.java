@@ -180,6 +180,7 @@ public class Login extends javax.swing.JFrame {
         for (int i = 0; i < usuarios.size(); i++) {
             user = usuarios.get(i);
             if (txt_User.getText().equals(user.getCedula()) && Pass.equals(user.getContraseña())) {
+                usuarios.get(i).setConectado(true);
                 FramePrincipal principal = new FramePrincipal();
                 principal.setVisible(true);
                 dispose();
