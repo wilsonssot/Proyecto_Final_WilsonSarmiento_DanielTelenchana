@@ -163,6 +163,7 @@ public class Ventas extends javax.swing.JDialog {
         //jTable_CarritoCompra.setEnabled(false);
         jButtonFacturar.setEnabled(false);
         jButton_Cancelar.setEnabled(false);
+        jButton_Limpiar.setEnabled(false);
 
     }
 
@@ -691,7 +692,6 @@ public class Ventas extends javax.swing.JDialog {
                 cn.Conectar();
                 String sql = "insert into ventas (NUM_VEN,CED_EMP_V,CED_CLI_V,FEC_VEN,TOTAL) values(?,?,?,?,?)";
                 pst = cn.getConexion().prepareStatement(sql);
-                pst.setString(1, "seq2.NEXTVAL");
                 pst.setString(2, "1802499275");
                 pst.setString(3, cedCli);
                 pst.setString(4, "SYSDATE");

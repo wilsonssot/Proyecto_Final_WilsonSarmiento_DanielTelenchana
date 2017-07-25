@@ -42,32 +42,22 @@ public class ClientesIngreso extends javax.swing.JDialog {
     }
 
     public void deshabilitarCancelar() {
-        boolean res;
+        jButtonCancelar.setEnabled(false);
 
-        if (jTextField_NomCli.getText().equals("")) {
-            res = true;
-        } else {
-            res = false;
+        if (!jTextField_NomCli.getText().equals("")) {
+            jButtonCancelar.setEnabled(true);
+        } 
+        if (!jTextField_ApeCli.getText().equals("")) {
+            jButtonCancelar.setEnabled(true);
+        } 
+        if (!jTextField_DirCli.getText().equals("")) {
+            jButtonCancelar.setEnabled(true);
         }
-        if (jTextField_ApeCli.getText().equals("")) {
-            res = true;
-        } else {
-            res = false;
+        if (!jTextField_TelCli.getText().equals("")) {
+            jButtonCancelar.setEnabled(true);
         }
-        if (jTextField_DirCli.getText().equals("")) {
-            res = true;
-        } else {
-            res = false;
-        }
-        if (jTextField_TelCli.getText().equals("")) {
-            res = true;
-        } else {
-            res = false;
-        }
-        if (jTextFieldCedulaCli.getText().equals("")) {
-            res = true;
-        } else {
-            res = false;
+        if (!jTextFieldCedulaCli.getText().equals("")) {
+            jButtonCancelar.setEnabled(true);
         }
 
 //        if (res) {
@@ -75,7 +65,6 @@ public class ClientesIngreso extends javax.swing.JDialog {
 //        } else {
 //            jButtonCancelar.setEnabled(true);
 //        }
-        jButtonCancelar.setEnabled(!res);
     }
 
     public boolean existeCedula() throws SQLException {
@@ -163,7 +152,7 @@ public class ClientesIngreso extends javax.swing.JDialog {
             jTextFieldCedulaCli.setText("");
         }
         pst.close();
-        
+
     }
 
     /**
