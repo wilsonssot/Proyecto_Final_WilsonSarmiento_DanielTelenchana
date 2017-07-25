@@ -6,6 +6,7 @@
 package Formularios;
 
 import ClasesSecundarias.Coneccion;
+import ClasesSecundarias.Metodos;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,13 +35,45 @@ public class Proveedores extends javax.swing.JDialog {
     public Proveedores(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        deshabilitarCancelar();
+    }
+
+    public void deshabilitarCancelar() {
+        boolean res;
+
+        if (jTextField_Nom_Prov.getText().equals("")) {
+            res = true;
+        } else {
+            res = false;
+        }
+        if (jTextField_Dir_Prov.getText().equals("")) {
+            res = true;
+        } else {
+            res = false;
+        }
+        if (jTextField_Tel_Prov.getText().equals("")) {
+            res = true;
+        } else {
+            res = false;
+        }
+
+        if (jTextField_Cod_Prov.getText().equals("")) {
+            res = true;
+        } else {
+            res = false;
+        }
+        if (res) {
+            jButton_Can_Prov.setEnabled(false);
+        } else {
+            jButton_Can_Prov.setEnabled(true);
+        }
     }
 
     public boolean existeCodigoProveedor() throws SQLException {
         cn.Conectar();
         String usu = "";
         String codigo = jTextField_Cod_Prov.getText();
-        String query = "Select * proveedores where ced_cli" + codigo + "";
+        String query = "Select * from proveedores where ced_cli" + codigo + "";
         st = cn.getConexion().createStatement();
         rs = st.executeQuery(query);
         while (rs.next()) {
@@ -59,7 +92,7 @@ public class Proveedores extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Ingrese el código", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        
+
         if (jTextField_Nom_Prov.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Ingrese el nombre", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -93,7 +126,7 @@ public class Proveedores extends javax.swing.JDialog {
         if (validarDatos()) {
             setearVariables();
             cn.Conectar();
-            pst = cn.getConexion().prepareStatement("insert into proveedores (COD_PROV,NOM_PROV,DIR_PROV, TEL_PROV) values(?,?.?.?)");
+            pst = cn.getConexion().prepareStatement("insert into proveedores (COD_PROV,NOM_PROV,DIR_PROV, TEL_PROV) values(?,?,?,?)");
             pst.setString(1, codigo);
             pst.setString(2, nombre);
             pst.setString(3, direccion);
@@ -101,6 +134,7 @@ public class Proveedores extends javax.swing.JDialog {
             pst.executeUpdate();
             JOptionPane.showMessageDialog(null, "Datos ingresados correctamente");
             limpiarDatos();
+            deshabilitarCancelar();
         } else {
             JOptionPane.showMessageDialog(null, "");
         }
@@ -153,16 +187,50 @@ public class Proveedores extends javax.swing.JDialog {
                 jButton_Gua_ProvActionPerformed(evt);
             }
         });
+        jButton_Gua_Prov.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jButton_Gua_ProvKeyTyped(evt);
+            }
+        });
 
         jButton_Can_Prov.setText("Cancelar");
+        jButton_Can_Prov.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_Can_ProvActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Código del Proveedor:");
 
+        jTextField_Cod_Prov.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Cod_ProvKeyTyped(evt);
+            }
+        });
+
         jLabel2.setText("Nombre:");
+
+        jTextField_Nom_Prov.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Nom_ProvKeyTyped(evt);
+            }
+        });
 
         jLabel3.setText("Dirección:");
 
+        jTextField_Dir_Prov.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Dir_ProvKeyTyped(evt);
+            }
+        });
+
         jLabel4.setText("Teléfono:");
+
+        jTextField_Tel_Prov.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Tel_ProvKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -249,6 +317,34 @@ public class Proveedores extends javax.swing.JDialog {
         }
 
     }//GEN-LAST:event_jButton_Gua_ProvActionPerformed
+
+    private void jTextField_Cod_ProvKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Cod_ProvKeyTyped
+        deshabilitarCancelar();
+    }//GEN-LAST:event_jTextField_Cod_ProvKeyTyped
+
+    private void jTextField_Nom_ProvKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Nom_ProvKeyTyped
+        deshabilitarCancelar();
+        Metodos.validarLetras(evt, jTextField_Nom_Prov);
+    }//GEN-LAST:event_jTextField_Nom_ProvKeyTyped
+
+    private void jTextField_Dir_ProvKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Dir_ProvKeyTyped
+        deshabilitarCancelar();
+        Metodos.validarLetras(evt, jTextField_Dir_Prov);
+    }//GEN-LAST:event_jTextField_Dir_ProvKeyTyped
+
+    private void jTextField_Tel_ProvKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Tel_ProvKeyTyped
+        deshabilitarCancelar();
+        Metodos.validarTelefono(evt, jTextField_Tel_Prov);
+    }//GEN-LAST:event_jTextField_Tel_ProvKeyTyped
+
+    private void jButton_Gua_ProvKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton_Gua_ProvKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton_Gua_ProvKeyTyped
+
+    private void jButton_Can_ProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Can_ProvActionPerformed
+        limpiarDatos();
+        deshabilitarCancelar();
+    }//GEN-LAST:event_jButton_Can_ProvActionPerformed
 
     /**
      * @param args the command line arguments
