@@ -4,7 +4,15 @@
  * and open the template in the editor.
  */
 package Acceso;
+
+import ClasesSecundarias.Coneccion;
+import ClasesSecundarias.Usuario;
 import Formularios.FramePrincipal;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -19,23 +27,52 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
-    protected String Usario = "admin";
-    protected String Contraseña = "tutia";
-    
+    Coneccion cn = new Coneccion();
+    PreparedStatement pst = null;
+    Statement st = null;
+    ResultSet rs = null;
+
+    protected ArrayList<Usuario> usuarios = new ArrayList();
+
     public Login() {
         initComponents();
         EstablecerValoresPorDefecto();
-        PonerImagenFondo(); 
+        PonerImagenFondo();
+        obtenerUsuarios();
+    }
+
+    private void obtenerUsuarios() {
+        Usuario usu;
+        try {
+            cn.Conectar();
+            st = cn.getConexion().createStatement();
+            String query = "select * from empleados";
+            rs = st.executeQuery(query);
+            while (rs.next()) {
+                usu = new Usuario();
+                usu.setCedula(rs.getString(1));
+                usu.setNombre(rs.getString(2));
+                usu.setApellido(rs.getString(3));
+                usu.setDireccion(rs.getString(4));
+                usu.setSueldo(rs.getDouble(5));
+                usu.setTelefono(rs.getString(6));
+                usu.setContraseña("tutia");
+                usuarios.add(usu);
+                System.out.println("Exitoso...");
+            }
+        } catch (SQLException ex) {
+
+        }
     }
 
     private void PonerImagenFondo() {
         // setIconImage(new ImageIcon(getClass().getResource("/imagenes/fondo_login.jpg")).getImage());
-        ((JPanel)getContentPane()).setOpaque(false); 
-        ImageIcon uno=new ImageIcon(this.getClass().getResource("/Imagenes/login.png"));
-        JLabel fondo= new JLabel();
+        ((JPanel) getContentPane()).setOpaque(false);
+        ImageIcon uno = new ImageIcon(this.getClass().getResource("/Imagenes/login.png"));
+        JLabel fondo = new JLabel();
         fondo.setIcon(uno);
-        getLayeredPane().add(fondo,JLayeredPane.FRAME_CONTENT_LAYER);
-        fondo.setBounds(0,0,uno.getIconWidth(),uno.getIconHeight());
+        getLayeredPane().add(fondo, JLayeredPane.FRAME_CONTENT_LAYER);
+        fondo.setBounds(0, 0, uno.getIconWidth(), uno.getIconHeight());
     }
 
     private void EstablecerValoresPorDefecto() {
@@ -137,14 +174,20 @@ public class Login extends javax.swing.JFrame {
 
     private void btn_AceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AceptarActionPerformed
         // TODO add your handling code here:}
-        
+
         String Pass = new String(txtPas_Password.getPassword());
-        if(txt_User.getText().equals(Usario) && Pass.equals(Contraseña) ){
-            FramePrincipal principal = new FramePrincipal();
-            principal.setVisible(true);
-            dispose();
+        Usuario user;
+        for (int i = 0; i < usuarios.size(); i++) {
+            user = usuarios.get(i);
+            if (txt_User.getText().equals(user.getCedula()) && Pass.equals(user.getContraseña())) {
+                FramePrincipal principal = new FramePrincipal();
+                principal.setVisible(true);
+                dispose();
+                break;
+            }
         }
-        
+
+
     }//GEN-LAST:event_btn_AceptarActionPerformed
 
     private void btn_CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CancelarActionPerformed

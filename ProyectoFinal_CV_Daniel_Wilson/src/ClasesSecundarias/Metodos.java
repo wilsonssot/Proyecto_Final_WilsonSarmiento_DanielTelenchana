@@ -6,6 +6,9 @@
 package ClasesSecundarias;
 
 import java.awt.event.KeyEvent;
+
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.JTextField;
 
 /**
@@ -13,7 +16,7 @@ import javax.swing.JTextField;
  * @author USER-11
  */
 public class Metodos {
-
+    
     public static boolean verificadorCédula(String ced) {
         int sumaPares = 0, sumaImpares = 0, ds, st, verif, aux;
         int j = 0;

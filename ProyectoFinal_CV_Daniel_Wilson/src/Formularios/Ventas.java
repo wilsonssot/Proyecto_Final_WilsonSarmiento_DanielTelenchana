@@ -8,18 +8,17 @@ package Formularios;
 import ClasesSecundarias.Calzado;
 import ClasesSecundarias.Coneccion;
 import ClasesSecundarias.Metodos;
-import java.awt.List;
+import java.awt.HeadlessException;
 import java.awt.event.ItemEvent;
-import java.sql.Array;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Vector;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -149,6 +148,7 @@ public class Ventas extends javax.swing.JDialog {
         jTable_CarritoCompra.setEnabled(true);
         //jButtonFacturar.setEnabled(true);
         //jButtonLimpiarDatos.setEnabled(true);
+        jButton_Eliminar.setEnabled(true);
 
     }
 
@@ -164,6 +164,7 @@ public class Ventas extends javax.swing.JDialog {
         jButtonFacturar.setEnabled(false);
         jButton_Cancelar.setEnabled(false);
         jButton_Limpiar.setEnabled(false);
+        jButton_Eliminar.setEnabled(false);
 
     }
 
@@ -264,6 +265,7 @@ public class Ventas extends javax.swing.JDialog {
         jTextField_Cantidad = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jTextField_Precio = new javax.swing.JTextField();
+        jButton_Eliminar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_CarritoCompra = new javax.swing.JTable();
@@ -429,6 +431,14 @@ public class Ventas extends javax.swing.JDialog {
 
         jTextField_Precio.setEditable(false);
 
+        jButton_Eliminar.setText("Eliminar");
+        jButton_Eliminar.setEnabled(false);
+        jButton_Eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_EliminarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -453,7 +463,9 @@ public class Ventas extends javax.swing.JDialog {
                             .addComponent(jTextField_Cantidad)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(227, 227, 227)
-                        .addComponent(jButton_Añadir)))
+                        .addComponent(jButton_Añadir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_Eliminar)))
                 .addContainerGap(11, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -470,7 +482,9 @@ public class Ventas extends javax.swing.JDialog {
                     .addComponent(jTextField_Cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField_Precio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton_Añadir)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton_Añadir)
+                    .addComponent(jButton_Eliminar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -634,6 +648,10 @@ public class Ventas extends javax.swing.JDialog {
     }//GEN-LAST:event_jTextField_CantidadKeyTyped
 
     private void jComboBox_MarcasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_MarcasItemStateChanged
+        establecerPrecioCalzado(evt);
+    }//GEN-LAST:event_jComboBox_MarcasItemStateChanged
+
+    private void establecerPrecioCalzado(ItemEvent evt) {
         // TODO add your handling code here:
         int cont = 0;
         if (evt.getStateChange() == ItemEvent.SELECTED) {
@@ -644,9 +662,15 @@ public class Ventas extends javax.swing.JDialog {
         if (cont != 0) {
             jButton_Añadir.setEnabled(true);
         }
-    }//GEN-LAST:event_jComboBox_MarcasItemStateChanged
+    }
 
     private void jButton_AñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AñadirActionPerformed
+        AñadirCalzadoTabla();
+
+
+    }//GEN-LAST:event_jButton_AñadirActionPerformed
+
+    private void AñadirCalzadoTabla() throws HeadlessException {
         // TODO add your handling code here:
         if (!jTextField_Cantidad.getText().equals("")) {
             jButton_Cancelar.setEnabled(true);
@@ -664,61 +688,63 @@ public class Ventas extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(null, "Quedan pocos artículos de este tipo : " + existencia, "AVISO!", JOptionPane.WARNING_MESSAGE);
             }
         }
-//        try {
-//            cn.Conectar();
-//            st = cn.getConexion().createStatement();
-//            String sql = "select * from producto_calzado";
-//            rs = st.executeQuery(sql);
-//            while (rs.next()) {
-//                if (existencia > 24) {
-//                    zapatoVendido = (Calzado)jComboBox_Marcas.getSelectedItem();
-//                    vendidos.add(zapatoVendido);
-//                }
-//            }
-//
-//        } catch (SQLException ex) {
-//
-//        }
-
-
-    }//GEN-LAST:event_jButton_AñadirActionPerformed
+    }
 
     private void jButtonFacturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFacturarActionPerformed
+        Facturar();
+    }//GEN-LAST:event_jButtonFacturarActionPerformed
+
+    private void Facturar() throws HeadlessException, NumberFormatException {
         // TODO add your handling code here:
+        
+        LocalDate todayLocalDate = LocalDate.now( ZoneId.of( "America/Bogota" ) );
         String cedCli = jTextField_CedCli.getText();
         double total = Double.valueOf(jTextField_Total.getText());
         if (jTable_CarritoCompra.getRowCount() > 0) {
             try {
                 cn.Conectar();
-                String sql = "insert into ventas (NUM_VEN,CED_EMP_V,CED_CLI_V,FEC_VEN,TOTAL) values(?,?,?,?,?)";
+                String sql = "insert into ventas (CED_EMP_V,CED_CLI_V,FEC_VEN,TOTAL) values(?,?,?,?)";
                 pst = cn.getConexion().prepareStatement(sql);
-                pst.setString(2, "1802499275");
-                pst.setString(3, cedCli);
-                pst.setString(4, "SYSDATE");
-                pst.setDouble(5, total);
+                pst.setString(1, "1802499275");
+                pst.setString(2, cedCli);
+                pst.setDate(3, java.sql.Date.valueOf(todayLocalDate));
+                pst.setDouble(4, total);
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Venta exitosa!...");
             } catch (SQLException ex) {
-
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un problema "+ex.toString());
             }
         } else {
             JOptionPane.showMessageDialog(null, "No existen artículos a facturar");
         }
-    }//GEN-LAST:event_jButtonFacturarActionPerformed
+    }
 
     private void jButton_CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CancelarActionPerformed
-        // TODO add your handling code here:
+        confirmarCancelarVenta();
+    }//GEN-LAST:event_jButton_CancelarActionPerformed
 
+    private void jButton_EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_EliminarActionPerformed
+        // TODO add your handling code here:
+        try{
+            modeloTabla.removeRow(jTable_CarritoCompra.getSelectedRow());
+        }catch( java.lang.ArrayIndexOutOfBoundsException ex){
+            JOptionPane.showMessageDialog(null, "No ha seleccionado una fila");
+        }
+    }//GEN-LAST:event_jButton_EliminarActionPerformed
+
+    private void confirmarCancelarVenta() throws HeadlessException {
+        // TODO add your handling code here:
+        
         int confirmar = JOptionPane.showConfirmDialog(null, "Está seguro que desea cancelar la venta?...", "CANCELANDO VENTA", JOptionPane.YES_NO_OPTION);
         if (confirmar == 0) {
-
+            
             limpiarValores();
             for (int i = jTable_CarritoCompra.getRowCount()-1; i >= 0; i--) {
                 modeloTabla.removeRow(i);
             }
             deshabilitarComponentes();
         }
-    }//GEN-LAST:event_jButton_CancelarActionPerformed
+    }
 
     /**
      * @param args the command line arguments
@@ -767,6 +793,7 @@ public class Ventas extends javax.swing.JDialog {
     private javax.swing.JButton jButton_Añadir;
     private javax.swing.JButton jButton_Cancelar;
     private javax.swing.JButton jButton_Cargar;
+    private javax.swing.JButton jButton_Eliminar;
     private javax.swing.JButton jButton_Limpiar;
     private javax.swing.JComboBox<String> jComboBox_Marcas;
     private javax.swing.JLabel jLabel1;
