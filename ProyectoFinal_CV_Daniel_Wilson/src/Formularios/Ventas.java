@@ -92,7 +92,10 @@ public class Ventas extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(null, "Cliente no existe", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error BDD: "+ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
 
+        }catch (java.lang.NullPointerException ex1){
+            JOptionPane.showMessageDialog(null, "Ocurrió un error BDD: "+ex1.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -121,7 +124,9 @@ public class Ventas extends javax.swing.JDialog {
             rs.close();
 
         } catch (SQLException ex) {
-
+            JOptionPane.showMessageDialog(null, "Ocurrió un error : "+ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }catch (java.lang.NullPointerException ex1){
+            JOptionPane.showMessageDialog(null, "Ocurrió un error : "+ex1.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
         return zapatos;
 
