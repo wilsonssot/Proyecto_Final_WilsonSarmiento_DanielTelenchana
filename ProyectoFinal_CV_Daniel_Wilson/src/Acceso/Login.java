@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -32,7 +33,7 @@ public class Login extends javax.swing.JFrame {
     Statement st = null;
     ResultSet rs = null;
 
-    protected ArrayList<Usuario> usuarios = new ArrayList();
+    private static ArrayList<Usuario> usuarios = new ArrayList();
 
     public Login() {
         initComponents();
@@ -63,6 +64,16 @@ public class Login extends javax.swing.JFrame {
         } catch (SQLException ex) {
 
         }
+    }
+
+    public static Usuario obtenerUsuarioConectado() {
+        Usuario conectado = null;
+        for (int i = 0; i < usuarios.size(); i++) {
+            if (usuarios.get(i).isConectado()) {
+                conectado = usuarios.get(i);
+            }
+        }
+        return conectado;
     }
 
     private void PonerImagenFondo() {
@@ -173,13 +184,20 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_AceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AceptarActionPerformed
+        IngresoAlSistema();
+    }//GEN-LAST:event_btn_AceptarActionPerformed
+
+    private void IngresoAlSistema() {
         // TODO add your handling code here:}
 
         String Pass = new String(txtPas_Password.getPassword());
         Usuario user;
-        for (int i = 0; i < usuarios.size(); i++) {
+        int i;
+        boolean coneccion = false;
+        for (i = 0; i < usuarios.size(); i++) {
             user = usuarios.get(i);
             if (txt_User.getText().equals(user.getCedula()) && Pass.equals(user.getContraseña())) {
+                coneccion = true;
                 usuarios.get(i).setConectado(true);
                 FramePrincipal principal = new FramePrincipal();
                 principal.setVisible(true);
@@ -187,9 +205,12 @@ public class Login extends javax.swing.JFrame {
                 break;
             }
         }
-
-
-    }//GEN-LAST:event_btn_AceptarActionPerformed
+        if (!coneccion) {
+            JOptionPane.showMessageDialog(null, "Error: Usuario o contraseña incorrectos");
+            txt_User.setText("");
+            txtPas_Password.setText("");
+        }
+    }
 
     private void btn_CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CancelarActionPerformed
         // TODO add your handling code here:

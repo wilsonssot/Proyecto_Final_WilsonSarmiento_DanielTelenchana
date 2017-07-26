@@ -38,36 +38,27 @@ public class Inventario extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        btnAgregarCalzado.setIcon(new javax.swing.ImageIcon("C:\\Users\\USER-12\\Documents\\ProyectoFinalCV\\Proyecto_Final_WilsonSarmiento_DanielTelenchana\\ProyectoFinal_CV_Daniel_Wilson\\src\\Imagenes\\Menu\\boton_agregar_cliente_2.png")); // NOI18N
         btnAgregarCalzado.setText("AGREGAR");
         btnAgregarCalzado.setBorderPainted(false);
         btnAgregarCalzado.setContentAreaFilled(false);
         btnAgregarCalzado.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAgregarCalzado.setIconTextGap(-3);
-        btnAgregarCalzado.setPressedIcon(new javax.swing.ImageIcon("C:\\Users\\USER-12\\Documents\\ProyectoFinalCV\\Proyecto_Final_WilsonSarmiento_DanielTelenchana\\ProyectoFinal_CV_Daniel_Wilson\\src\\Imagenes\\Menu\\boton_agregar_cliente_3.png")); // NOI18N
-        btnAgregarCalzado.setRolloverIcon(new javax.swing.ImageIcon("C:\\Users\\USER-12\\Documents\\ProyectoFinalCV\\Proyecto_Final_WilsonSarmiento_DanielTelenchana\\ProyectoFinal_CV_Daniel_Wilson\\src\\Imagenes\\Menu\\boton_agregar_cliente_1.png")); // NOI18N
         btnAgregarCalzado.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnAgregarCalzado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
-        btnModificarCalzado.setIcon(new javax.swing.ImageIcon("C:\\Users\\USER-12\\Documents\\ProyectoFinalCV\\Proyecto_Final_WilsonSarmiento_DanielTelenchana\\ProyectoFinal_CV_Daniel_Wilson\\src\\Imagenes\\Menu\\boton_editar_cliente_2.png")); // NOI18N
         btnModificarCalzado.setText("MODIFICAR");
         btnModificarCalzado.setBorderPainted(false);
         btnModificarCalzado.setContentAreaFilled(false);
         btnModificarCalzado.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnModificarCalzado.setIconTextGap(-3);
-        btnModificarCalzado.setPressedIcon(new javax.swing.ImageIcon("C:\\Users\\USER-12\\Documents\\ProyectoFinalCV\\Proyecto_Final_WilsonSarmiento_DanielTelenchana\\ProyectoFinal_CV_Daniel_Wilson\\src\\Imagenes\\Menu\\boton_editar_cliente_3.png")); // NOI18N
-        btnModificarCalzado.setRolloverIcon(new javax.swing.ImageIcon("C:\\Users\\USER-12\\Documents\\ProyectoFinalCV\\Proyecto_Final_WilsonSarmiento_DanielTelenchana\\ProyectoFinal_CV_Daniel_Wilson\\src\\Imagenes\\Menu\\boton_editar_cliente_1.png")); // NOI18N
         btnModificarCalzado.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnModificarCalzado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
-        btnBuscarCalzado.setIcon(new javax.swing.ImageIcon("C:\\Users\\USER-12\\Documents\\ProyectoFinalCV\\Proyecto_Final_WilsonSarmiento_DanielTelenchana\\ProyectoFinal_CV_Daniel_Wilson\\src\\Imagenes\\Menu\\boton_buscar_clientes_2.png")); // NOI18N
         btnBuscarCalzado.setText("BUSCAR");
         btnBuscarCalzado.setBorderPainted(false);
         btnBuscarCalzado.setContentAreaFilled(false);
         btnBuscarCalzado.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnBuscarCalzado.setIconTextGap(-3);
-        btnBuscarCalzado.setPressedIcon(new javax.swing.ImageIcon("C:\\Users\\USER-12\\Documents\\ProyectoFinalCV\\Proyecto_Final_WilsonSarmiento_DanielTelenchana\\ProyectoFinal_CV_Daniel_Wilson\\src\\Imagenes\\Menu\\boton_buscar_clientes_3.png")); // NOI18N
-        btnBuscarCalzado.setRolloverIcon(new javax.swing.ImageIcon("C:\\Users\\USER-12\\Documents\\ProyectoFinalCV\\Proyecto_Final_WilsonSarmiento_DanielTelenchana\\ProyectoFinal_CV_Daniel_Wilson\\src\\Imagenes\\Menu\\boton_buscar_clientes_1.png")); // NOI18N
         btnBuscarCalzado.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnBuscarCalzado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
@@ -100,7 +91,7 @@ public class Inventario extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -121,9 +112,9 @@ public class Inventario extends javax.swing.JDialog {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAgregarCalzado)
-                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnModificarCalzado)
-                        .addGap(24, 24, 24)
+                        .addGap(224, 224, 224)
                         .addComponent(btnBuscarCalzado)))
                 .addContainerGap())
         );

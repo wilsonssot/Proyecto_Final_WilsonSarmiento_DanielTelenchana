@@ -29,9 +29,9 @@
                   <Component id="jPanel1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="btnAgregarCalzado" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="btnModificarCalzado" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="224" max="-2" attributes="0"/>
                       <Component id="btnBuscarCalzado" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -58,60 +58,33 @@
   <SubComponents>
     <Component class="javax.swing.JButton" name="btnAgregarCalzado">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\USER-12\Documents\ProyectoFinalCV\Proyecto_Final_WilsonSarmiento_DanielTelenchana\ProyectoFinal_CV_Daniel_Wilson\src\Imagenes\Menu\boton_agregar_cliente_2.png"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="AGREGAR"/>
         <Property name="borderPainted" type="boolean" value="false"/>
         <Property name="contentAreaFilled" type="boolean" value="false"/>
         <Property name="horizontalTextPosition" type="int" value="0"/>
         <Property name="iconTextGap" type="int" value="-3"/>
-        <Property name="pressedIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\USER-12\Documents\ProyectoFinalCV\Proyecto_Final_WilsonSarmiento_DanielTelenchana\ProyectoFinal_CV_Daniel_Wilson\src\Imagenes\Menu\boton_agregar_cliente_3.png"/>
-        </Property>
-        <Property name="rolloverIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\USER-12\Documents\ProyectoFinalCV\Proyecto_Final_WilsonSarmiento_DanielTelenchana\ProyectoFinal_CV_Daniel_Wilson\src\Imagenes\Menu\boton_agregar_cliente_1.png"/>
-        </Property>
         <Property name="verticalAlignment" type="int" value="3"/>
         <Property name="verticalTextPosition" type="int" value="3"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnModificarCalzado">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\USER-12\Documents\ProyectoFinalCV\Proyecto_Final_WilsonSarmiento_DanielTelenchana\ProyectoFinal_CV_Daniel_Wilson\src\Imagenes\Menu\boton_editar_cliente_2.png"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="MODIFICAR"/>
         <Property name="borderPainted" type="boolean" value="false"/>
         <Property name="contentAreaFilled" type="boolean" value="false"/>
         <Property name="horizontalTextPosition" type="int" value="0"/>
         <Property name="iconTextGap" type="int" value="-3"/>
-        <Property name="pressedIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\USER-12\Documents\ProyectoFinalCV\Proyecto_Final_WilsonSarmiento_DanielTelenchana\ProyectoFinal_CV_Daniel_Wilson\src\Imagenes\Menu\boton_editar_cliente_3.png"/>
-        </Property>
-        <Property name="rolloverIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\USER-12\Documents\ProyectoFinalCV\Proyecto_Final_WilsonSarmiento_DanielTelenchana\ProyectoFinal_CV_Daniel_Wilson\src\Imagenes\Menu\boton_editar_cliente_1.png"/>
-        </Property>
         <Property name="verticalAlignment" type="int" value="3"/>
         <Property name="verticalTextPosition" type="int" value="3"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnBuscarCalzado">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\USER-12\Documents\ProyectoFinalCV\Proyecto_Final_WilsonSarmiento_DanielTelenchana\ProyectoFinal_CV_Daniel_Wilson\src\Imagenes\Menu\boton_buscar_clientes_2.png"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="BUSCAR"/>
         <Property name="borderPainted" type="boolean" value="false"/>
         <Property name="contentAreaFilled" type="boolean" value="false"/>
         <Property name="horizontalTextPosition" type="int" value="0"/>
         <Property name="iconTextGap" type="int" value="-3"/>
-        <Property name="pressedIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\USER-12\Documents\ProyectoFinalCV\Proyecto_Final_WilsonSarmiento_DanielTelenchana\ProyectoFinal_CV_Daniel_Wilson\src\Imagenes\Menu\boton_buscar_clientes_3.png"/>
-        </Property>
-        <Property name="rolloverIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\USER-12\Documents\ProyectoFinalCV\Proyecto_Final_WilsonSarmiento_DanielTelenchana\ProyectoFinal_CV_Daniel_Wilson\src\Imagenes\Menu\boton_buscar_clientes_1.png"/>
-        </Property>
         <Property name="verticalAlignment" type="int" value="3"/>
         <Property name="verticalTextPosition" type="int" value="3"/>
       </Properties>
@@ -130,7 +103,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="0" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" pref="693" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>

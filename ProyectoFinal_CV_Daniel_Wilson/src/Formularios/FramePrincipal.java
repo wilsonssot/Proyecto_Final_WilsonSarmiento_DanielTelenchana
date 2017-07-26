@@ -5,10 +5,17 @@
  */
 package Formularios;
 
+import Acceso.Login;
+import ClasesSecundarias.Usuario;
 import ParaBDD.Clientes;
 import ParaBDD.Inventario;
 import ParaBDD.Usuarios;
+import java.awt.HeadlessException;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 
 /**
  *
@@ -40,7 +47,6 @@ public class FramePrincipal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -126,9 +132,6 @@ public class FramePrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -188,9 +191,26 @@ public class FramePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_AdminActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
-        JOptionPane.showInputDialog(this, "Vuelva a ingresar la contraseña", "Confirme Salida", JOptionPane.WARNING_MESSAGE);
+        confirmarSalida();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void confirmarSalida() throws HeadlessException {
+        // TODO add your handling code here:
+        JPasswordField jpf = new JPasswordField();
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+        panel.add(new JLabel("Ingrese nuevamente la contraseña: "));
+        panel.add(jpf);
+        int resultado = JOptionPane.showConfirmDialog(this, panel, "Confirme Salida", JOptionPane.WARNING_MESSAGE);
+        Usuario user = Login.obtenerUsuarioConectado();
+        String Pass = new String(jpf.getPassword());
+        if(user.getContraseña().equals(Pass) && resultado == 0){
+            System.exit(0);
+            
+        }else{
+            JOptionPane.showMessageDialog(null, "Error: Contraseña incorrecta");
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -233,7 +253,6 @@ public class FramePrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btn_Inventory;
     private javax.swing.JButton btn_Ventas;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     // End of variables declaration//GEN-END:variables
