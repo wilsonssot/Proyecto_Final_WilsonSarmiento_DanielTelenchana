@@ -56,12 +56,19 @@ public class Ventas extends javax.swing.JDialog {
         llenarComboBox();
         establecerModeloTabla();
         establecerEmpleado();
+        setearPrecioCalzado();
     }
-    
-    public void establecerEmpleado(){
+
+    public void establecerEmpleado() {
+
         Usuario user = Login.obtenerUsuarioConectado();
-        jTextField_CedEmp.setText(user.getCedula());
-        jTextField_NomEmp.setText(user.getNombre()+" "+user.getApellido());
+        if (user != null) {
+            jTextField_CedEmp.setText(user.getCedula());
+            jTextField_NomEmp.setText(user.getNombre() + " " + user.getApellido());
+        } else {
+            System.out.println("Empleado no encontrado");
+        }
+
     }
 
     public void establecerModeloTabla() {
@@ -101,10 +108,10 @@ public class Ventas extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(null, "Cliente no existe", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Ocurrió un error BDD: "+ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Ocurrió un error BDD: " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
 
-        }catch (java.lang.NullPointerException ex1){
-            JOptionPane.showMessageDialog(null, "Ocurrió un error BDD: "+ex1.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        } catch (java.lang.NullPointerException ex1) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error BDD: " + ex1.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -133,9 +140,9 @@ public class Ventas extends javax.swing.JDialog {
             rs.close();
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Ocurrió un error : "+ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
-        }catch (java.lang.NullPointerException ex1){
-            JOptionPane.showMessageDialog(null, "Ocurrió un error : "+ex1.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        } catch (java.lang.NullPointerException ex1) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex1.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
         return zapatos;
 
@@ -191,7 +198,6 @@ public class Ventas extends javax.swing.JDialog {
         jTextField_TelCli.setText("");
         jTextField_Total.setText("");
         jTextField_Precio.setText("");
-        
 
     }
 
@@ -714,10 +720,17 @@ public class Ventas extends javax.swing.JDialog {
         int cont = 0;
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             cont++;
-            Calzado zapato = (Calzado) jComboBox_Marcas.getSelectedItem();
-            jTextField_Precio.setText(String.valueOf(zapato.getPrecio()));
+            setearPrecioCalzado();
         }
         if (cont != 0) {
+            jButton_Añadir.setEnabled(true);
+        }
+    }
+
+    private void setearPrecioCalzado() {
+        Calzado zapato = (Calzado) jComboBox_Marcas.getSelectedItem();
+        jTextField_Precio.setText(String.valueOf(zapato.getPrecio()));
+        if (!jTextField_Precio.getText().equals("")) {
             jButton_Añadir.setEnabled(true);
         }
     }
@@ -754,29 +767,42 @@ public class Ventas extends javax.swing.JDialog {
 
     private void Facturar() throws HeadlessException, NumberFormatException {
         // TODO add your handling code here:
-        
-        LocalDate todayLocalDate = LocalDate.now( ZoneId.of( "America/Bogota" ) );
+
+        LocalDate todayLocalDate = LocalDate.now(ZoneId.of("America/Bogota"));
         String cedCli = jTextField_CedCli.getText();
         double total = Double.valueOf(jTextField_Total.getText());
         if (jTable_CarritoCompra.getRowCount() > 0) {
             try {
                 cn.Conectar();
-                String sql = "insert into ventas (CED_EMP_V,CED_CLI_V,FEC_VEN,TOTAL) values(?,?,?,?); select scope";
-                pst = cn.getConexion().prepareStatement(sql);
-                pst.setString(1, "1802499275");
+                String sql = "insert into ventas (CED_EMP_V,CED_CLI_V,FEC_VEN,TOTAL) values(?,?,?,?)";
+                pst = cn.getConexion().prepareStatement(sql, new String[]{"NUM_VEN"});
+                pst.setString(1, Login.obtenerUsuarioConectado().getCedula());
                 pst.setString(2, cedCli);
                 pst.setDate(3, java.sql.Date.valueOf(todayLocalDate));
                 pst.setDouble(4, total);
-                pst.executeUpdate();
-                
+                //pst.executeUpdate();
+                int affectedRows = pst.executeUpdate();
+
+                if (affectedRows == 0) {
+                    throw new SQLException("Creating user failed, no rows affected.");
+                }
+
+                try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        affectedRows = generatedKeys.getInt(1);
+                        System.out.println(affectedRows);
+                    } else {
+                        throw new SQLException("Creating user failed, no ID obtained.");
+                    }
+                }
                 JOptionPane.showMessageDialog(null, "Venta exitosa!...");
-                
+
                 limpiarValores();
                 deshabilitarCancelar();
                 deshabilitarComponentes();
                 limpiarTabla();
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Ha ocurrido un problema "+ex.toString());
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un problema " + ex.toString());
             }
         } else {
             JOptionPane.showMessageDialog(null, "No existen artículos a facturar");
@@ -793,19 +819,19 @@ public class Ventas extends javax.swing.JDialog {
 
     private void eliminarDeCarritoDeCompra() throws HeadlessException {
         // TODO add your handling code here:
-        try{
+        try {
             modeloTabla.removeRow(jTable_CarritoCompra.getSelectedRow());
-        }catch( java.lang.ArrayIndexOutOfBoundsException ex){
+        } catch (java.lang.ArrayIndexOutOfBoundsException ex) {
             JOptionPane.showMessageDialog(null, "No ha seleccionado una fila");
         }
     }
 
     private void confirmarCancelarVenta() throws HeadlessException {
         // TODO add your handling code here:
-        
+
         int confirmar = JOptionPane.showConfirmDialog(null, "Está seguro que desea cancelar la venta?...", "CANCELANDO VENTA", JOptionPane.YES_NO_OPTION);
         if (confirmar == 0) {
-            
+
             limpiarValores();
             limpiarTabla();
             deshabilitarComponentes();
@@ -813,7 +839,7 @@ public class Ventas extends javax.swing.JDialog {
     }
 
     private void limpiarTabla() {
-        for (int i = jTable_CarritoCompra.getRowCount()-1; i >= 0; i--) {
+        for (int i = jTable_CarritoCompra.getRowCount() - 1; i >= 0; i--) {
             modeloTabla.removeRow(i);
         }
     }
