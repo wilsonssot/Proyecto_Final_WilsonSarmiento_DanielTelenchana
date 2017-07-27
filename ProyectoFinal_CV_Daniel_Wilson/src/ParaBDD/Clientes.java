@@ -5,13 +5,36 @@
  */
 package ParaBDD;
 
+import ClasesSecundarias.Cliente;
+import ClasesSecundarias.Coneccion;
 import Formularios.ClientesIngreso;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Usuario
  */
 public class Clientes extends javax.swing.JDialog {
+
+    DefaultTableModel modeloTabla = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+
+    };
+
+    Coneccion cn = new Coneccion();
+    PreparedStatement pst = null;
+    Statement st = null;
+    ResultSet rs = null;
 
     /**
      * Creates new form Clientes
@@ -20,6 +43,8 @@ public class Clientes extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(parent);
+        establecerModeloTabla();
+        cargarDatosClientes();
     }
 
     /**
@@ -152,10 +177,60 @@ public class Clientes extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    public void establecerModeloTabla() {
+        jTable_DatosClientes.setModel(modeloTabla);
+        modeloTabla.addColumn("Cédula");
+        modeloTabla.addColumn("Nombre");
+        modeloTabla.addColumn("Apellido");
+        modeloTabla.addColumn("Dirección");
+        modeloTabla.addColumn("Teléfono");
+    }
+
+    public void cargarDatosClientes() {
+        Vector<Cliente> clientes = DatosClientes();
+        Object cli[] = new Object[5];
+        for (int i = 0; i < clientes.size(); i++) {
+            cli[0]=clientes.get(i).getCedula();
+            cli[1]=clientes.get(i).getNombre();
+            cli[2]=clientes.get(i).getApellido();
+            cli[3]=clientes.get(i).getDireccion();
+            cli[4]=clientes.get(i).getTelefono();
+            modeloTabla.addRow(cli);
+        }
+    }
+
+    public Vector<Cliente> DatosClientes() {
+        Vector<Cliente> clientes = new Vector<Cliente>();
+        Cliente cl;
+        try {
+
+            cn.Conectar();
+            st = cn.getConexion().createStatement();
+            String sql = "select * from clientes";
+            rs = st.executeQuery(sql);
+            while (rs.next()) {
+                cl = new Cliente();
+                cl.setCedula(rs.getString(1));
+                cl.setNombre(rs.getString(2));
+                cl.setApellido(rs.getString(3));
+                cl.setDireccion(rs.getString(4));
+                cl.setTelefono(rs.getString(5));
+                clientes.add(cl);
+            }
+            st.close();
+            rs.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        } catch (java.lang.NullPointerException ex1) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex1.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        return clientes;
+    }
 
     private void btnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarClienteActionPerformed
         // TODO add your handling code here:
-        new ClientesIngreso(null,true).setVisible(true);
+        new ClientesIngreso(null, true).setVisible(true);
     }//GEN-LAST:event_btnAgregarClienteActionPerformed
 
     /**
