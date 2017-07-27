@@ -14,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*import ClasesSecundarias.Coneccion;
 import java.sql.PreparedStatement;
@@ -40,6 +42,7 @@ public class Pedidos extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(parent);
+        deshabilitarComponentes();
     }
 
     public void setearVariables() {
@@ -70,8 +73,85 @@ public class Pedidos extends javax.swing.JDialog {
 
     }
 
-    public void mostrarProveedores() {
+    //Revisar Codigo para mostrar los proveedores
+    /* public void mostrarProveedores() throws SQLException {
         cn.Conectar();
+        String usu = " ";
+        String codigo = jTextField_Cod_Prov.getText();
+        String query = "select * from proveedores where cod_prov = " + codigo + " ";
+        st = cn.getConexion().createStatement();
+        rs = st.executeQuery(query);
+        while (rs.next()) {
+            usu = rs.getString("COD_PROV");
+        }
+        if (codigo.equals(usu)) {
+            jTextField_Nom_Prov.setText(rs.getString("NOM_PROV"));
+            jTextField_Dir_Prov.setText(rs.getString("DIR_PROV"));
+            jTextField_Tel_Prov.setText(rs.getString("TEL_PROV"));
+        }
+    }*/
+    public void CargarDatosProveedor() {
+        try {
+            cn.Conectar();
+            int cont = 0;
+            String usu = "";
+            String codigo = jTextField_Cod_Prov.getText();
+            String query = "select * from proveedores where cod_prov = " + codigo + " ";
+            st = cn.getConexion().createStatement();
+            rs = st.executeQuery(query);
+            while (rs.next()) {
+                cont++;
+                if (codigo.equals(rs.getString("COD_PROV"))) {
+                    jTextField_Nom_Prov.setText(rs.getString("NOM_PROV"));
+                    jTextField_Dir_Prov.setText(rs.getString("DIR_PROV"));
+                    jTextField_Tel_Prov.setText(rs.getString("TEL_PROV"));
+                    JOptionPane.showMessageDialog(null, "Carga de datos Exitosa!...");
+                    habilitarComponentes();
+                }
+
+            }
+            st.close();
+            rs.close();
+            if (cont == 0) {
+                JOptionPane.showMessageDialog(null, "Proveedor no existe", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error BDD: " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+
+        } catch (java.lang.NullPointerException ex1) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error BDD: " + ex1.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void habilitarComponentes() {
+        jComboBox_Materiales.setEnabled(true);
+        jTextField_Precio.setEnabled(true);
+        jTextField_Nom_Prov.setEnabled(true);
+        jTextField_Tel_Prov.setEnabled(true);
+        jTextField_Dir_Prov.setEnabled(true);
+        jTextField_Cant_Material.setEnabled(true);
+        //jButton_Añadir.setEnabled(true);
+        jTable_Pedidos.setEnabled(true);
+        //jButtonFacturar.setEnabled(true);
+        //jButtonLimpiarDatos.setEnabled(true);
+    }
+    
+    public void deshabilitarComponentes() {
+        jComboBox_Materiales.setEnabled(false);
+        //jTextField_Talla.setEnabled(false);
+        //jTextField_Modelo.setEnabled(false);
+        //jTextField_TipoZapato.setEnabled(false);
+        jTextField_Precio.setEnabled(false);
+        jTextField_Nom_Prov.setEnabled(false);
+        jTextField_Tel_Prov.setEnabled(false);
+        jTextField_Dir_Prov.setEnabled(false);
+        jTextField_Cant_Material.setEnabled(false);
+        jButton_Añadir_Pedido.setEnabled(false);
+        //jTable_CarritoCompra.setEnabled(false);
+        jButton_RealizarPedido.setEnabled(false);
+        jButton_LimpiarDatos.setEnabled(false);
+ 
+
     }
 
     public boolean ValidarControlesIngresoPedidos() {
@@ -100,13 +180,14 @@ public class Pedidos extends javax.swing.JDialog {
         jPanel_Fondo = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField_Cod_Prov = new javax.swing.JTextField();
         jTextField_Nom_Prov = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jTextField_Tel_Prov = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jTextField_Dir_Prov = new javax.swing.JTextField();
+        jTextField_Cod_Prov = new javax.swing.JTextField();
+        jButton_Cargar_Prov = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jComboBox_Materiales = new javax.swing.JComboBox<>();
@@ -139,6 +220,13 @@ public class Pedidos extends javax.swing.JDialog {
 
         jLabel5.setText("Dirección:");
 
+        jButton_Cargar_Prov.setText("Cargar>>");
+        jButton_Cargar_Prov.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_Cargar_ProvActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -151,18 +239,21 @@ public class Pedidos extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField_Cod_Prov, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(140, 140, 140)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField_Tel_Prov, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jTextField_Nom_Prov, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jTextField_Cod_Prov, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
+                        .addComponent(jButton_Cargar_Prov)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField_Dir_Prov)))
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jTextField_Tel_Prov, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jTextField_Dir_Prov, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -171,9 +262,10 @@ public class Pedidos extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField_Cod_Prov, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField_Tel_Prov, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField_Tel_Prov, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_Cod_Prov, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton_Cargar_Prov))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -224,13 +316,10 @@ public class Pedidos extends javax.swing.JDialog {
                         .addComponent(jTextField_Precio, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel8)))
+                .addGap(22, 22, 22)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jLabel9))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField_Cant_Material, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel9)
+                    .addComponent(jTextField_Cant_Material, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addContainerGap())
@@ -400,6 +489,7 @@ public class Pedidos extends javax.swing.JDialog {
         jTextField_Precio.setText("");
         jComboBox_Materiales.setSelectedItem("");
     }
+
     private void jButton_RealizarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_RealizarPedidoActionPerformed
         try {
             if (ValidarControlesIngresoPedidos()) {
@@ -409,6 +499,11 @@ public class Pedidos extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jButton_RealizarPedidoActionPerformed
 
+    private void jButton_Cargar_ProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Cargar_ProvActionPerformed
+        CargarDatosProveedor();
+    }//GEN-LAST:event_jButton_Cargar_ProvActionPerformed
+
+    /**/
     public void mostrar() {
         String datos[][] = new String[lista.size()][5];
 
@@ -443,16 +538,24 @@ public class Pedidos extends javax.swing.JDialog {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Pedidos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Pedidos.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Pedidos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Pedidos.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Pedidos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Pedidos.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Pedidos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Pedidos.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -476,6 +579,7 @@ public class Pedidos extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Añadir_Pedido;
+    private javax.swing.JButton jButton_Cargar_Prov;
     private javax.swing.JButton jButton_LimpiarDatos;
     private javax.swing.JButton jButton_RealizarPedido;
     private javax.swing.JComboBox<String> jComboBox_Materiales;
