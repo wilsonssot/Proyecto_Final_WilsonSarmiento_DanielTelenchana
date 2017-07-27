@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 
 /*import ClasesSecundarias.Coneccion;
 import java.sql.PreparedStatement;
@@ -33,6 +34,14 @@ import java.sql.Statement;*/
  * @author Usuario
  */
 public class Pedidos extends javax.swing.JDialog {
+    
+    DefaultTableModel modeloTablaPedidos = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+
+    };
 
     ArrayList<Pedido> lista = new ArrayList<Pedido>();
 
@@ -51,8 +60,71 @@ public class Pedidos extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         deshabilitarComponentes();
         llenarComboBox();
+        setearPrecioMaterial();
     }
 
+    public void establecerModeloTabla() {
+        jTable_Pedidos.setModel(modeloTablaPedidos);
+        modeloTablaPedidos.addColumn("Código");
+        modeloTablaPedidos.addColumn("Material");
+        modeloTablaPedidos.addColumn("Cantidad");
+        modeloTablaPedidos.addColumn("Valor/U");
+        modeloTablaPedidos.addColumn("Valor/T");
+
+    }
+    
+    public void llenarDatosVendidos(Material producto) {
+        Object[] prodPedido = new Object[5];
+        prodPedido[0] = producto.getId();
+        prodPedido[1] = producto.getNombre();
+        prodPedido[2] = jTextField_Cant_Material.getText();
+        prodPedido[3] = producto.getPrecioC();
+        prodPedido[4] = (producto.getPrecioC() * Double.valueOf(jTextField_Cant_Material.getText()));
+        modeloTablaPedidos.addRow(prodPedido);
+        double total = 0, valor;
+        for (int i = 0; i < jTable_Pedidos.getRowCount(); i++) {
+            valor = (double) jTable_Pedidos.getValueAt(i, 4);
+            total += valor;
+        }
+        jLabel_Total_Pedido.setText(String.valueOf(total));
+
+    }
+    
+   private void AñadirMaterialTabla() throws HeadlessException {
+        // TODO add your handling code here:
+        if (!jTextField_Cant_Material.getText().equals("")) {
+           // jButton_Cancelar.setEnabled(true);
+            jButton_Añadir_Pedido.setEnabled(true);
+           // int existencia;
+            Material zapatoVendido = ((Material) (jComboBox_Materiales.getSelectedItem()));
+            /*existencia = zapatoVendido.getExistencia();
+            if (existencia > 24) {
+                llenarDatosVendidos(zapatoVendido);
+            } else if (existencia > 12) {
+                JOptionPane.showMessageDialog(null, "Quedan " + existencia + " artículos de este tipo", "AVISO!", JOptionPane.WARNING_MESSAGE);
+            } else if (existencia == 0) {
+                JOptionPane.showMessageDialog(null, "Ya no quedan artículos de este tipo!", "ERROR!...", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Quedan pocos artículos de este tipo : " + existencia, "AVISO!", JOptionPane.WARNING_MESSAGE);
+            }
+        }*/
+    }
+    
+   }
+   
+   private void setearPrecioMaterial() {
+        try {
+            Material producto = (Material) jComboBox_Materiales.getSelectedItem();
+            jTextField_Precio.setText(String.valueOf(producto.getPrecioC()));
+            if (!jTextField_Precio.getText().equals("")) {
+                jButton_Añadir_Pedido.setEnabled(true);
+            }
+        } catch (java.lang.NullPointerException ex) {
+            JOptionPane.showMessageDialog(null, "Error: ComboBox vacio");
+        }
+
+    }
+    
     public void setearVariables() {
         for (int i = 0; i < lista.size(); i++) {
             codigo = lista.get(i).getCodigo();
@@ -63,7 +135,7 @@ public class Pedidos extends javax.swing.JDialog {
         }
     }
 
-    public void ingresoPedidos() throws SQLException {
+  /*  public void ingresoPedidos() throws SQLException {
         for (int i = 0; i < lista.size(); i++) {
             if (ValidarControlesIngresoPedidos()) {
                 setearVariables();
@@ -79,7 +151,7 @@ public class Pedidos extends javax.swing.JDialog {
             }
         }
 
-    }
+    }*/
 
     //Revisar Codigo para mostrar los proveedores
     /* public void mostrarProveedores() throws SQLException {
@@ -104,7 +176,7 @@ public class Pedidos extends javax.swing.JDialog {
             int cont = 0;
             String usu = "";
             String codigo = jTextField_Cod_Prov.getText();
-            String query = "select * from proveedores where cod_prov = " + codigo + " ";
+            String query = "select * from proveedores where cod_prov = '" + codigo + "' ";
             st = cn.getConexion().createStatement();
             rs = st.executeQuery(query);
             while (rs.next()) {
@@ -187,7 +259,7 @@ public class Pedidos extends javax.swing.JDialog {
             rs = st.executeQuery(sql);
             while (rs.next()) {
                 mat = new Material();
-                mat.setId(rs.getInt(1));
+                mat.setId(rs.getString(1));
                 mat.setNombre(rs.getString(2));
                 mat.setDescripcion(rs.getString(3));
                 mat.setPrecioC(rs.getFloat(4));
@@ -235,6 +307,7 @@ public class Pedidos extends javax.swing.JDialog {
         jTextField_Dir_Prov = new javax.swing.JTextField();
         jTextField_Cod_Prov = new javax.swing.JTextField();
         jButton_Cargar_Prov = new javax.swing.JButton();
+        jButton_LimpiarDatos = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jComboBox_Materiales = new javax.swing.JComboBox<>();
@@ -250,7 +323,6 @@ public class Pedidos extends javax.swing.JDialog {
         jTable_Pedidos = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
         jLabel_Total_Pedido = new javax.swing.JLabel();
-        jButton_LimpiarDatos = new javax.swing.JButton();
         jButton_RealizarPedido = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -273,6 +345,8 @@ public class Pedidos extends javax.swing.JDialog {
                 jButton_Cargar_ProvActionPerformed(evt);
             }
         });
+
+        jButton_LimpiarDatos.setText("Limpiar Datos");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -297,10 +371,12 @@ public class Pedidos extends javax.swing.JDialog {
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField_Dir_Prov, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField_Tel_Prov, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jTextField_Dir_Prov, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton_LimpiarDatos)
+                            .addComponent(jTextField_Tel_Prov, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -323,7 +399,9 @@ public class Pedidos extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTextField_Dir_Prov)
                         .addComponent(jLabel5)))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton_LimpiarDatos)
+                .addGap(6, 6, 6))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("CALZADO"));
@@ -423,8 +501,6 @@ public class Pedidos extends javax.swing.JDialog {
         jLabel_Total_Pedido.setText(" ");
         jLabel_Total_Pedido.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jButton_LimpiarDatos.setText("Limpiar Datos");
-
         jButton_RealizarPedido.setText("Realizar Pedido");
         jButton_RealizarPedido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -439,11 +515,9 @@ public class Pedidos extends javax.swing.JDialog {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jButton_RealizarPedido)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton_LimpiarDatos)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel10)
                         .addGap(18, 18, 18)
@@ -459,7 +533,6 @@ public class Pedidos extends javax.swing.JDialog {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(jLabel_Total_Pedido)
-                    .addComponent(jButton_LimpiarDatos)
                     .addComponent(jButton_RealizarPedido))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -481,7 +554,7 @@ public class Pedidos extends javax.swing.JDialog {
             .addGroup(jPanel_FondoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -503,7 +576,9 @@ public class Pedidos extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_Añadir_PedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Añadir_PedidoActionPerformed
-        if (ValidarControlesIngresoPedidos()) {
+       AñadirMaterialTabla();
+        
+        /*if (ValidarControlesIngresoPedidos()) {
 
             double total;
             total = Double.valueOf(jTextField_Cant_Material.getText()) * Double.valueOf(jTextField_Precio.getText());
@@ -524,7 +599,7 @@ public class Pedidos extends javax.swing.JDialog {
             }
             jLabel_Total_Pedido.setText(String.valueOf(sumaTotal));
 
-        }
+        }*/
     }//GEN-LAST:event_jButton_Añadir_PedidoActionPerformed
 
     private void Facturar() throws HeadlessException, NumberFormatException, SQLException {
@@ -578,22 +653,22 @@ public class Pedidos extends javax.swing.JDialog {
         if (codigo == 0) {
             try {
                 cn.Conectar();
-                String query = "insert into detalle_pedido (NUM_VEN,COD_PRO_V,CANTIDAD) values (?,?,?)";
+                String query = "insert into detalle_pedido (NUM_PED_P,COD_MAT_P,CANTIDAD) values (?,?,?)";
                 pst = cn.getConexion().prepareStatement(query);
                 boolean ok = false;
-                int size = jTable_CarritoCompra.getRowCount();
+                int size = jTable_Pedidos.getRowCount();
                 for (int i = 0; i < size; i++) {
                     pst.setInt(1, codigo);
-                    pst.setString(2, jTable_CarritoCompra.getValueAt(i, 0).toString());
-                    pst.setInt(3, Integer.valueOf(jTable_CarritoCompra.getValueAt(i, 2).toString()));
+                    pst.setString(2, jTable_Pedidos.getValueAt(i, 0).toString());
+                    pst.setInt(3, Integer.valueOf(jTable_Pedidos.getValueAt(i, 2).toString()));
                     pst.executeUpdate();
                     ok = true;
                 }
                 if (ok) {
 
-                    JOptionPane.showMessageDialog(null, "Venta exitosa!...");
-                    limpiarValores();
-                    deshabilitarCancelar();
+                    JOptionPane.showMessageDialog(null, "Pedido exitoso!...");
+                    limpiarDatos();
+                   //deshabilitarCancelar();
                     deshabilitarComponentes();
                     limpiarTabla();
                 }
@@ -603,7 +678,23 @@ public class Pedidos extends javax.swing.JDialog {
         }
 
     }
+    private void limpiarTabla() {
+        for (int i = jTable_Pedidos.getRowCount() - 1; i >= 0; i--) {
+            modeloTablaPedidos.removeRow(i);
+        }
+    }
 
+   /*  public void limpiarValores() {
+        jTextField_Nom_Prov.setText("");
+        jTextField_Cod_Prov.setText("");
+        jTextField_Cant_Material.setText("");
+        jTextField_Dir_Prov.setText("");
+        jTextField_Tel_Prov.setText("");
+        jLabel_Total_Pedido.setText("");
+        jTextField_Precio.setText("");
+
+    }*/
+    
     public void limpiarDatos() {
         jTextField_Cod_Prov.setText("");
         jTextField_Nom_Prov.setText("");
@@ -615,12 +706,7 @@ public class Pedidos extends javax.swing.JDialog {
     }
 
     private void jButton_RealizarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_RealizarPedidoActionPerformed
-        try {
-            if (ValidarControlesIngresoPedidos()) {
-                ingresoPedidos();
-            }
-        } catch (SQLException ex) {
-        }
+    
     }//GEN-LAST:event_jButton_RealizarPedidoActionPerformed
 
     private void jButton_Cargar_ProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Cargar_ProvActionPerformed
@@ -628,7 +714,7 @@ public class Pedidos extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton_Cargar_ProvActionPerformed
 
     /**/
-    public void mostrar() {
+  /* public void mostrar() {
         String datos[][] = new String[lista.size()][5];
 
         for (int i = 0; i < lista.size(); i++) {
@@ -646,7 +732,7 @@ public class Pedidos extends javax.swing.JDialog {
                 }
         ));
 
-    }
+    }*/
 
     /**
      * @param args the command line arguments

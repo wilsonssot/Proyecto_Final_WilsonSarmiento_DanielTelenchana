@@ -11,15 +11,14 @@ package ClasesSecundarias;
  */
 public class Material {
 
-    private String nombre, descripcion;
-    private int id;
+    private String nombre, descripcion, id;
     private float precioC;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
