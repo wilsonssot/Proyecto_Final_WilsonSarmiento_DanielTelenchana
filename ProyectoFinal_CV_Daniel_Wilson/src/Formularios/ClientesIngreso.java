@@ -7,6 +7,7 @@ package Formularios;
 
 import ClasesSecundarias.Coneccion;
 import ClasesSecundarias.Metodos;
+import ParaBDD.Clientes;
 import java.awt.event.KeyEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -78,7 +79,7 @@ public class ClientesIngreso extends javax.swing.JDialog {
             usu = rs.getString("CED_CLI");
         }
         if (cedula.equals(usu)) {
-            JOptionPane.showMessageDialog(null, "Cliente ya EXISTE");
+            JOptionPane.showMessageDialog(null, "Cliente ya EXISTE","Error",JOptionPane.ERROR_MESSAGE);
             return false;
         } else {
             return true;
@@ -147,6 +148,7 @@ public class ClientesIngreso extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Datos ingresados correctamente");
             limpiarDatos();
             deshabilitarCancelar();
+            this.dispose();
         } else {
             JOptionPane.showMessageDialog(null, "Vuelva a ingresar la cédula", "Cédula Errónea", JOptionPane.ERROR_MESSAGE);
             jTextFieldCedulaCli.setText("");

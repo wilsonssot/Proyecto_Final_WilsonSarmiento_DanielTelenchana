@@ -177,7 +177,7 @@ public class Clientes extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     public void establecerModeloTabla() {
         jTable_DatosClientes.setModel(modeloTabla);
         modeloTabla.addColumn("Cédula");
@@ -190,13 +190,26 @@ public class Clientes extends javax.swing.JDialog {
     public void cargarDatosClientes() {
         Vector<Cliente> clientes = DatosClientes();
         Object cli[] = new Object[5];
+        boolean existe = false;
         for (int i = 0; i < clientes.size(); i++) {
-            cli[0]=clientes.get(i).getCedula();
-            cli[1]=clientes.get(i).getNombre();
-            cli[2]=clientes.get(i).getApellido();
-            cli[3]=clientes.get(i).getDireccion();
-            cli[4]=clientes.get(i).getTelefono();
-            modeloTabla.addRow(cli);
+            cli[0] = clientes.get(i).getCedula();
+            cli[1] = clientes.get(i).getNombre();
+            cli[2] = clientes.get(i).getApellido();
+            cli[3] = clientes.get(i).getDireccion();
+            cli[4] = clientes.get(i).getTelefono();
+            for (int j = 0; j < jTable_DatosClientes.getRowCount(); j++) {
+                if (cli[0].toString().equals(jTable_DatosClientes.getValueAt(j, 0))) {
+                    existe = true;
+                    break;
+                }else{
+                    existe = false;
+                }
+            }
+
+            if (!existe) {
+                modeloTabla.addRow(cli);
+            }
+
         }
     }
 
@@ -230,7 +243,9 @@ public class Clientes extends javax.swing.JDialog {
 
     private void btnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarClienteActionPerformed
         // TODO add your handling code here:
+
         new ClientesIngreso(null, true).setVisible(true);
+        cargarDatosClientes();
     }//GEN-LAST:event_btnAgregarClienteActionPerformed
 
     /**
