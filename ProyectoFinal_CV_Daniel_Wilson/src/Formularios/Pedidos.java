@@ -5,16 +5,20 @@
  */
 package Formularios;
 
+import Acceso.Login;
 import ClasesSecundarias.Material;
 import ClasesSecundarias.Coneccion;
 import static java.awt.image.ImageObserver.HEIGHT;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import ClasesSecundarias.Pedido;
+import java.awt.HeadlessException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -522,6 +526,83 @@ public class Pedidos extends javax.swing.JDialog {
 
         }
     }//GEN-LAST:event_jButton_Añadir_PedidoActionPerformed
+
+    private void Facturar() throws HeadlessException, NumberFormatException, SQLException {
+        // TODO add your handling code here:
+
+        int codDetalle = 0;
+        LocalDate todayLocalDate = LocalDate.now(ZoneId.of("America/Bogota"));
+        String codProv = jTextField_Cod_Prov.getText();
+        double total = Double.valueOf(jLabel_Total_Pedido.getText());
+        if (jTable_Pedidos.getRowCount() > 0) {
+            try {
+                cn.Conectar();
+                String sql = "insert into pedidos (CED_EMP_P,COD_PROV_P,FEC_PED,TOTAL) values(?,?,?,?)";
+                pst = cn.getConexion().prepareStatement(sql, new String[]{"NUM_PED"});
+                pst.setString(1, Login.obtenerUsuarioConectado().getCedula());
+                pst.setString(2, codProv);
+                pst.setDate(3, java.sql.Date.valueOf(todayLocalDate));
+                pst.setDouble(4, total);
+                //pst.executeUpdate();
+                int affectedRows = pst.executeUpdate();
+
+                if (affectedRows == 0) {
+                    throw new SQLException("Creating user failed, no rows affected.");
+                }
+
+                try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        affectedRows = generatedKeys.getInt(1);
+                        codDetalle = affectedRows;
+                        cn.getConexion().close();
+                    } else {
+                        throw new SQLException("Creating user failed, no ID obtained.");
+                    }
+                }
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un problema " + ex.toString());
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No existen artículos a facturar");
+        }
+
+        paraTablaDetalle(codDetalle);
+
+    }
+
+    private void paraTablaDetalle(int codigo) {
+        //Enviar los datos a la tabla detalle
+
+        //
+        if (codigo == 0) {
+            try {
+                cn.Conectar();
+                String query = "insert into detalle_pedido (NUM_VEN,COD_PRO_V,CANTIDAD) values (?,?,?)";
+                pst = cn.getConexion().prepareStatement(query);
+                boolean ok = false;
+                int size = jTable_CarritoCompra.getRowCount();
+                for (int i = 0; i < size; i++) {
+                    pst.setInt(1, codigo);
+                    pst.setString(2, jTable_CarritoCompra.getValueAt(i, 0).toString());
+                    pst.setInt(3, Integer.valueOf(jTable_CarritoCompra.getValueAt(i, 2).toString()));
+                    pst.executeUpdate();
+                    ok = true;
+                }
+                if (ok) {
+
+                    JOptionPane.showMessageDialog(null, "Venta exitosa!...");
+                    limpiarValores();
+                    deshabilitarCancelar();
+                    deshabilitarComponentes();
+                    limpiarTabla();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un problema " + ex.toString());
+            }
+        }
+
+    }
 
     public void limpiarDatos() {
         jTextField_Cod_Prov.setText("");
