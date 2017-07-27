@@ -19,6 +19,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -778,13 +780,18 @@ public class Ventas extends javax.swing.JDialog {
     private void jButtonFacturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFacturarActionPerformed
         int preg = JOptionPane.showConfirmDialog(this, "Realizar Venta?...", "Facturando...", JOptionPane.YES_NO_OPTION);
         if (preg == 0) {
-            Facturar();
+            try {
+                Facturar();
+            } catch (SQLException ex) {
+                Logger.getLogger(Ventas.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_jButtonFacturarActionPerformed
 
-    private void Facturar() throws HeadlessException, NumberFormatException {
+    private void Facturar() throws HeadlessException, NumberFormatException, SQLException {
         // TODO add your handling code here:
-        boolean maestro = false;
+
+        int codDetalle = 0;
         LocalDate todayLocalDate = LocalDate.now(ZoneId.of("America/Bogota"));
         String cedCli = jTextField_CedCli.getText();
         double total = Double.valueOf(jTextField_Total.getText());
@@ -807,25 +814,8 @@ public class Ventas extends javax.swing.JDialog {
                 try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         affectedRows = generatedKeys.getInt(1);
-                        //Enviar los datos a la tabla detalle
-                        String query = "insert into detalle_venta (NUM_VER,COD_PRO_V,CANTIDAD) values (?,?,?)";
-                        pst.close();
-                        pst = cn.getConexion().prepareStatement(query);
-                        for (int i = 0; i < jTable_CarritoCompra.getRowCount(); i++) {
-                            int codZap = Integer.valueOf(jTable_CarritoCompra.getValueAt(i, 0).toString());
-                            int cant = Integer.valueOf(jTable_CarritoCompra.getValueAt(i, 2).toString());
-                            pst.setInt(affectedRows, 1);
-                            pst.setInt(codZap, 2);
-                            pst.setInt(cant, 3);
-                            pst.executeUpdate();
-
-                        }
-                        JOptionPane.showMessageDialog(null, "Venta exitosa!...");
-                        limpiarValores();
-                        deshabilitarCancelar();
-                        deshabilitarComponentes();
-                        limpiarTabla();
-                        //
+                        codDetalle = affectedRows;
+                        cn.getConexion().close();
                     } else {
                         throw new SQLException("Creating user failed, no ID obtained.");
                     }
@@ -837,6 +827,42 @@ public class Ventas extends javax.swing.JDialog {
         } else {
             JOptionPane.showMessageDialog(null, "No existen artículos a facturar");
         }
+
+        paraTablaDetalle(codDetalle);
+
+    }
+
+    private void paraTablaDetalle(int codigo) {
+        //Enviar los datos a la tabla detalle
+
+        //
+        if (codigo == 0) {
+            try {
+                cn.Conectar();
+                String query = "insert into detalle_venta (NUM_VER,COD_PRO_V,CANTIDAD) values (?,?,?)";
+                pst = cn.getConexion().prepareStatement(query);
+                boolean ok = false;
+                int size = jTable_CarritoCompra.getRowCount();
+                for (int i = 0; i < size; i++) {
+                    pst.setInt(1, codigo);
+                    pst.setString(2, jTable_CarritoCompra.getValueAt(i, 0).toString());
+                    pst.setInt(3, Integer.valueOf(jTable_CarritoCompra.getValueAt(i, 2).toString()));
+                    pst.executeUpdate();
+                    ok = true;
+                }
+                if (ok) {
+
+                    JOptionPane.showMessageDialog(null, "Venta exitosa!...");
+                    limpiarValores();
+                    deshabilitarCancelar();
+                    deshabilitarComponentes();
+                    limpiarTabla();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un problema " + ex.toString());
+            }
+        }
+
     }
 
 
