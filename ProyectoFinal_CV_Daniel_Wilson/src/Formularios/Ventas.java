@@ -815,7 +815,8 @@ public class Ventas extends javax.swing.JDialog {
                     if (generatedKeys.next()) {
                         affectedRows = generatedKeys.getInt(1);
                         codDetalle = affectedRows;
-                        cn.getConexion().close();
+                        System.out.println(codDetalle);
+//                        cn.getConexion().close();
                     } else {
                         throw new SQLException("Creating user failed, no ID obtained.");
                     }
@@ -836,7 +837,7 @@ public class Ventas extends javax.swing.JDialog {
         //Enviar los datos a la tabla detalle
 
         //
-        if (codigo == 0) {
+        if (codigo != 0) {
             try {
                 cn.Conectar();
                 String query = "insert into detalle_venta (NUM_VER,COD_PRO_V,CANTIDAD) values (?,?,?)";

@@ -318,12 +318,14 @@ public class Pedidos extends javax.swing.JDialog {
         jLabel7 = new javax.swing.JLabel();
         jTextField_Precio = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
+        jButton_ELiminar_Ped = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_Pedidos = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
         jLabel_Total_Pedido = new javax.swing.JLabel();
         jButton_RealizarPedido = new javax.swing.JButton();
+        jButton_Cancelar_Pedido = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -425,6 +427,8 @@ public class Pedidos extends javax.swing.JDialog {
 
         jLabel8.setText("$");
 
+        jButton_ELiminar_Ped.setText("Eliminar");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -451,6 +455,8 @@ public class Pedidos extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(171, 171, 171)
                 .addComponent(jButton_Añadir_Pedido)
+                .addGap(18, 18, 18)
+                .addComponent(jButton_ELiminar_Ped, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -469,7 +475,9 @@ public class Pedidos extends javax.swing.JDialog {
                     .addComponent(jTextField_Precio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addGap(18, 18, 18)
-                .addComponent(jButton_Añadir_Pedido)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton_Añadir_Pedido)
+                    .addComponent(jButton_ELiminar_Ped))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -508,6 +516,8 @@ public class Pedidos extends javax.swing.JDialog {
             }
         });
 
+        jButton_Cancelar_Pedido.setText("Cancelar");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -518,6 +528,8 @@ public class Pedidos extends javax.swing.JDialog {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jButton_RealizarPedido)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton_Cancelar_Pedido, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel10)
                         .addGap(18, 18, 18)
@@ -533,7 +545,8 @@ public class Pedidos extends javax.swing.JDialog {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(jLabel_Total_Pedido)
-                    .addComponent(jButton_RealizarPedido))
+                    .addComponent(jButton_RealizarPedido)
+                    .addComponent(jButton_Cancelar_Pedido))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -789,7 +802,9 @@ public class Pedidos extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Añadir_Pedido;
+    private javax.swing.JButton jButton_Cancelar_Pedido;
     private javax.swing.JButton jButton_Cargar_Prov;
+    private javax.swing.JButton jButton_ELiminar_Ped;
     private javax.swing.JButton jButton_LimpiarDatos;
     private javax.swing.JButton jButton_RealizarPedido;
     private javax.swing.JComboBox<String> jComboBox_Materiales;
