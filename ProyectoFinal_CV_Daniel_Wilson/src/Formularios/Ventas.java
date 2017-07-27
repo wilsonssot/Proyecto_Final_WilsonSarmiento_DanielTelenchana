@@ -16,10 +16,8 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -160,9 +158,11 @@ public class Ventas extends javax.swing.JDialog {
 
     public void habilitarComponentes() {
         jComboBox_Marcas.setEnabled(true);
-        //jTextField_Talla.setEnabled(true);
-        //jTextField_Modelo.setEnabled(true);
-        //jTextField_TipoZapato.setEnabled(true);
+        jTextField_Precio.setEnabled(true);
+        jTextField_NomCli.setEnabled(true);
+        jTextField_ApeCli.setEnabled(true);
+        jTextField_TelCli.setEnabled(true);
+        jTextField_DirCli.setEnabled(true);
         jTextField_Cantidad.setEnabled(true);
         jTextField_Total.setEnabled(true);
         //jButton_Añadir.setEnabled(true);
@@ -178,6 +178,11 @@ public class Ventas extends javax.swing.JDialog {
         //jTextField_Talla.setEnabled(false);
         //jTextField_Modelo.setEnabled(false);
         //jTextField_TipoZapato.setEnabled(false);
+        jTextField_Precio.setEnabled(false);
+        jTextField_NomCli.setEnabled(false);
+        jTextField_ApeCli.setEnabled(false);
+        jTextField_TelCli.setEnabled(false);
+        jTextField_DirCli.setEnabled(false);
         jTextField_Cantidad.setEnabled(false);
         jTextField_Total.setEnabled(false);
         jButton_Añadir.setEnabled(false);
@@ -314,6 +319,7 @@ public class Ventas extends javax.swing.JDialog {
         });
 
         jTextField_NomCli.setEditable(false);
+        jTextField_NomCli.setEnabled(false);
         jTextField_NomCli.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField_NomCliKeyTyped(evt);
@@ -323,6 +329,7 @@ public class Ventas extends javax.swing.JDialog {
         jLabel2.setText("Nombre:");
 
         jTextField_ApeCli.setEditable(false);
+        jTextField_ApeCli.setEnabled(false);
         jTextField_ApeCli.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField_ApeCliKeyTyped(evt);
@@ -334,6 +341,7 @@ public class Ventas extends javax.swing.JDialog {
         jLabel4.setText("Teléfono:");
 
         jTextField_TelCli.setEditable(false);
+        jTextField_TelCli.setEnabled(false);
         jTextField_TelCli.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField_TelCliKeyTyped(evt);
@@ -343,6 +351,7 @@ public class Ventas extends javax.swing.JDialog {
         jLabel5.setText("Dirección:");
 
         jTextField_DirCli.setEditable(false);
+        jTextField_DirCli.setEnabled(false);
         jTextField_DirCli.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField_DirCliKeyTyped(evt);
@@ -455,6 +464,7 @@ public class Ventas extends javax.swing.JDialog {
         jLabel7.setText("Precio:");
 
         jTextField_Precio.setEditable(false);
+        jTextField_Precio.setEnabled(false);
 
         jButton_Eliminar.setText("Eliminar");
         jButton_Eliminar.setEnabled(false);
@@ -695,7 +705,6 @@ public class Ventas extends javax.swing.JDialog {
 
     private void jButton_CargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CargarActionPerformed
         // TODO add your handling code here:
-
         CargarDatosCedula();
     }//GEN-LAST:event_jButton_CargarActionPerformed
 
@@ -728,11 +737,16 @@ public class Ventas extends javax.swing.JDialog {
     }
 
     private void setearPrecioCalzado() {
-        Calzado zapato = (Calzado) jComboBox_Marcas.getSelectedItem();
-        jTextField_Precio.setText(String.valueOf(zapato.getPrecio()));
-        if (!jTextField_Precio.getText().equals("")) {
-            jButton_Añadir.setEnabled(true);
+        try {
+            Calzado zapato = (Calzado) jComboBox_Marcas.getSelectedItem();
+            jTextField_Precio.setText(String.valueOf(zapato.getPrecio()));
+            if (!jTextField_Precio.getText().equals("")) {
+                jButton_Añadir.setEnabled(true);
+            }
+        } catch (java.lang.NullPointerException ex) {
+            JOptionPane.showMessageDialog(null, "Error: ComboBox vacio");
         }
+
     }
 
     private void jButton_AñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AñadirActionPerformed
@@ -762,12 +776,15 @@ public class Ventas extends javax.swing.JDialog {
     }
 
     private void jButtonFacturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFacturarActionPerformed
-        Facturar();
+        int preg = JOptionPane.showConfirmDialog(this, "Realizar Venta?...", "Facturando...", JOptionPane.YES_NO_OPTION);
+        if (preg == 0) {
+            Facturar();
+        }
     }//GEN-LAST:event_jButtonFacturarActionPerformed
 
     private void Facturar() throws HeadlessException, NumberFormatException {
         // TODO add your handling code here:
-
+        boolean maestro = false;
         LocalDate todayLocalDate = LocalDate.now(ZoneId.of("America/Bogota"));
         String cedCli = jTextField_CedCli.getText();
         double total = Double.valueOf(jTextField_Total.getText());
@@ -790,17 +807,30 @@ public class Ventas extends javax.swing.JDialog {
                 try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         affectedRows = generatedKeys.getInt(1);
-                        System.out.println(affectedRows);
+                        //Enviar los datos a la tabla detalle
+                        String query = "insert into detalle_venta (NUM_VER,COD_PRO_V,CANTIDAD) values (?,?,?)";
+                        pst.close();
+                        pst = cn.getConexion().prepareStatement(query);
+                        for (int i = 0; i < jTable_CarritoCompra.getRowCount(); i++) {
+                            int codZap = Integer.valueOf(jTable_CarritoCompra.getValueAt(i, 0).toString());
+                            int cant = Integer.valueOf(jTable_CarritoCompra.getValueAt(i, 2).toString());
+                            pst.setInt(affectedRows, 1);
+                            pst.setInt(codZap, 2);
+                            pst.setInt(cant, 3);
+                            pst.executeUpdate();
+
+                        }
+                        JOptionPane.showMessageDialog(null, "Venta exitosa!...");
+                        limpiarValores();
+                        deshabilitarCancelar();
+                        deshabilitarComponentes();
+                        limpiarTabla();
+                        //
                     } else {
                         throw new SQLException("Creating user failed, no ID obtained.");
                     }
                 }
-                JOptionPane.showMessageDialog(null, "Venta exitosa!...");
 
-                limpiarValores();
-                deshabilitarCancelar();
-                deshabilitarComponentes();
-                limpiarTabla();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido un problema " + ex.toString());
             }
@@ -808,6 +838,7 @@ public class Ventas extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "No existen artículos a facturar");
         }
     }
+
 
     private void jButton_CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CancelarActionPerformed
         confirmarCancelarVenta();
