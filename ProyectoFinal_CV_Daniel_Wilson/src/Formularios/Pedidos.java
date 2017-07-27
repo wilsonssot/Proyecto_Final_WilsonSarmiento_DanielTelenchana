@@ -5,6 +5,7 @@
  */
 package Formularios;
 
+import ClasesSecundarias.Material;
 import ClasesSecundarias.Coneccion;
 import static java.awt.image.ImageObserver.HEIGHT;
 import java.util.ArrayList;
@@ -14,8 +15,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 
 /*import ClasesSecundarias.Coneccion;
 import java.sql.PreparedStatement;
@@ -43,6 +46,7 @@ public class Pedidos extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(parent);
         deshabilitarComponentes();
+        llenarComboBox();
     }
 
     public void setearVariables() {
@@ -135,7 +139,7 @@ public class Pedidos extends javax.swing.JDialog {
         //jButtonFacturar.setEnabled(true);
         //jButtonLimpiarDatos.setEnabled(true);
     }
-    
+
     public void deshabilitarComponentes() {
         jComboBox_Materiales.setEnabled(false);
         //jTextField_Talla.setEnabled(false);
@@ -150,7 +154,6 @@ public class Pedidos extends javax.swing.JDialog {
         //jTable_CarritoCompra.setEnabled(false);
         jButton_RealizarPedido.setEnabled(false);
         jButton_LimpiarDatos.setEnabled(false);
- 
 
     }
 
@@ -166,6 +169,46 @@ public class Pedidos extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Por favor ingrese la cantidad", "ERROR", HEIGHT);
         }
         return true;
+    }
+
+    public Vector<Material> datosParaComboBox() {
+        Vector<Material> material = new Vector<Material>();
+        Material mat;
+        jComboBox_Materiales.removeAllItems();
+        try {
+
+            cn.Conectar();
+            st = cn.getConexion().createStatement();
+            String sql = "select * from materiales";
+            rs = st.executeQuery(sql);
+            while (rs.next()) {
+                mat = new Material();
+                mat.setId(rs.getInt(1));
+                mat.setNombre(rs.getString(2));
+                mat.setDescripcion(rs.getString(3));
+                mat.setPrecioC(rs.getFloat(4));
+                material.add(mat);
+            }
+            st.close();
+            rs.close();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        } catch (java.lang.NullPointerException ex1) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex1.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        return material;
+
+    }
+
+    public void llenarComboBox() {
+
+        Vector<Material> mat = datosParaComboBox();
+        DefaultComboBoxModel modeloMaterial = new DefaultComboBoxModel(mat);
+//        for (int i = 0; i < cal.size(); i++) {
+//            modeloProductos.addElement(cal.get(i).toString());
+//        }
+        jComboBox_Materiales.setModel(modeloMaterial);
     }
 
     /**

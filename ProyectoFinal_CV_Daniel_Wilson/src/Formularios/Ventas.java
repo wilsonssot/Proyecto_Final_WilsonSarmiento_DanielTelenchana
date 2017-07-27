@@ -839,7 +839,7 @@ public class Ventas extends javax.swing.JDialog {
         if (codigo == 0) {
             try {
                 cn.Conectar();
-                String query = "insert into detalle_venta (NUM_VER,COD_PRO_V,CANTIDAD) values (?,?,?)";
+                String query = "insert into detalle_venta (NUM_VEN,COD_PRO_V,CANTIDAD) values (?,?,?)";
                 pst = cn.getConexion().prepareStatement(query);
                 boolean ok = false;
                 int size = jTable_CarritoCompra.getRowCount();
