@@ -34,7 +34,7 @@ import java.sql.Statement;*/
  * @author Usuario
  */
 public class Pedidos extends javax.swing.JDialog {
-    
+
     DefaultTableModel modeloTablaPedidos = new DefaultTableModel() {
         @Override
         public boolean isCellEditable(int row, int column) {
@@ -43,13 +43,13 @@ public class Pedidos extends javax.swing.JDialog {
 
     };
 
-    ArrayList<Pedido> lista = new ArrayList<Pedido>();
+   // ArrayList<Pedido> lista = new ArrayList<Pedido>();
 
     Coneccion cn = new Coneccion();
-    ResultSet rs = null;
+
     PreparedStatement pst = null;
     Statement st = null;
-    String codigo, material, cantidad, precio, vTotal;
+    ResultSet rs = null;
 
     /**
      * Creates new form Ventas
@@ -72,8 +72,7 @@ public class Pedidos extends javax.swing.JDialog {
         modeloTablaPedidos.addColumn("Valor/T");
 
     }
-    
-    public void llenarDatosVendidos(Material producto) {
+    public void llenarDatosPedidos(Material producto) {
         Object[] prodPedido = new Object[5];
         prodPedido[0] = producto.getId();
         prodPedido[1] = producto.getNombre();
@@ -89,30 +88,21 @@ public class Pedidos extends javax.swing.JDialog {
         jLabel_Total_Pedido.setText(String.valueOf(total));
 
     }
-    
-   private void AñadirMaterialTabla() throws HeadlessException {
+
+     private void AñadirMaterialTabla() throws HeadlessException {
         // TODO add your handling code here:
         if (!jTextField_Cant_Material.getText().equals("")) {
-           // jButton_Cancelar.setEnabled(true);
+           jButton_Cancelar_Pedido.setEnabled(true);
             jButton_Añadir_Pedido.setEnabled(true);
-           // int existencia;
-            Material zapatoVendido = ((Material) (jComboBox_Materiales.getSelectedItem()));
-            /*existencia = zapatoVendido.getExistencia();
-            if (existencia > 24) {
-                llenarDatosVendidos(zapatoVendido);
-            } else if (existencia > 12) {
-                JOptionPane.showMessageDialog(null, "Quedan " + existencia + " artículos de este tipo", "AVISO!", JOptionPane.WARNING_MESSAGE);
-            } else if (existencia == 0) {
-                JOptionPane.showMessageDialog(null, "Ya no quedan artículos de este tipo!", "ERROR!...", JOptionPane.ERROR_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, "Quedan pocos artículos de este tipo : " + existencia, "AVISO!", JOptionPane.WARNING_MESSAGE);
-            }
-        }*/
+           int existencia;
+            Material productoPedido = ((Material) (jComboBox_Materiales.getSelectedItem()));
+            llenarDatosPedidos(productoPedido);
     }
     
    }
-   
-   private void setearPrecioMaterial() {
+     
+     
+    private void setearPrecioMaterial() {
         try {
             Material producto = (Material) jComboBox_Materiales.getSelectedItem();
             jTextField_Precio.setText(String.valueOf(producto.getPrecioC()));
@@ -124,8 +114,8 @@ public class Pedidos extends javax.swing.JDialog {
         }
 
     }
-    
-    public void setearVariables() {
+
+  /*  public void setearVariables() {
         for (int i = 0; i < lista.size(); i++) {
             codigo = lista.get(i).getCodigo();
             material = lista.get(i).getMaterial();
@@ -133,9 +123,9 @@ public class Pedidos extends javax.swing.JDialog {
             precio = lista.get(i).getPrecio();
             vTotal = lista.get(i).getTotal();
         }
-    }
+    }*/
 
-  /*  public void ingresoPedidos() throws SQLException {
+    /*  public void ingresoPedidos() throws SQLException {
         for (int i = 0; i < lista.size(); i++) {
             if (ValidarControlesIngresoPedidos()) {
                 setearVariables();
@@ -152,7 +142,6 @@ public class Pedidos extends javax.swing.JDialog {
         }
 
     }*/
-
     //Revisar Codigo para mostrar los proveedores
     /* public void mostrarProveedores() throws SQLException {
         cn.Conectar();
@@ -212,8 +201,8 @@ public class Pedidos extends javax.swing.JDialog {
         jTextField_Cant_Material.setEnabled(true);
         //jButton_Añadir.setEnabled(true);
         jTable_Pedidos.setEnabled(true);
-        //jButtonFacturar.setEnabled(true);
-        //jButtonLimpiarDatos.setEnabled(true);
+        jButton_RealizarPedido.setEnabled(true);
+        jButton_LimpiarDatos.setEnabled(true);
     }
 
     public void deshabilitarComponentes() {
@@ -589,9 +578,9 @@ public class Pedidos extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_Añadir_PedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Añadir_PedidoActionPerformed
-       AñadirMaterialTabla();
-        
-        /*if (ValidarControlesIngresoPedidos()) {
+        // AñadirMaterialTabla();
+
+       /* if (ValidarControlesIngresoPedidos()) {
 
             double total;
             total = Double.valueOf(jTextField_Cant_Material.getText()) * Double.valueOf(jTextField_Precio.getText());
@@ -681,7 +670,7 @@ public class Pedidos extends javax.swing.JDialog {
 
                     JOptionPane.showMessageDialog(null, "Pedido exitoso!...");
                     limpiarDatos();
-                   //deshabilitarCancelar();
+                    //deshabilitarCancelar();
                     deshabilitarComponentes();
                     limpiarTabla();
                 }
@@ -691,13 +680,14 @@ public class Pedidos extends javax.swing.JDialog {
         }
 
     }
+
     private void limpiarTabla() {
         for (int i = jTable_Pedidos.getRowCount() - 1; i >= 0; i--) {
             modeloTablaPedidos.removeRow(i);
         }
     }
 
-   /*  public void limpiarValores() {
+    /*  public void limpiarValores() {
         jTextField_Nom_Prov.setText("");
         jTextField_Cod_Prov.setText("");
         jTextField_Cant_Material.setText("");
@@ -707,7 +697,6 @@ public class Pedidos extends javax.swing.JDialog {
         jTextField_Precio.setText("");
 
     }*/
-    
     public void limpiarDatos() {
         jTextField_Cod_Prov.setText("");
         jTextField_Nom_Prov.setText("");
@@ -719,7 +708,10 @@ public class Pedidos extends javax.swing.JDialog {
     }
 
     private void jButton_RealizarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_RealizarPedidoActionPerformed
-    
+       int preg = JOptionPane.showConfirmDialog(this, "Realizar Venta?...", "Facturando...", JOptionPane.YES_NO_OPTION);
+        if (preg == 0) {
+            Facturar();
+        }
     }//GEN-LAST:event_jButton_RealizarPedidoActionPerformed
 
     private void jButton_Cargar_ProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Cargar_ProvActionPerformed
@@ -727,7 +719,7 @@ public class Pedidos extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton_Cargar_ProvActionPerformed
 
     /**/
-  /* public void mostrar() {
+   /*public void mostrar() {
         String datos[][] = new String[lista.size()][5];
 
         for (int i = 0; i < lista.size(); i++) {
@@ -744,7 +736,7 @@ public class Pedidos extends javax.swing.JDialog {
                     "Codigo", "Material", "Cantidad", "Precio", "V.Total"
                 }
         ));
-
+*
     }*/
 
     /**

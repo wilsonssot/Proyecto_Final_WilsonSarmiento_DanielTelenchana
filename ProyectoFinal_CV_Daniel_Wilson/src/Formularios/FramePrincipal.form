@@ -62,7 +62,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="btn_Inventory" min="-2" pref="140" max="-2" attributes="0"/>
-                          <Component id="btn_Materiales" min="-2" max="-2" attributes="0"/>
+                          <Component id="btn_Pedidos" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -83,7 +83,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="btn_Inventory" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btn_Materiales" min="-2" max="-2" attributes="0"/>
+                      <Component id="btn_Pedidos" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="btn_Admin" min="-2" max="-2" attributes="0"/>
@@ -225,8 +225,11 @@
         <Property name="verticalAlignment" type="int" value="3"/>
         <Property name="verticalTextPosition" type="int" value="3"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_ProveedoresActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btn_Materiales">
+    <Component class="javax.swing.JButton" name="btn_Pedidos">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/Imagenes/Menu/boton_usuario_2.png"/>
@@ -249,6 +252,9 @@
         <Property name="verticalAlignment" type="int" value="3"/>
         <Property name="verticalTextPosition" type="int" value="3"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_PedidosActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
