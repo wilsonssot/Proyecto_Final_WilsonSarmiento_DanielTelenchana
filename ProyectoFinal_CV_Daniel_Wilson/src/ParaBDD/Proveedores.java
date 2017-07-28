@@ -88,7 +88,7 @@ public class Proveedores extends javax.swing.JDialog {
                         + "NOM_PROV = '" + datos[1].toString() + "' , "
                         + "DIR_PROV = '" + datos[2].toString() + "' , "
                         + "TEL_PROV = '" + datos[3].toString() + "' "
-                        + "WHERE CED_EMP = '" + datos[0].toString() + "'";
+                        + "WHERE COD_PROV = '" + datos[0].toString() + "'";
                 pst = cn.getConexion().prepareStatement(sql);
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Datos actualizados correctamente!...");
@@ -253,6 +253,11 @@ public class Proveedores extends javax.swing.JDialog {
                 return types [columnIndex];
             }
         });
+        jTable_DatosProveedores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable_DatosProveedoresMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable_DatosProveedores);
 
         btnAgregarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_2.png"))); // NOI18N
@@ -319,6 +324,12 @@ public class Proveedores extends javax.swing.JDialog {
         });
 
         jLabel5.setText("Buscar:");
+
+        jTextField_Buscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField_BuscarKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -424,6 +435,16 @@ public class Proveedores extends javax.swing.JDialog {
     private void jTextField_Tel_ProvKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Tel_ProvKeyTyped
       Metodos.validarTelefono(evt, jTextField_Tel_Prov);
     }//GEN-LAST:event_jTextField_Tel_ProvKeyTyped
+
+    private void jTable_DatosProveedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_DatosProveedoresMouseClicked
+        // TODO add your handling code here:
+        mostrarValores();
+    }//GEN-LAST:event_jTable_DatosProveedoresMouseClicked
+
+    private void jTextField_BuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_BuscarKeyReleased
+        // TODO add your handling code here:
+        buscarDato();
+    }//GEN-LAST:event_jTextField_BuscarKeyReleased
 
     /**
      * @param args the command line arguments

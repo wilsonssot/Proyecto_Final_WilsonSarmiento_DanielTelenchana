@@ -97,8 +97,8 @@ public class Inventario extends javax.swing.JDialog {
                         + "MOD_PRO = '" + datos[3].toString() + "' , "
                         + "COD_TALL_P = '" + datos[4].toString() + "' , "
                         + "PRE_PRO =" + Double.valueOf(datos[4].toString()) + ", "
-                        + "EXISTENCIA =" + Double.valueOf(datos[4].toString()) + "' "
-                        + "WHERE CED_EMP = '" + datos[0].toString() + "'";
+                        + "EXISTENCIA =" + Double.valueOf(datos[4].toString()) + ""
+                        + "WHERE COD_PRO = '" + datos[0].toString() + "'";
                 pst = cn.getConexion().prepareStatement(sql);
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Datos actualizados correctamente!...");
@@ -175,7 +175,7 @@ public class Inventario extends javax.swing.JDialog {
         limpiarTabla();
         try {
             cn.Conectar();
-            String consulta = "SELECT * FROM PRODUCTO_CALZADO WHERE MOD_PRO LIKE " + "'" + jTextField_Buscar.getText() + "_%'";
+            String consulta = "SELECT * FROM PRODUCTO_CALZADO WHERE NOM_PRO LIKE " + "'" + jTextField_Buscar.getText() + "_%'";
             st = cn.getConexion().prepareStatement(consulta);
             rs = st.executeQuery(consulta);
             String[] fila = new String[7];
@@ -292,6 +292,11 @@ public class Inventario extends javax.swing.JDialog {
                 return types [columnIndex];
             }
         });
+        jTable_Inventario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable_InventarioMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable_Inventario);
 
         btnModificarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_2.png"))); // NOI18N
@@ -386,6 +391,12 @@ public class Inventario extends javax.swing.JDialog {
             }
         });
 
+        jTextField_Buscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField_BuscarKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -416,13 +427,11 @@ public class Inventario extends javax.swing.JDialog {
                                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jTextField_Pre_Cal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
-                                        .addComponent(jTextField_Talla_Cal, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jTextField_Stock_Calz))
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jTextField_Buscar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                                        .addComponent(jTextField_Modelo_cal)))
+                                    .addComponent(jTextField_Pre_Cal, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+                                    .addComponent(jTextField_Talla_Cal)
+                                    .addComponent(jTextField_Stock_Calz, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jTextField_Buscar, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                                    .addComponent(jTextField_Modelo_cal, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addGap(138, 138, 138)))
                         .addComponent(btnModificarProveedor)
                         .addGap(37, 37, 37)
@@ -529,6 +538,16 @@ public class Inventario extends javax.swing.JDialog {
         new PoductosIngreso(null, true).setVisible(true);
         cargarDatosCalzado();
     }//GEN-LAST:event_btnAgregarProveedorActionPerformed
+
+    private void jTable_InventarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_InventarioMouseClicked
+        // TODO add your handling code here:
+        mostrarValores();
+    }//GEN-LAST:event_jTable_InventarioMouseClicked
+
+    private void jTextField_BuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_BuscarKeyReleased
+        // TODO add your handling code here:
+        buscarDato();
+    }//GEN-LAST:event_jTextField_BuscarKeyReleased
 
     /**
      * @param args the command line arguments

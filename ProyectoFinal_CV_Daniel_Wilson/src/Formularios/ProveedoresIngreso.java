@@ -35,6 +35,7 @@ public class ProveedoresIngreso extends javax.swing.JDialog {
     public ProveedoresIngreso(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
         deshabilitarCancelar();
     }
 

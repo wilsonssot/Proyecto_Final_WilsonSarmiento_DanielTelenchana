@@ -9,6 +9,7 @@ import Acceso.Login;
 import ClasesSecundarias.Usuario;
 import ParaBDD.Clientes;
 import ParaBDD.Inventario;
+import ParaBDD.Proveedores;
 import ParaBDD.Usuarios;
 import java.awt.HeadlessException;
 import javax.swing.BoxLayout;
@@ -247,7 +248,7 @@ public class FramePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_PedidosActionPerformed
 
     private void btn_ProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ProveedoresActionPerformed
-       new ProveedoresIngreso(this, true).setVisible(true);
+       new Proveedores(this, true).setVisible(true);
     }//GEN-LAST:event_btn_ProveedoresActionPerformed
 
     private void confirmarSalida() throws HeadlessException {
