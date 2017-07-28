@@ -5,12 +5,31 @@
  */
 package ParaBDD;
 
+import ClasesSecundarias.Coneccion;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Usuario
  */
 public class Proveedores extends javax.swing.JDialog {
 
+    
+     DefaultTableModel modeloTabla = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+
+    };
+     
+         Coneccion cn = new Coneccion();
+    PreparedStatement pst = null;
+    Statement st = null;
+    ResultSet rs = null;
     /**
      * Creates new form Clientes
      */
