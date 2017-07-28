@@ -22,10 +22,10 @@ public class Coneccion {
 
     private Connection conexion;
 
-    public static void main(String[] args) {
-        Coneccion obconeccion = new Coneccion();
-        obconeccion.Conectar();
-    }
+//    public static void main(String[] args) {
+//        Coneccion obconeccion = new Coneccion();
+//        obconeccion.Conectar();
+//    }
 
     public Connection getConexion() {
         return conexion;
