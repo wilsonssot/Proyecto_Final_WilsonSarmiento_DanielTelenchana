@@ -5,17 +5,163 @@
  */
 package Formularios;
 
+import ClasesSecundarias.Coneccion;
+import ClasesSecundarias.Metodos;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Leonardo
  */
 public class Productos extends javax.swing.JFrame {
 
+    Coneccion cn = new Coneccion();
+    ResultSet rs = null;
+    PreparedStatement pst = null;
+    Statement st = null;
+    String codigo, nombre, marca, modelo;
+    double talla, precio, stock;
+    ArrayList listaProductos = new ArrayList();
+
     /**
      * Creates new form Productos
      */
     public Productos() {
         initComponents();
+        deshabilitarCancelar();
+    }
+
+    public void deshabilitarCancelar() {
+        jButtonCancelar.setEnabled(false);
+
+        if (!jTextField_Nom_Pro.getText().equals("")) {
+            jButtonCancelar.setEnabled(true);
+        }
+        if (!jTextField_Marca_Pro.getText().equals("")) {
+            jButtonCancelar.setEnabled(true);
+        }
+        if (!jTextField_Modelo_Pro.getText().equals("")) {
+            jButtonCancelar.setEnabled(true);
+        }
+        if (!jTextField_Talla_Pro.getText().equals("")) {
+            jButtonCancelar.setEnabled(true);
+        }
+        if (!jTextField_Pre_Pro.getText().equals("")) {
+            jButtonCancelar.setEnabled(true);
+        }
+        if (!jTextField_Stock_Pro.getText().equals("")) {
+            jButtonCancelar.setEnabled(true);
+        }
+
+//        if (res) {
+//            jButtonCancelar.setEnabled(false);
+//        } else {
+//            jButtonCancelar.setEnabled(true);
+//        }
+    }
+
+    public boolean existeProducto() throws SQLException {
+        cn.Conectar();
+        String usu = "";
+        String codigo = jTextField_Cod_Pro.getText();
+        String query = "select * from producto_calzado where cod_pro = " + codigo + " ";
+        st = cn.getConexion().createStatement();
+        rs = st.executeQuery(query);
+        while (rs.next()) {
+            usu = rs.getString("COD_PRO");
+        }
+        if (codigo.equals(usu)) {
+            JOptionPane.showMessageDialog(null, "Producto ya EXISTE", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public boolean validarDatos() throws SQLException {
+
+        if (jTextField_Nom_Pro.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese el nombre del producto", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (jTextField_Marca_Pro.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese la marca del producto", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (jTextField_Modelo_Pro.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese el modelo del producto", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (jTextField_Talla_Pro.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese la talla del producto", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (jTextField_Pre_Pro.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese el precio del producto", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (jTextField_Stock_Pro.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Ingrese el stock del producto", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (existeProducto()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public void limpiarDatos() {
+        jTextField_Cod_Pro.setText("");
+        jTextField_Nom_Pro.setText("");
+        jTextField_Marca_Pro.setText("");
+        jTextField_Modelo_Pro.setText("");
+        jTextField_Talla_Pro.setText("");
+        jTextField_Pre_Pro.setText("");
+        jTextField_Stock_Pro.setText("");
+    }
+
+    public void setearVariables() {
+        codigo = jTextField_Cod_Pro.getText();
+        nombre = jTextField_Nom_Pro.getText();
+        marca = jTextField_Marca_Pro.getText();
+        modelo = jTextField_Modelo_Pro.getText();
+        talla = Double.valueOf(jTextField_Talla_Pro.getText());
+        precio = Double.valueOf(jTextField_Pre_Pro.getText());
+        stock = Double.valueOf(jTextField_Stock_Pro.getText());
+    }
+
+    public void ingresoUsuariosBase() throws SQLException {
+        if (validarDatos()) {
+            setearVariables();
+            cn.Conectar();
+            pst = cn.getConexion().prepareStatement("insert into producto_calzado(COD_PRO,NOM_PRO,MAR_PRO,MOD_PRO,COD_TALL_P,PRE_PRO,EXISTENCIA) values (?,?,?,?,?,?,?)");
+            pst.setString(1, codigo);
+            pst.setString(2, nombre);
+            pst.setString(3, marca);
+            pst.setString(4, modelo);
+            pst.setDouble(5, talla);
+            pst.setDouble(6, precio);
+            pst.setDouble(7, stock);
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Datos ingresados correctamente");
+            limpiarDatos();
+            deshabilitarCancelar();
+            this.dispose();
+        } else {
+            /*JOptionPane.showMessageDialog(null, "Vuelva a ingresar la cédula", "Cédula Errónea", JOptionPane.ERROR_MESSAGE);
+            jTextField_CedUsu.setText("");*/
+        }
+        pst.close();
+
     }
 
     /**
@@ -31,18 +177,19 @@ public class Productos extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField_CedUsu = new javax.swing.JTextField();
-        jTextField_NomUsu = new javax.swing.JTextField();
-        jTextField_ApeUsu = new javax.swing.JTextField();
+        jTextField_Cod_Pro = new javax.swing.JTextField();
+        jTextField_Nom_Pro = new javax.swing.JTextField();
+        jTextField_Marca_Pro = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField_DirUsu = new javax.swing.JTextField();
-        jTextField_TelUsu = new javax.swing.JTextField();
+        jTextField_Pre_Pro = new javax.swing.JTextField();
+        jTextField_Stock_Pro = new javax.swing.JTextField();
         jButton_Guardar = new javax.swing.JButton();
         jButtonCancelar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jTextField_SueUsu = new javax.swing.JTextField();
+        jTextField_Talla_Pro = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
+        jTextField_Modelo_Pro = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,37 +201,37 @@ public class Productos extends javax.swing.JFrame {
 
         jLabel3.setText("Marca:");
 
-        jTextField_CedUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+        jTextField_Cod_Pro.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField_CedUsuKeyTyped(evt);
+                jTextField_Cod_ProKeyTyped(evt);
             }
         });
 
-        jTextField_NomUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+        jTextField_Nom_Pro.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField_NomUsuKeyTyped(evt);
+                jTextField_Nom_ProKeyTyped(evt);
             }
         });
 
-        jTextField_ApeUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+        jTextField_Marca_Pro.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField_ApeUsuKeyTyped(evt);
+                jTextField_Marca_ProKeyTyped(evt);
             }
         });
 
-        jLabel5.setText("Precio:");
+        jLabel5.setText("Stock:");
 
         jLabel6.setText("Precio:");
 
-        jTextField_DirUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+        jTextField_Pre_Pro.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField_DirUsuKeyTyped(evt);
+                jTextField_Pre_ProKeyTyped(evt);
             }
         });
 
-        jTextField_TelUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+        jTextField_Stock_Pro.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField_TelUsuKeyTyped(evt);
+                jTextField_Stock_ProKeyTyped(evt);
             }
         });
 
@@ -104,6 +251,12 @@ public class Productos extends javax.swing.JFrame {
 
         jLabel4.setText("Talla:");
 
+        jTextField_Talla_Pro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField_Talla_ProActionPerformed(evt);
+            }
+        });
+
         jLabel7.setText("Modelo:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -116,8 +269,7 @@ public class Productos extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton_Guardar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonCancelar)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jButtonCancelar))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -126,22 +278,21 @@ public class Productos extends javax.swing.JFrame {
                             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField_CedUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField_NomUsu)
-                            .addComponent(jTextField_ApeUsu, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE))
+                            .addComponent(jTextField_Cod_Pro, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField_Nom_Pro)
+                            .addComponent(jTextField_Marca_Pro, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                            .addComponent(jTextField_Modelo_Pro))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField_DirUsu)
-                            .addComponent(jTextField_TelUsu)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextField_SueUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 129, Short.MAX_VALUE)))))
-                .addContainerGap())
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextField_Talla_Pro, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+                            .addComponent(jTextField_Stock_Pro)
+                            .addComponent(jTextField_Pre_Pro))))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,24 +300,27 @@ public class Productos extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField_CedUsu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField_SueUsu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField_Cod_Pro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_NomUsu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(jTextField_DirUsu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField_Nom_Pro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(jTextField_Talla_Pro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField_ApeUsu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextField_TelUsu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                    .addComponent(jTextField_Marca_Pro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(jTextField_Pre_Pro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextField_Stock_Pro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5))
+                    .addComponent(jTextField_Modelo_Pro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Guardar)
                     .addComponent(jButtonCancelar)))
@@ -192,31 +346,31 @@ public class Productos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField_CedUsuKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_CedUsuKeyTyped
+    private void jTextField_Cod_ProKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Cod_ProKeyTyped
         // TODO add your handling code here:
         deshabilitarCancelar();
-        Metodos.validarTelefono(evt, jTextField_CedUsu);
-    }//GEN-LAST:event_jTextField_CedUsuKeyTyped
+        Metodos.validarTelefono(evt, jTextField_Cod_Pro);
+    }//GEN-LAST:event_jTextField_Cod_ProKeyTyped
 
-    private void jTextField_NomUsuKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_NomUsuKeyTyped
+    private void jTextField_Nom_ProKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Nom_ProKeyTyped
         deshabilitarCancelar();
-        Metodos.validarLetras(evt, jTextField_NomUsu);
-    }//GEN-LAST:event_jTextField_NomUsuKeyTyped
+        Metodos.validarLetras(evt, jTextField_Nom_Pro);
+    }//GEN-LAST:event_jTextField_Nom_ProKeyTyped
 
-    private void jTextField_ApeUsuKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_ApeUsuKeyTyped
+    private void jTextField_Marca_ProKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Marca_ProKeyTyped
         deshabilitarCancelar();
-        Metodos.validarLetras(evt, jTextField_ApeUsu);
-    }//GEN-LAST:event_jTextField_ApeUsuKeyTyped
+        Metodos.validarLetras(evt, jTextField_Marca_Pro);
+    }//GEN-LAST:event_jTextField_Marca_ProKeyTyped
 
-    private void jTextField_DirUsuKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_DirUsuKeyTyped
+    private void jTextField_Pre_ProKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Pre_ProKeyTyped
         deshabilitarCancelar();
-        Metodos.validarLetras(evt, jTextField_DirUsu);
-    }//GEN-LAST:event_jTextField_DirUsuKeyTyped
+        Metodos.validarLetras(evt, jTextField_Pre_Pro);
+    }//GEN-LAST:event_jTextField_Pre_ProKeyTyped
 
-    private void jTextField_TelUsuKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_TelUsuKeyTyped
+    private void jTextField_Stock_ProKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Stock_ProKeyTyped
         deshabilitarCancelar();
-        Metodos.validarTelefono(evt, jTextField_TelUsu);
-    }//GEN-LAST:event_jTextField_TelUsuKeyTyped
+        Metodos.validarTelefono(evt, jTextField_Stock_Pro);
+    }//GEN-LAST:event_jTextField_Stock_ProKeyTyped
 
     private void jButton_GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GuardarActionPerformed
         try {
@@ -237,6 +391,10 @@ public class Productos extends javax.swing.JFrame {
         limpiarDatos();
         deshabilitarCancelar();
     }//GEN-LAST:event_jButtonCancelarActionPerformed
+
+    private void jTextField_Talla_ProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_Talla_ProActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField_Talla_ProActionPerformed
 
     /**
      * @param args the command line arguments
@@ -284,11 +442,12 @@ public class Productos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField_ApeUsu;
-    private javax.swing.JTextField jTextField_CedUsu;
-    private javax.swing.JTextField jTextField_DirUsu;
-    private javax.swing.JTextField jTextField_NomUsu;
-    private javax.swing.JTextField jTextField_SueUsu;
-    private javax.swing.JTextField jTextField_TelUsu;
+    private javax.swing.JTextField jTextField_Cod_Pro;
+    private javax.swing.JTextField jTextField_Marca_Pro;
+    private javax.swing.JTextField jTextField_Modelo_Pro;
+    private javax.swing.JTextField jTextField_Nom_Pro;
+    private javax.swing.JTextField jTextField_Pre_Pro;
+    private javax.swing.JTextField jTextField_Stock_Pro;
+    private javax.swing.JTextField jTextField_Talla_Pro;
     // End of variables declaration//GEN-END:variables
 }
