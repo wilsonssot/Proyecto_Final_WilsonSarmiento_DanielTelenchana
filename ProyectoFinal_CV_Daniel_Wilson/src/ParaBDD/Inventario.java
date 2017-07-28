@@ -7,6 +7,7 @@ package ParaBDD;
 
 import ClasesSecundarias.Coneccion;
 import ClasesSecundarias.Calzado;
+import ClasesSecundarias.Metodos;
 import java.awt.HeadlessException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -302,6 +303,11 @@ public void habilitarComponentes() {
         btnModificarProveedor.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_1.png"))); // NOI18N
         btnModificarProveedor.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnModificarProveedor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnModificarProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarProveedorActionPerformed(evt);
+            }
+        });
 
         btnAgregarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_2.png"))); // NOI18N
         btnAgregarProveedor.setText("AGREGAR");
@@ -313,6 +319,11 @@ public void habilitarComponentes() {
         btnAgregarProveedor.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_1.png"))); // NOI18N
         btnAgregarProveedor.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnAgregarProveedor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAgregarProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarProveedorActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Código:");
 
@@ -333,16 +344,46 @@ public void habilitarComponentes() {
         jTextField_Cod_Cal.setEnabled(false);
 
         jTextField_Nom_Cal.setEnabled(false);
+        jTextField_Nom_Cal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Nom_CalKeyTyped(evt);
+            }
+        });
 
         jTextField_Marca_Cal.setEnabled(false);
+        jTextField_Marca_Cal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Marca_CalKeyTyped(evt);
+            }
+        });
 
         jTextField_Modelo_cal.setEnabled(false);
+        jTextField_Modelo_cal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Modelo_calKeyTyped(evt);
+            }
+        });
 
         jTextField_Talla_Cal.setEnabled(false);
+        jTextField_Talla_Cal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Talla_CalKeyTyped(evt);
+            }
+        });
 
         jTextField_Pre_Cal.setEnabled(false);
+        jTextField_Pre_Cal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Pre_CalKeyTyped(evt);
+            }
+        });
 
         jTextField_Stock_Calz.setEnabled(false);
+        jTextField_Stock_Calz.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Stock_CalzKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -453,6 +494,39 @@ public void habilitarComponentes() {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextField_Nom_CalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Nom_CalKeyTyped
+        Metodos.validarLetras(evt, jTextField_Nom_Cal);
+    }//GEN-LAST:event_jTextField_Nom_CalKeyTyped
+
+    private void jTextField_Marca_CalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Marca_CalKeyTyped
+        Metodos.validarLetras(evt, jTextField_Marca_Cal);
+    }//GEN-LAST:event_jTextField_Marca_CalKeyTyped
+
+    private void jTextField_Modelo_calKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Modelo_calKeyTyped
+       
+    }//GEN-LAST:event_jTextField_Modelo_calKeyTyped
+
+    private void jTextField_Talla_CalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Talla_CalKeyTyped
+        Metodos.validarTelefono(evt, jTextField_Talla_Cal);
+    }//GEN-LAST:event_jTextField_Talla_CalKeyTyped
+
+    private void jTextField_Pre_CalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Pre_CalKeyTyped
+       Metodos.validarTelefono(evt, jTextField_Pre_Cal);
+    }//GEN-LAST:event_jTextField_Pre_CalKeyTyped
+
+    private void jTextField_Stock_CalzKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Stock_CalzKeyTyped
+        Metodos.validarTelefono(evt, jTextField_Stock_Calz);
+    }//GEN-LAST:event_jTextField_Stock_CalzKeyTyped
+
+    private void btnModificarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarProveedorActionPerformed
+       actualizarUnDato();
+       
+    }//GEN-LAST:event_btnModificarProveedorActionPerformed
+
+    private void btnAgregarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarProveedorActionPerformed
+       
+    }//GEN-LAST:event_btnAgregarProveedorActionPerformed
 
     /**
      * @param args the command line arguments
