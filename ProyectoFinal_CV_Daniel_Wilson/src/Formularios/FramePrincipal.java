@@ -44,6 +44,8 @@ public class FramePrincipal extends javax.swing.JFrame {
         btn_Ventas = new javax.swing.JButton();
         btn_Inventory = new javax.swing.JButton();
         btn_Admin = new javax.swing.JButton();
+        btn_Proveedores = new javax.swing.JButton();
+        btn_Materiales = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -120,6 +122,32 @@ public class FramePrincipal extends javax.swing.JFrame {
             }
         });
 
+        btn_Proveedores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_usuario_2.png"))); // NOI18N
+        btn_Proveedores.setText("PROVEEDORES");
+        btn_Proveedores.setActionCommand("JButtonAdm");
+        btn_Proveedores.setBorderPainted(false);
+        btn_Proveedores.setContentAreaFilled(false);
+        btn_Proveedores.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_Proveedores.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn_Proveedores.setIconTextGap(-3);
+        btn_Proveedores.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_usuario_3.png"))); // NOI18N
+        btn_Proveedores.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_usuario_1.png"))); // NOI18N
+        btn_Proveedores.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btn_Proveedores.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
+        btn_Materiales.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_usuario_2.png"))); // NOI18N
+        btn_Materiales.setText("PEDIDOS");
+        btn_Materiales.setActionCommand("JButtonAdm");
+        btn_Materiales.setBorderPainted(false);
+        btn_Materiales.setContentAreaFilled(false);
+        btn_Materiales.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_Materiales.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn_Materiales.setIconTextGap(-3);
+        btn_Materiales.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_usuario_3.png"))); // NOI18N
+        btn_Materiales.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_usuario_1.png"))); // NOI18N
+        btn_Materiales.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btn_Materiales.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
         jMenu1.setText("Menu");
 
         jMenuItem1.setText("Salir");
@@ -146,9 +174,13 @@ public class FramePrincipal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_Ventas, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btn_Admin, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btn_Proveedores)
+                            .addComponent(btn_Admin, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_Inventory, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btn_Inventory, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_Materiales))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -160,8 +192,14 @@ public class FramePrincipal extends javax.swing.JFrame {
                     .addComponent(btn_Clientes, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btn_Inventory)
-                    .addComponent(btn_Admin))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btn_Inventory)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_Materiales))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btn_Admin)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_Proveedores)))
                 .addContainerGap())
         );
 
@@ -251,6 +289,8 @@ public class FramePrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btn_Admin;
     private javax.swing.JButton btn_Clientes;
     private javax.swing.JButton btn_Inventory;
+    private javax.swing.JButton btn_Materiales;
+    private javax.swing.JButton btn_Proveedores;
     private javax.swing.JButton btn_Ventas;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
