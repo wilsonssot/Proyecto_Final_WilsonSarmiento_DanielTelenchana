@@ -45,7 +45,7 @@ public class FramePrincipal extends javax.swing.JFrame {
         btn_Inventory = new javax.swing.JButton();
         btn_Admin = new javax.swing.JButton();
         btn_Proveedores = new javax.swing.JButton();
-        btn_Materiales = new javax.swing.JButton();
+        btn_Pedidos = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -134,19 +134,29 @@ public class FramePrincipal extends javax.swing.JFrame {
         btn_Proveedores.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_usuario_1.png"))); // NOI18N
         btn_Proveedores.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btn_Proveedores.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btn_Proveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ProveedoresActionPerformed(evt);
+            }
+        });
 
-        btn_Materiales.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_usuario_2.png"))); // NOI18N
-        btn_Materiales.setText("PEDIDOS");
-        btn_Materiales.setActionCommand("JButtonAdm");
-        btn_Materiales.setBorderPainted(false);
-        btn_Materiales.setContentAreaFilled(false);
-        btn_Materiales.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btn_Materiales.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btn_Materiales.setIconTextGap(-3);
-        btn_Materiales.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_usuario_3.png"))); // NOI18N
-        btn_Materiales.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_usuario_1.png"))); // NOI18N
-        btn_Materiales.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btn_Materiales.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btn_Pedidos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_usuario_2.png"))); // NOI18N
+        btn_Pedidos.setText("PEDIDOS");
+        btn_Pedidos.setActionCommand("JButtonAdm");
+        btn_Pedidos.setBorderPainted(false);
+        btn_Pedidos.setContentAreaFilled(false);
+        btn_Pedidos.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_Pedidos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btn_Pedidos.setIconTextGap(-3);
+        btn_Pedidos.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_usuario_3.png"))); // NOI18N
+        btn_Pedidos.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_usuario_1.png"))); // NOI18N
+        btn_Pedidos.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btn_Pedidos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btn_Pedidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_PedidosActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("Menu");
 
@@ -180,7 +190,7 @@ public class FramePrincipal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btn_Inventory, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_Materiales))))
+                            .addComponent(btn_Pedidos))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -195,7 +205,7 @@ public class FramePrincipal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btn_Inventory)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_Materiales))
+                        .addComponent(btn_Pedidos))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btn_Admin)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -231,6 +241,14 @@ public class FramePrincipal extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         confirmarSalida();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void btn_PedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_PedidosActionPerformed
+        new Pedidos(this, true).setVisible(true);
+    }//GEN-LAST:event_btn_PedidosActionPerformed
+
+    private void btn_ProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ProveedoresActionPerformed
+       new Proveedores(this, true).setVisible(true);
+    }//GEN-LAST:event_btn_ProveedoresActionPerformed
 
     private void confirmarSalida() throws HeadlessException {
         // TODO add your handling code here:
@@ -289,7 +307,7 @@ public class FramePrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btn_Admin;
     private javax.swing.JButton btn_Clientes;
     private javax.swing.JButton btn_Inventory;
-    private javax.swing.JButton btn_Materiales;
+    private javax.swing.JButton btn_Pedidos;
     private javax.swing.JButton btn_Proveedores;
     private javax.swing.JButton btn_Ventas;
     private javax.swing.JMenu jMenu1;
