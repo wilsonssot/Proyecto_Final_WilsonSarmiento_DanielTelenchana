@@ -74,7 +74,7 @@ public class Clientes extends javax.swing.JDialog {
         jTextField_TelCli = new javax.swing.JTextField();
         btnAgregarCliente = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jTextField_Buscar = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -182,6 +182,12 @@ public class Clientes extends javax.swing.JDialog {
 
         jLabel6.setText("Buscar:");
 
+        jTextField_Buscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField_BuscarKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -205,7 +211,7 @@ public class Clientes extends javax.swing.JDialog {
                             .addComponent(jTextField_ApeCli)
                             .addComponent(jTextField_DirCli)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                                .addComponent(jTextField_Buscar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
                                 .addComponent(jTextField_TelCli, javax.swing.GroupLayout.Alignment.LEADING)))
                         .addGap(18, 18, 18)
                         .addComponent(btnModificarCliente)
@@ -244,10 +250,10 @@ public class Clientes extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -399,15 +405,7 @@ public class Clientes extends javax.swing.JDialog {
         jTextField_DirCli.setText("");
         jTextField_TelCli.setText("");
     }
-
-    private void btnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarClienteActionPerformed
-        // TODO add your handling code here:
-
-        new ClientesIngreso(null, true).setVisible(true);
-        cargarDatosClientes();
-    }//GEN-LAST:event_btnAgregarClienteActionPerformed
-
-    private void jTable_DatosClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_DatosClientesMouseClicked
+    private void mostrarValores() {
         // TODO add your handling code here:
         if (jTable_DatosClientes.getSelectedRow() != -1) {
             habilitarComponentes();
@@ -420,7 +418,45 @@ public class Clientes extends javax.swing.JDialog {
         } else {
             deshabilitarComponentes();
         }
+    }
+    
+    public void buscarDato() {
+        limpiarTabla();
+        try {
+            cn.Conectar();
+            String consulta = "SELECT * FROM CLIENTES WHERE APE_CLI LIKE " + "'" + jTextField_Buscar.getText() + "_%'";
+            st = cn.getConexion().prepareStatement(consulta);
+            rs = st.executeQuery(consulta);
+            String[] fila = new String[5];
+            while (rs.next()) {
+                fila[0] = rs.getString("CED_CLI");
+                fila[1] = rs.getString("NOM_CLI");
+                fila[2] = rs.getString("APE_CLI");
+                fila[3] = rs.getString("DIR_CLI");
+                fila[4] = rs.getString("TEL_CLI");
+                modeloTabla.addRow(fila);
+            }
+
+            rs.close();
+            st.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
+    private void btnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarClienteActionPerformed
+        // TODO add your handling code here:
+
+        new ClientesIngreso(null, true).setVisible(true);
+        cargarDatosClientes();
+    }//GEN-LAST:event_btnAgregarClienteActionPerformed
+
+    private void jTable_DatosClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_DatosClientesMouseClicked
+        mostrarValores();
     }//GEN-LAST:event_jTable_DatosClientesMouseClicked
+
+    
 
     private void jTextField_NomCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_NomCliKeyTyped
         // TODO add your handling code here:
@@ -447,6 +483,11 @@ public class Clientes extends javax.swing.JDialog {
 
 
     }//GEN-LAST:event_btnModificarClienteActionPerformed
+
+    private void jTextField_BuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_BuscarKeyReleased
+        // TODO add your handling code here:
+        buscarDato();
+    }//GEN-LAST:event_jTextField_BuscarKeyReleased
 
     /**
      * @param args the command line arguments
@@ -502,8 +543,8 @@ public class Clientes extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable_DatosClientes;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField_ApeCli;
+    private javax.swing.JTextField jTextField_Buscar;
     private javax.swing.JTextField jTextField_CedCli;
     private javax.swing.JTextField jTextField_DirCli;
     private javax.swing.JTextField jTextField_NomCli;

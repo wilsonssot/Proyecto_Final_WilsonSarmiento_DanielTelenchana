@@ -7,7 +7,10 @@ package ParaBDD;
 
 import ClasesSecundarias.Cliente;
 import ClasesSecundarias.Coneccion;
+import ClasesSecundarias.Metodos;
 import ClasesSecundarias.Usuario;
+import Formularios.UsuariosIngreso;
+import java.awt.HeadlessException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -59,6 +62,51 @@ public class Usuarios extends javax.swing.JDialog {
         modeloTabla.addColumn("Dirección");
         modeloTabla.addColumn("Sueldo");
         modeloTabla.addColumn("Teléfono");
+    }
+
+    private void limpiarTabla() {
+        for (int i = jTable_DatosUsuarios.getRowCount() - 1; i >= 0; i--) {
+            modeloTabla.removeRow(i);
+        }
+    }
+
+    public void actualizarClientes() {
+        limpiarTabla();
+        cargarDatosUsuarios();
+    }
+
+    private void actualizarUnDato() throws HeadlessException {
+        // TODO add your handling code here:
+        Cliente c = new Cliente();
+
+        if (jTextField_ApeUsu.getText().equals("")
+                || jTextField_NomUsu.getText().equals("")
+                || jTextField_DirUsu.getText().equals("")
+                || jTextField_TelUsu.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Campos sin llenar", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Object[] datos = {jTextField_CedUsu.getText(), jTextField_NomUsu.getText(), jTextField_ApeUsu.getText(),
+                jTextField_DirUsu.getText(), jTextField_SueUsu.getText(), jTextField_TelUsu.getText()};
+            try {
+                cn.Conectar();
+                String sql = "UPDATE EMPLEADOS SET "
+                        + "NOM_EMP = '" + datos[1].toString() + "' , "
+                        + "APE_EMP = '" + datos[2].toString() + "' , "
+                        + "DIR_EMP = '" + datos[3].toString() + "' , "
+                        + "SUE_EMP =" + Double.valueOf(datos[4].toString()) + ", "
+                        + "TEL_EMP = '" + datos[5].toString() + "' "
+                        + "WHERE CED_EMP = '" + datos[0].toString() + "'";
+                pst = cn.getConexion().prepareStatement(sql);
+                pst.executeUpdate();
+                limpiarCampos();
+                cargarDatosUsuarios();
+                deshabilitarComponentes();
+                actualizarClientes();
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al actualizar " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     public void cargarDatosUsuarios() {
@@ -117,18 +165,174 @@ public class Usuarios extends javax.swing.JDialog {
         return usuarios;
     }
 
+    public void buscarDato() {
+        limpiarTabla();
+        try {
+            cn.Conectar();
+            String consulta = "SELECT * FROM EMPLEADOS WHERE APE_EMP LIKE " + "'" + jTextField_Buscar.getText() + "_%'";
+            st = cn.getConexion().prepareStatement(consulta);
+            rs = st.executeQuery(consulta);
+            String[] fila = new String[6];
+            while (rs.next()) {
+                fila[0] = rs.getString("CED_EMP");
+                fila[1] = rs.getString("NOM_EMP");
+                fila[2] = rs.getString("APE_EMP");
+                fila[3] = rs.getString("DIR_EMP");
+                fila[4] = String.valueOf(rs.getDouble("SUE_EMP"));
+                fila[5] = rs.getString("TEL_EMP");
+                modeloTabla.addRow(fila);
+            }
+
+            rs.close();
+            st.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
+    public void habilitarComponentes() {
+        jTextField_ApeUsu.setEnabled(true);
+        jTextField_NomUsu.setEnabled(true);
+        jTextField_DirUsu.setEnabled(true);
+        jTextField_TelUsu.setEnabled(true);
+        jTextField_SueUsu.setEnabled(true);
+    }
+
+    public void deshabilitarComponentes() {
+        jTextField_ApeUsu.setEnabled(false);
+        jTextField_NomUsu.setEnabled(false);
+        jTextField_DirUsu.setEnabled(false);
+        jTextField_SueUsu.setEnabled(false);
+        jTextField_TelUsu.setEnabled(false);
+    }
+
+    public void limpiarCampos() {
+        jTextField_CedUsu.setText("");
+        jTextField_ApeUsu.setText("");
+        jTextField_NomUsu.setText("");
+        jTextField_DirUsu.setText("");
+        jTextField_SueUsu.setText("");
+        jTextField_TelUsu.setText("");
+    }
+
+    private void mostrarValores() {
+        // TODO add your handling code here:
+        if (jTable_DatosUsuarios.getSelectedRow() != -1) {
+            habilitarComponentes();
+            int fila = jTable_DatosUsuarios.getSelectedRow();
+            jTextField_CedUsu.setText(jTable_DatosUsuarios.getValueAt(fila, 0).toString());
+            jTextField_NomUsu.setText(jTable_DatosUsuarios.getValueAt(fila, 1).toString());
+            jTextField_ApeUsu.setText(jTable_DatosUsuarios.getValueAt(fila, 2).toString());
+            jTextField_DirUsu.setText(jTable_DatosUsuarios.getValueAt(fila, 3).toString());
+            jTextField_SueUsu.setText(jTable_DatosUsuarios.getValueAt(fila, 4).toString());
+            jTextField_TelUsu.setText(jTable_DatosUsuarios.getValueAt(fila, 5).toString());
+        } else {
+            deshabilitarComponentes();
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnAgregarUsuario = new javax.swing.JButton();
-        btnModificarUsuario = new javax.swing.JButton();
-        btnBuscarUsuario = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_DatosUsuarios = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jTextField_CedUsu = new javax.swing.JTextField();
+        jTextField_NomUsu = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField_ApeUsu = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jTextField_DirUsu = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jTextField_TelUsu = new javax.swing.JTextField();
+        jTextField_Buscar = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        btnAgregarUsuario = new javax.swing.JButton();
+        btnModificarUsuario = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jTextField_SueUsu = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Usuarios"));
+
+        jTable_DatosUsuarios.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Cédula", "Nombre", "Apellido", "Dirección", "Teléfono", "Cargo", "Sueldo"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jTable_DatosUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable_DatosUsuariosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTable_DatosUsuarios);
+
+        jLabel1.setText("Cédula:");
+
+        jTextField_CedUsu.setEnabled(false);
+
+        jTextField_NomUsu.setEnabled(false);
+        jTextField_NomUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_NomUsuKeyTyped(evt);
+            }
+        });
+
+        jLabel2.setText("Nombre:");
+
+        jLabel3.setText("Apellido:");
+
+        jTextField_ApeUsu.setEnabled(false);
+        jTextField_ApeUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_ApeUsuKeyTyped(evt);
+            }
+        });
+
+        jLabel4.setText("Dirección:");
+
+        jTextField_DirUsu.setEnabled(false);
+        jTextField_DirUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_DirUsuKeyTyped(evt);
+            }
+        });
+
+        jLabel5.setText("Teléfono:");
+
+        jTextField_TelUsu.setEnabled(false);
+        jTextField_TelUsu.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_TelUsuKeyTyped(evt);
+            }
+        });
+
+        jTextField_Buscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField_BuscarKeyReleased(evt);
+            }
+        });
+
+        jLabel6.setText("Buscar:");
 
         btnAgregarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_2.png"))); // NOI18N
         btnAgregarUsuario.setText("AGREGAR");
@@ -156,40 +360,15 @@ public class Usuarios extends javax.swing.JDialog {
         btnModificarUsuario.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_1.png"))); // NOI18N
         btnModificarUsuario.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnModificarUsuario.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
-        btnBuscarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_buscar_clientes_2.png"))); // NOI18N
-        btnBuscarUsuario.setText("BUSCAR");
-        btnBuscarUsuario.setBorderPainted(false);
-        btnBuscarUsuario.setContentAreaFilled(false);
-        btnBuscarUsuario.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnBuscarUsuario.setIconTextGap(-3);
-        btnBuscarUsuario.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_buscar_clientes_3.png"))); // NOI18N
-        btnBuscarUsuario.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_buscar_clientes_1.png"))); // NOI18N
-        btnBuscarUsuario.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btnBuscarUsuario.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Usuarios"));
-
-        jTable_DatosUsuarios.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Cédula", "Nombre", "Apellido", "Dirección", "Teléfono", "Cargo", "Sueldo"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+        btnModificarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarUsuarioActionPerformed(evt);
             }
         });
-        jScrollPane1.setViewportView(jTable_DatosUsuarios);
+
+        jLabel7.setText("Sueldo:");
+
+        jTextField_SueUsu.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -197,14 +376,70 @@ public class Usuarios extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jTextField_CedUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField_NomUsu)
+                                .addComponent(jTextField_ApeUsu)
+                                .addComponent(jTextField_DirUsu)
+                                .addComponent(jTextField_Buscar)
+                                .addComponent(jTextField_TelUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTextField_SueUsu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnModificarUsuario)
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addComponent(btnAgregarUsuario)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField_CedUsu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(jTextField_NomUsu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField_ApeUsu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jTextField_DirUsu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField_SueUsu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jTextField_TelUsu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnModificarUsuario)
+                    .addComponent(btnAgregarUsuario))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -214,14 +449,7 @@ public class Usuarios extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAgregarUsuario)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
-                        .addComponent(btnModificarUsuario)
-                        .addGap(72, 72, 72)
-                        .addComponent(btnBuscarUsuario)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -229,11 +457,6 @@ public class Usuarios extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBuscarUsuario)
-                    .addComponent(btnAgregarUsuario)
-                    .addComponent(btnModificarUsuario))
                 .addContainerGap())
         );
 
@@ -242,7 +465,44 @@ public class Usuarios extends javax.swing.JDialog {
 
     private void btnAgregarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarUsuarioActionPerformed
         // TODO add your handling code here:
+        new UsuariosIngreso(null, true).setVisible(true);
+        cargarDatosUsuarios();
+        
     }//GEN-LAST:event_btnAgregarUsuarioActionPerformed
+
+    private void jTextField_NomUsuKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_NomUsuKeyTyped
+        // TODO add your handling code here:
+        Metodos.validarLetras(evt, jTextField_NomUsu);
+    }//GEN-LAST:event_jTextField_NomUsuKeyTyped
+
+    private void jTextField_ApeUsuKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_ApeUsuKeyTyped
+        // TODO add your handling code here:
+        Metodos.validarLetras(evt, jTextField_ApeUsu);
+    }//GEN-LAST:event_jTextField_ApeUsuKeyTyped
+
+    private void jTextField_DirUsuKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_DirUsuKeyTyped
+        // TODO add your handling code here:
+        Metodos.validarLetras(evt, jTextField_DirUsu);
+    }//GEN-LAST:event_jTextField_DirUsuKeyTyped
+
+    private void jTextField_TelUsuKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_TelUsuKeyTyped
+        // TODO add your handling code here:
+        Metodos.validarTelefono(evt, jTextField_TelUsu);
+    }//GEN-LAST:event_jTextField_TelUsuKeyTyped
+
+    private void jTable_DatosUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_DatosUsuariosMouseClicked
+        // TODO add your handling code here:
+        mostrarValores();
+    }//GEN-LAST:event_jTable_DatosUsuariosMouseClicked
+
+    private void btnModificarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarUsuarioActionPerformed
+        // TODO add your handling code here:
+        actualizarUnDato();
+    }//GEN-LAST:event_btnModificarUsuarioActionPerformed
+
+    private void jTextField_BuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_BuscarKeyReleased
+        buscarDato();
+    }//GEN-LAST:event_jTextField_BuscarKeyReleased
 
     /**
      * @param args the command line arguments
@@ -291,10 +551,23 @@ public class Usuarios extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarUsuario;
-    private javax.swing.JButton btnBuscarUsuario;
     private javax.swing.JButton btnModificarUsuario;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable_DatosUsuarios;
+    private javax.swing.JTextField jTextField_ApeUsu;
+    private javax.swing.JTextField jTextField_Buscar;
+    private javax.swing.JTextField jTextField_CedUsu;
+    private javax.swing.JTextField jTextField_DirUsu;
+    private javax.swing.JTextField jTextField_NomUsu;
+    private javax.swing.JTextField jTextField_SueUsu;
+    private javax.swing.JTextField jTextField_TelUsu;
     // End of variables declaration//GEN-END:variables
 }
