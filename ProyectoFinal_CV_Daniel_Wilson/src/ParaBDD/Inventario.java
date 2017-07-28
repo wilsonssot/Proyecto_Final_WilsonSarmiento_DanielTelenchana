@@ -124,38 +124,29 @@ public class Inventario extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnAgregarCalzado = new javax.swing.JButton();
-        btnModificarCalzado = new javax.swing.JButton();
-        btnBuscarCalzado = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_Inventario = new javax.swing.JTable();
+        btnModificarProveedor = new javax.swing.JButton();
+        btnAgregarProveedor = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jTextField_Cod_Cal = new javax.swing.JTextField();
+        jTextField_Nom_Cal = new javax.swing.JTextField();
+        jTextField_Marca_Cal = new javax.swing.JTextField();
+        jTextField_Modelo_cal = new javax.swing.JTextField();
+        jTextField_Talla_Cal = new javax.swing.JTextField();
+        jTextField_Pre_Cal = new javax.swing.JTextField();
+        jTextField_Stock_Calz = new javax.swing.JTextField();
+        jTextField_Buscar = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        btnAgregarCalzado.setText("AGREGAR");
-        btnAgregarCalzado.setBorderPainted(false);
-        btnAgregarCalzado.setContentAreaFilled(false);
-        btnAgregarCalzado.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAgregarCalzado.setIconTextGap(-3);
-        btnAgregarCalzado.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btnAgregarCalzado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
-        btnModificarCalzado.setText("MODIFICAR");
-        btnModificarCalzado.setBorderPainted(false);
-        btnModificarCalzado.setContentAreaFilled(false);
-        btnModificarCalzado.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnModificarCalzado.setIconTextGap(-3);
-        btnModificarCalzado.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btnModificarCalzado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
-        btnBuscarCalzado.setText("BUSCAR");
-        btnBuscarCalzado.setBorderPainted(false);
-        btnBuscarCalzado.setContentAreaFilled(false);
-        btnBuscarCalzado.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnBuscarCalzado.setIconTextGap(-3);
-        btnBuscarCalzado.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btnBuscarCalzado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Inventario"));
 
@@ -180,21 +171,146 @@ public class Inventario extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(jTable_Inventario);
 
+        btnModificarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_2.png"))); // NOI18N
+        btnModificarProveedor.setText("MODIFICAR");
+        btnModificarProveedor.setBorderPainted(false);
+        btnModificarProveedor.setContentAreaFilled(false);
+        btnModificarProveedor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnModificarProveedor.setIconTextGap(-3);
+        btnModificarProveedor.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_3.png"))); // NOI18N
+        btnModificarProveedor.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_1.png"))); // NOI18N
+        btnModificarProveedor.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnModificarProveedor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
+        btnAgregarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_2.png"))); // NOI18N
+        btnAgregarProveedor.setText("AGREGAR");
+        btnAgregarProveedor.setBorderPainted(false);
+        btnAgregarProveedor.setContentAreaFilled(false);
+        btnAgregarProveedor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAgregarProveedor.setIconTextGap(-3);
+        btnAgregarProveedor.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_3.png"))); // NOI18N
+        btnAgregarProveedor.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_1.png"))); // NOI18N
+        btnAgregarProveedor.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnAgregarProveedor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+
+        jLabel1.setText("Código:");
+
+        jLabel2.setText("Nombre:");
+
+        jLabel3.setText("Marca:");
+
+        jLabel4.setText("Modelo:");
+
+        jLabel5.setText("Talla:");
+
+        jLabel6.setText("Precio:");
+
+        jLabel7.setText("Stock:");
+
+        jLabel8.setText("Buscar:");
+
+        jTextField_Cod_Cal.setEnabled(false);
+
+        jTextField_Nom_Cal.setEnabled(false);
+
+        jTextField_Marca_Cal.setEnabled(false);
+
+        jTextField_Modelo_cal.setEnabled(false);
+
+        jTextField_Talla_Cal.setEnabled(false);
+
+        jTextField_Pre_Cal.setEnabled(false);
+
+        jTextField_Stock_Calz.setEnabled(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextField_Cod_Cal, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField_Nom_Cal, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                                    .addComponent(jTextField_Marca_Cal))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jTextField_Pre_Cal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+                                        .addComponent(jTextField_Talla_Cal, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jTextField_Stock_Calz))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jTextField_Buscar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                                        .addComponent(jTextField_Modelo_cal)))
+                                .addGap(138, 138, 138)))
+                        .addComponent(btnModificarProveedor)
+                        .addGap(37, 37, 37)
+                        .addComponent(btnAgregarProveedor)
+                        .addGap(27, 27, 27)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField_Cod_Cal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jTextField_Nom_Cal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jTextField_Marca_Cal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jTextField_Modelo_cal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jTextField_Talla_Cal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jTextField_Pre_Cal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnModificarProveedor))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(jTextField_Stock_Calz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnAgregarProveedor))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -203,27 +319,15 @@ public class Inventario extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAgregarCalzado)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnModificarCalzado)
-                        .addGap(224, 224, 224)
-                        .addComponent(btnBuscarCalzado)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBuscarCalzado)
-                    .addComponent(btnAgregarCalzado)
-                    .addComponent(btnModificarCalzado))
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -275,11 +379,26 @@ public class Inventario extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregarCalzado;
-    private javax.swing.JButton btnBuscarCalzado;
-    private javax.swing.JButton btnModificarCalzado;
+    private javax.swing.JButton btnAgregarProveedor;
+    private javax.swing.JButton btnModificarProveedor;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable_Inventario;
+    private javax.swing.JTextField jTextField_Buscar;
+    private javax.swing.JTextField jTextField_Cod_Cal;
+    private javax.swing.JTextField jTextField_Marca_Cal;
+    private javax.swing.JTextField jTextField_Modelo_cal;
+    private javax.swing.JTextField jTextField_Nom_Cal;
+    private javax.swing.JTextField jTextField_Pre_Cal;
+    private javax.swing.JTextField jTextField_Stock_Calz;
+    private javax.swing.JTextField jTextField_Talla_Cal;
     // End of variables declaration//GEN-END:variables
 }
