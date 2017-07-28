@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import ClasesSecundarias.Pedido;
 import java.awt.HeadlessException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,8 +44,7 @@ public class Pedidos extends javax.swing.JDialog {
 
     };
 
-   // ArrayList<Pedido> lista = new ArrayList<Pedido>();
-
+    // ArrayList<Pedido> lista = new ArrayList<Pedido>();
     Coneccion cn = new Coneccion();
 
     PreparedStatement pst = null;
@@ -65,6 +65,15 @@ public class Pedidos extends javax.swing.JDialog {
         setearPrecioMaterial();
         deshabilitarCancelar();
     }
+    public void limpiarValores() {
+        jTextField_Cant_Material.setText("");
+        jTextField_Cod_Prov.setText("");
+        jTextField_Dir_Prov.setText("");
+        jTextField_Nom_Prov.setText("");
+        jLabel_Total_Pedido.setText("");
+        jTextField_Tel_Prov.setText("");
+
+    }
 
     public void establecerModeloTabla() {
         jTable_Pedidos.setModel(modeloTablaPedidos);
@@ -75,6 +84,7 @@ public class Pedidos extends javax.swing.JDialog {
         modeloTablaPedidos.addColumn("Valor/T");
 
     }
+
     public void deshabilitarCancelar() {
         boolean res;
 
@@ -105,6 +115,7 @@ public class Pedidos extends javax.swing.JDialog {
             jButton_LimpiarDatos.setEnabled(true);
         }
     }
+
     public void llenarDatosPedidos(Material producto) {
         Object[] prodPedido = new Object[5];
         prodPedido[0] = producto.getId();
@@ -122,18 +133,17 @@ public class Pedidos extends javax.swing.JDialog {
 
     }
 
-     private void AñadirMaterialTabla() throws HeadlessException {
+    private void AñadirMaterialTabla() throws HeadlessException {
         // TODO add your handling code here:
         if (!jTextField_Cant_Material.getText().equals("")) {
-           jButton_Cancelar_Pedido.setEnabled(true);
+            jButton_Cancelar_Pedido.setEnabled(true);
             jButton_Añadir_Pedido.setEnabled(true);
             Material productoPedido = ((Material) (jComboBox_Materiales.getSelectedItem()));
             llenarDatosPedidos(productoPedido);
+        }
+
     }
-    
-   }
-     
-     
+
     private void setearPrecioMaterial() {
         try {
             Material producto = (Material) jComboBox_Materiales.getSelectedItem();
@@ -147,7 +157,7 @@ public class Pedidos extends javax.swing.JDialog {
 
     }
 
-  /*  public void setearVariables() {
+    /* public void setearVariables() {
         for (int i = 0; i < lista.size(); i++) {
             codigo = lista.get(i).getCodigo();
             material = lista.get(i).getMaterial();
@@ -155,9 +165,9 @@ public class Pedidos extends javax.swing.JDialog {
             precio = lista.get(i).getPrecio();
             vTotal = lista.get(i).getTotal();
         }
-    }*/
+    }
 
-    /*  public void ingresoPedidos() throws SQLException {
+ /*  public void ingresoPedidos() throws SQLException {
         for (int i = 0; i < lista.size(); i++) {
             if (ValidarControlesIngresoPedidos()) {
                 setearVariables();
@@ -192,13 +202,16 @@ public class Pedidos extends javax.swing.JDialog {
         }
     }*/
     public void CargarDatosProveedor() {
+        Connection con;
+        Statement st;
+        ResultSet rs;
         try {
-            cn.Conectar();
+            con = cn.establecerDB();
             int cont = 0;
             String usu = "";
             String codigo = jTextField_Cod_Prov.getText();
             String query = "select * from proveedores where cod_prov = '" + codigo + "' ";
-            st = cn.getConexion().createStatement();
+            st = con.createStatement();
             rs = st.executeQuery(query);
             while (rs.next()) {
                 cont++;
@@ -213,6 +226,7 @@ public class Pedidos extends javax.swing.JDialog {
             }
             st.close();
             rs.close();
+            con.close();
             if (cont == 0) {
                 JOptionPane.showMessageDialog(null, "Proveedor no existe", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
@@ -234,6 +248,7 @@ public class Pedidos extends javax.swing.JDialog {
         //jButton_Añadir.setEnabled(true);
         jTable_Pedidos.setEnabled(true);
         jButton_RealizarPedido.setEnabled(true);
+        jButton_ELiminar_Ped.setEnabled(true);
         jButton_LimpiarDatos.setEnabled(true);
     }
 
@@ -251,6 +266,7 @@ public class Pedidos extends javax.swing.JDialog {
         //jTable_CarritoCompra.setEnabled(false);
         jButton_RealizarPedido.setEnabled(false);
         jButton_LimpiarDatos.setEnabled(false);
+        jButton_ELiminar_Ped.setEnabled(false);
 
     }
 
@@ -272,10 +288,13 @@ public class Pedidos extends javax.swing.JDialog {
         Vector<Material> material = new Vector<Material>();
         Material mat;
         jComboBox_Materiales.removeAllItems();
+        Connection con;
+        Statement st;
+        ResultSet rs;
         try {
 
-            cn.Conectar();
-            st = cn.getConexion().createStatement();
+            con = cn.establecerDB();
+            st = con.createStatement();
             String sql = "select * from materiales";
             rs = st.executeQuery(sql);
             while (rs.next()) {
@@ -288,7 +307,7 @@ public class Pedidos extends javax.swing.JDialog {
             }
             st.close();
             rs.close();
-
+            con.close();;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         } catch (java.lang.NullPointerException ex1) {
@@ -449,6 +468,11 @@ public class Pedidos extends javax.swing.JDialog {
         jLabel8.setText("$");
 
         jButton_ELiminar_Ped.setText("Eliminar");
+        jButton_ELiminar_Ped.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ELiminar_PedActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -538,6 +562,12 @@ public class Pedidos extends javax.swing.JDialog {
         });
 
         jButton_Cancelar_Pedido.setText("Cancelar");
+        jButton_Cancelar_Pedido.setEnabled(false);
+        jButton_Cancelar_Pedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_Cancelar_PedidoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -565,10 +595,10 @@ public class Pedidos extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(jLabel_Total_Pedido)
                     .addComponent(jButton_RealizarPedido)
-                    .addComponent(jButton_Cancelar_Pedido))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton_Cancelar_Pedido)
+                    .addComponent(jLabel_Total_Pedido, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel_FondoLayout = new javax.swing.GroupLayout(jPanel_Fondo);
@@ -612,7 +642,7 @@ public class Pedidos extends javax.swing.JDialog {
     private void jButton_Añadir_PedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Añadir_PedidoActionPerformed
         AñadirMaterialTabla();
 
-       /* if (ValidarControlesIngresoPedidos()) {
+        /* if (ValidarControlesIngresoPedidos()) {
 
             double total;
             total = Double.valueOf(jTextField_Cant_Material.getText()) * Double.valueOf(jTextField_Precio.getText());
@@ -636,18 +666,19 @@ public class Pedidos extends javax.swing.JDialog {
         }*/
     }//GEN-LAST:event_jButton_Añadir_PedidoActionPerformed
 
-    private void Facturar(){
+    private void Facturar() {
         // TODO add your handling code here:
-
+        Connection con;
+        PreparedStatement pst = null;
         int codDetalle = 0;
         LocalDate todayLocalDate = LocalDate.now(ZoneId.of("America/Bogota"));
         String codProv = jTextField_Cod_Prov.getText();
         double total = Double.valueOf(jLabel_Total_Pedido.getText());
         if (jTable_Pedidos.getRowCount() > 0) {
             try {
-                cn.Conectar();
+                con = cn.establecerDB();
                 String sql = "insert into pedidos (CED_EMP_P,COD_PROV_P,FEC_PED,TOTAL) values(?,?,?,?)";
-                pst = cn.getConexion().prepareStatement(sql, new String[]{"NUM_PED"});
+                pst = con.prepareStatement(sql, new String[]{"NUM_PED"});
                 pst.setString(1, Login.obtenerUsuarioConectado().getCedula());
                 pst.setString(2, codProv);
                 pst.setDate(3, java.sql.Date.valueOf(todayLocalDate));
@@ -663,11 +694,12 @@ public class Pedidos extends javax.swing.JDialog {
                     if (generatedKeys.next()) {
                         affectedRows = generatedKeys.getInt(1);
                         codDetalle = affectedRows;
-                        cn.getConexion().close();
+                        System.out.println(codDetalle);
                     } else {
                         throw new SQLException("Creating user failed, no ID obtained.");
                     }
                 }
+                con.close();
 
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido un problema " + ex.toString());
@@ -677,6 +709,11 @@ public class Pedidos extends javax.swing.JDialog {
         }
 
         paraTablaDetalle(codDetalle);
+        JOptionPane.showMessageDialog(null, "Pedido exitoso!...");
+        limpiarDatos();
+        deshabilitarCancelar();
+        deshabilitarComponentes();
+        limpiarTabla();
 
     }
 
@@ -684,28 +721,24 @@ public class Pedidos extends javax.swing.JDialog {
         //Enviar los datos a la tabla detalle
 
         //
+        Connection con;
+        PreparedStatement pst = null;
         if (codigo == 0) {
             try {
-                cn.Conectar();
+                con = cn.establecerDB();
                 String query = "insert into detalle_pedido (NUM_PED_P,COD_MAT_P,CANTIDAD) values (?,?,?)";
-                pst = cn.getConexion().prepareStatement(query);
-                boolean ok = false;
+                pst = con.prepareStatement(query);
                 int size = jTable_Pedidos.getRowCount();
                 for (int i = 0; i < size; i++) {
                     pst.setInt(1, codigo);
                     pst.setString(2, jTable_Pedidos.getValueAt(i, 0).toString());
                     pst.setInt(3, Integer.valueOf(jTable_Pedidos.getValueAt(i, 2).toString()));
                     pst.executeUpdate();
-                    ok = true;
                 }
-                if (ok) {
 
-                    JOptionPane.showMessageDialog(null, "Pedido exitoso!...");
-                    limpiarDatos();
-                    //deshabilitarCancelar();
-                    deshabilitarComponentes();
-                    limpiarTabla();
-                }
+                
+                pst.close();
+                con.close();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido un problema " + ex.toString());
             }
@@ -734,13 +767,14 @@ public class Pedidos extends javax.swing.JDialog {
         jTextField_Nom_Prov.setText("");
         jTextField_Dir_Prov.setText("");
         jTextField_Tel_Prov.setText("");
+        jLabel_Total_Pedido.setText("");
         jTextField_Cant_Material.setText("");
         jTextField_Precio.setText("");
         jComboBox_Materiales.setSelectedItem("");
     }
 
     private void jButton_RealizarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_RealizarPedidoActionPerformed
-       int preg = JOptionPane.showConfirmDialog(this, "Realizar Venta?...", "Facturando...", JOptionPane.YES_NO_OPTION);
+        int preg = JOptionPane.showConfirmDialog(this, "Realizar Pedido?...", "Facturando...", JOptionPane.YES_NO_OPTION);
         if (preg == 0) {
             Facturar();
         }
@@ -750,8 +784,32 @@ public class Pedidos extends javax.swing.JDialog {
         CargarDatosProveedor();
     }//GEN-LAST:event_jButton_Cargar_ProvActionPerformed
 
+    private void jButton_ELiminar_PedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ELiminar_PedActionPerformed
+        // TODO add your handling code here:
+        eliminarDeCarritoDeCompra();
+    }//GEN-LAST:event_jButton_ELiminar_PedActionPerformed
+
+    private void jButton_Cancelar_PedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Cancelar_PedidoActionPerformed
+        // TODO add your handling code here:
+        int confirmar = JOptionPane.showConfirmDialog(null, "Está seguro que desea cancelar la venta?...", "CANCELANDO VENTA", JOptionPane.YES_NO_OPTION);
+        if (confirmar == 0) {
+
+            limpiarValores();
+            limpiarTabla();
+            deshabilitarComponentes();
+        }
+    }//GEN-LAST:event_jButton_Cancelar_PedidoActionPerformed
+    
+    private void eliminarDeCarritoDeCompra() throws HeadlessException {
+        // TODO add your handling code here:
+        try {
+            modeloTablaPedidos.removeRow(jTable_Pedidos.getSelectedRow());
+        } catch (java.lang.ArrayIndexOutOfBoundsException ex) {
+            JOptionPane.showMessageDialog(null, "No ha seleccionado una fila");
+        }
+    }
     /**/
-   /*public void mostrar() {
+ /*public void mostrar() {
         String datos[][] = new String[lista.size()][5];
 
         for (int i = 0; i < lista.size(); i++) {
@@ -770,7 +828,6 @@ public class Pedidos extends javax.swing.JDialog {
         ));
 *
     }*/
-
     /**
      * @param args the command line arguments
      */

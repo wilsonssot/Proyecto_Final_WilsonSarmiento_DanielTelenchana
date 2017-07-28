@@ -324,6 +324,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Eliminar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_ELiminar_PedActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -365,11 +368,11 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel_Total_Pedido" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_RealizarPedido" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton_Cancelar_Pedido" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel_Total_Pedido" alignment="1" pref="27" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -423,7 +426,11 @@
             <Component class="javax.swing.JButton" name="jButton_Cancelar_Pedido">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cancelar"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_Cancelar_PedidoActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
