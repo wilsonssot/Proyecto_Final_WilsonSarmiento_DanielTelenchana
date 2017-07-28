@@ -247,7 +247,7 @@ public class FramePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_PedidosActionPerformed
 
     private void btn_ProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ProveedoresActionPerformed
-       new Proveedores(this, true).setVisible(true);
+       new ProveedoresIngreso(this, true).setVisible(true);
     }//GEN-LAST:event_btn_ProveedoresActionPerformed
 
     private void confirmarSalida() throws HeadlessException {

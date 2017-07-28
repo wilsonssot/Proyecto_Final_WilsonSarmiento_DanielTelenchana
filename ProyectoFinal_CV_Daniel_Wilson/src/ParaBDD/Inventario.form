@@ -83,15 +83,11 @@
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                          <Component id="jTextField_Pre_Cal" alignment="0" pref="49" max="32767" attributes="0"/>
-                                          <Component id="jTextField_Talla_Cal" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jTextField_Stock_Calz" max="32767" attributes="0"/>
-                                      </Group>
-                                      <Group type="103" groupAlignment="1" attributes="0">
-                                          <Component id="jTextField_Buscar" alignment="0" pref="180" max="32767" attributes="0"/>
-                                          <Component id="jTextField_Modelo_cal" max="32767" attributes="0"/>
-                                      </Group>
+                                      <Component id="jTextField_Pre_Cal" alignment="0" pref="49" max="32767" attributes="0"/>
+                                      <Component id="jTextField_Talla_Cal" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="jTextField_Stock_Calz" alignment="1" max="32767" attributes="0"/>
+                                      <Component id="jTextField_Buscar" alignment="0" pref="180" max="32767" attributes="0"/>
+                                      <Component id="jTextField_Modelo_cal" alignment="1" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="138" max="-2" attributes="0"/>
                               </Group>

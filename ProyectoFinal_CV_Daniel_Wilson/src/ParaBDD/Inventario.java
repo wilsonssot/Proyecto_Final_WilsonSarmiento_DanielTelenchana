@@ -8,6 +8,7 @@ package ParaBDD;
 import ClasesSecundarias.Coneccion;
 import ClasesSecundarias.Calzado;
 import ClasesSecundarias.Metodos;
+import Formularios.PoductosIngreso;
 import java.awt.HeadlessException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,15 +23,15 @@ import javax.swing.table.DefaultTableModel;
  * @author Usuario
  */
 public class Inventario extends javax.swing.JDialog {
-
+    
     DefaultTableModel modeloTabla = new DefaultTableModel() {
         @Override
         public boolean isCellEditable(int row, int column) {
             return false;
         }
-
+        
     };
-
+    
     Coneccion cn = new Coneccion();
     PreparedStatement pst = null;
     Statement st = null;
@@ -45,7 +46,7 @@ public class Inventario extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         establecerModeloTabla();
         cargarDatosCalzado();
-
+        
     }
 
     /**
@@ -63,18 +64,18 @@ public class Inventario extends javax.swing.JDialog {
         modeloTabla.addColumn("Precio Venta");
         modeloTabla.addColumn("Stock");
     }
-
+    
     private void limpiarTabla() {
         for (int i = jTable_Inventario.getRowCount() - 1; i >= 0; i--) {
             modeloTabla.removeRow(i);
         }
     }
-
+    
     public void actualizarCalzado() {
         limpiarTabla();
         cargarDatosCalzado();
     }
-
+    
     private void actualizarUnDato() throws HeadlessException {
         // TODO add your handling code here:
 
@@ -105,13 +106,13 @@ public class Inventario extends javax.swing.JDialog {
                 cargarDatosCalzado();
                 deshabilitarComponentes();
                 actualizarCalzado();
-
+                
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al actualizar " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-
+    
     public void cargarDatosCalzado() {
         Vector<Calzado> calzado = DatosCalzado();
         boolean existe = false;
@@ -124,7 +125,7 @@ public class Inventario extends javax.swing.JDialog {
             cal[4] = calzado.get(i).getTalla();
             cal[5] = calzado.get(i).getPrecio();
             cal[6] = calzado.get(i).getExistencia();
-
+            
             for (int j = 0; j < jTable_Inventario.getRowCount(); j++) {
                 if (cal[0].toString().equals(jTable_Inventario.getValueAt(j, 0))) {
                     existe = true;
@@ -136,15 +137,15 @@ public class Inventario extends javax.swing.JDialog {
             if (!existe) {
                 modeloTabla.addRow(cal);
             }
-
+            
         }
     }
-
+    
     public Vector<Calzado> DatosCalzado() {
         Vector<Calzado> calzados = new Vector<Calzado>();
         Calzado cal;
         try {
-
+            
             cn.Conectar();
             st = cn.getConexion().createStatement();
             String sql = "select * from producto_calzado";
@@ -169,7 +170,7 @@ public class Inventario extends javax.swing.JDialog {
         }
         return calzados;
     }
-
+    
     public void buscarDato() {
         limpiarTabla();
         try {
@@ -188,15 +189,16 @@ public class Inventario extends javax.swing.JDialog {
                 fila[6] = String.valueOf(rs.getDouble("EXISTENCIA"));
                 modeloTabla.addRow(fila);
             }
-
+            
             rs.close();
             st.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
-
+        
     }
-public void habilitarComponentes() {
+
+    public void habilitarComponentes() {
         jTextField_Nom_Cal.setEnabled(true);
         jTextField_Marca_Cal.setEnabled(true);
         jTextField_Modelo_cal.setEnabled(true);
@@ -204,8 +206,8 @@ public void habilitarComponentes() {
         jTextField_Pre_Cal.setEnabled(true);
         jTextField_Stock_Calz.setEnabled(true);
     }
-
- public void deshabilitarComponentes() {
+    
+    public void deshabilitarComponentes() {
         jTextField_Nom_Cal.setEnabled(false);
         jTextField_Marca_Cal.setEnabled(false);
         jTextField_Modelo_cal.setEnabled(false);
@@ -214,7 +216,7 @@ public void habilitarComponentes() {
         jTextField_Stock_Calz.setEnabled(false);
     }
     
-   public void limpiarCampos() {
+    public void limpiarCampos() {
         jTextField_Cod_Cal.setText("");
         jTextField_Nom_Cal.setText("");
         jTextField_Marca_Cal.setText("");
@@ -223,7 +225,7 @@ public void habilitarComponentes() {
         jTextField_Pre_Cal.setText("");
         jTextField_Stock_Calz.setText("");
     }
-   
+    
     private void mostrarValores() {
         // TODO add your handling code here:
         if (jTable_Inventario.getSelectedRow() != -1) {
@@ -235,13 +237,12 @@ public void habilitarComponentes() {
             jTextField_Modelo_cal.setText(jTable_Inventario.getValueAt(fila, 3).toString());
             jTextField_Talla_Cal.setText(jTable_Inventario.getValueAt(fila, 4).toString());
             jTextField_Pre_Cal.setText(jTable_Inventario.getValueAt(fila, 5).toString());
-            jTextField_Stock_Calz.setText(jTable_Inventario.getValueAt(fila, 5).toString());
+            jTextField_Stock_Calz.setText(jTable_Inventario.getValueAt(fila, 6).toString());
         } else {
             deshabilitarComponentes();
         }
     }
-
-   
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -504,7 +505,7 @@ public void habilitarComponentes() {
     }//GEN-LAST:event_jTextField_Marca_CalKeyTyped
 
     private void jTextField_Modelo_calKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Modelo_calKeyTyped
-       
+        
     }//GEN-LAST:event_jTextField_Modelo_calKeyTyped
 
     private void jTextField_Talla_CalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Talla_CalKeyTyped
@@ -512,7 +513,7 @@ public void habilitarComponentes() {
     }//GEN-LAST:event_jTextField_Talla_CalKeyTyped
 
     private void jTextField_Pre_CalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Pre_CalKeyTyped
-       Metodos.validarTelefono(evt, jTextField_Pre_Cal);
+        Metodos.validarTelefono(evt, jTextField_Pre_Cal);
     }//GEN-LAST:event_jTextField_Pre_CalKeyTyped
 
     private void jTextField_Stock_CalzKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Stock_CalzKeyTyped
@@ -520,12 +521,13 @@ public void habilitarComponentes() {
     }//GEN-LAST:event_jTextField_Stock_CalzKeyTyped
 
     private void btnModificarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarProveedorActionPerformed
-       actualizarUnDato();
-       
+        actualizarUnDato();
+        
     }//GEN-LAST:event_btnModificarProveedorActionPerformed
 
     private void btnAgregarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarProveedorActionPerformed
-       
+        new PoductosIngreso(null, true).setVisible(true);
+        cargarDatosCalzado();
     }//GEN-LAST:event_btnAgregarProveedorActionPerformed
 
     /**

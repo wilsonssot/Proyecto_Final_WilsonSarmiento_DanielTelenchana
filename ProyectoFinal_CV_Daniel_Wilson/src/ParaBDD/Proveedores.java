@@ -9,6 +9,7 @@ import ClasesSecundarias.Coneccion;
 import ClasesSecundarias.Metodos;
 import ClasesSecundarias.Proveedor;
 import java.awt.HeadlessException;
+import Formularios.ProveedoresIngreso;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -377,7 +378,7 @@ public class Proveedores extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -408,7 +409,7 @@ public class Proveedores extends javax.swing.JDialog {
     }//GEN-LAST:event_btnModificarProveedorActionPerformed
 
     private void btnAgregarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarProveedorActionPerformed
-        new Proveedores(null, true).setVisible(true);
+        new ProveedoresIngreso(null, true).setVisible(true);
         cargarDatosProveedores();
     }//GEN-LAST:event_btnAgregarProveedorActionPerformed
 

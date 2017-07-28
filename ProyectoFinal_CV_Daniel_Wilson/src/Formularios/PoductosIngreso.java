@@ -18,25 +18,24 @@ import javax.swing.JOptionPane;
  *
  * @author Leonardo
  */
-public class Productos extends javax.swing.JFrame {
+public class PoductosIngreso extends javax.swing.JDialog {
 
-    Coneccion cn = new Coneccion();
+     Coneccion cn = new Coneccion();
     ResultSet rs = null;
     PreparedStatement pst = null;
     Statement st = null;
     String codigo, nombre, marca, modelo;
     double talla, precio, stock;
     ArrayList listaProductos = new ArrayList();
-
     /**
-     * Creates new form Productos
+     * Creates new form PoductosIngreso
      */
-    public Productos() {
+    public PoductosIngreso(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
-        deshabilitarCancelar();
     }
-
-    public void deshabilitarCancelar() {
+    
+     public void deshabilitarCancelar() {
         jButtonCancelar.setEnabled(false);
 
         if (!jTextField_Nom_Pro.getText().equals("")) {
@@ -139,7 +138,7 @@ public class Productos extends javax.swing.JFrame {
         stock = Double.valueOf(jTextField_Stock_Pro.getText());
     }
 
-    public void ingresoUsuariosBase() throws SQLException {
+    public void ingresoProductosBase() throws SQLException {
         if (validarDatos()) {
             setearVariables();
             cn.Conectar();
@@ -157,8 +156,7 @@ public class Productos extends javax.swing.JFrame {
             deshabilitarCancelar();
             this.dispose();
         } else {
-            /*JOptionPane.showMessageDialog(null, "Vuelva a ingresar la cédula", "Cédula Errónea", JOptionPane.ERROR_MESSAGE);
-            jTextField_CedUsu.setText("");*/
+           JOptionPane.showMessageDialog(null, "");
         }
         pst.close();
 
@@ -191,7 +189,7 @@ public class Productos extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jTextField_Modelo_Pro = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("AGREGAR NUEVO PRODUCTO"));
 
@@ -292,7 +290,7 @@ public class Productos extends javax.swing.JFrame {
                             .addComponent(jTextField_Talla_Pro, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
                             .addComponent(jTextField_Stock_Pro)
                             .addComponent(jTextField_Pre_Pro))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -320,7 +318,7 @@ public class Productos extends javax.swing.JFrame {
                         .addComponent(jLabel5))
                     .addComponent(jTextField_Modelo_Pro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Guardar)
                     .addComponent(jButtonCancelar)))
@@ -339,8 +337,8 @@ public class Productos extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -364,7 +362,7 @@ public class Productos extends javax.swing.JFrame {
 
     private void jTextField_Pre_ProKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Pre_ProKeyTyped
         deshabilitarCancelar();
-        Metodos.validarLetras(evt, jTextField_Pre_Pro);
+        Metodos.validarTelefono(evt, jTextField_Pre_Pro);
     }//GEN-LAST:event_jTextField_Pre_ProKeyTyped
 
     private void jTextField_Stock_ProKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Stock_ProKeyTyped
@@ -376,7 +374,7 @@ public class Productos extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             if (validarDatos()) {
-                ingresoUsuariosBase();
+                ingresoProductosBase();
             } else {
 
             }
@@ -413,20 +411,27 @@ public class Productos extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PoductosIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PoductosIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PoductosIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PoductosIngreso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Productos().setVisible(true);
+                PoductosIngreso dialog = new PoductosIngreso(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }
