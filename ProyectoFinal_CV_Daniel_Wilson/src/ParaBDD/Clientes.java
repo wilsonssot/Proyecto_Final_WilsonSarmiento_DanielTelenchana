@@ -7,7 +7,9 @@ package ParaBDD;
 
 import ClasesSecundarias.Cliente;
 import ClasesSecundarias.Coneccion;
+import ClasesSecundarias.Metodos;
 import Formularios.ClientesIngreso;
+import java.awt.HeadlessException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -56,55 +58,25 @@ public class Clientes extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnAgregarCliente = new javax.swing.JButton();
-        btnModificarCliente = new javax.swing.JButton();
-        btnBuscarClientes = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_DatosClientes = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        btnModificarCliente = new javax.swing.JButton();
+        jTextField_CedCli = new javax.swing.JTextField();
+        jTextField_NomCli = new javax.swing.JTextField();
+        jTextField_ApeCli = new javax.swing.JTextField();
+        jTextField_DirCli = new javax.swing.JTextField();
+        jTextField_TelCli = new javax.swing.JTextField();
+        btnAgregarCliente = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        btnAgregarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_2.png"))); // NOI18N
-        btnAgregarCliente.setText("AGREGAR");
-        btnAgregarCliente.setBorderPainted(false);
-        btnAgregarCliente.setContentAreaFilled(false);
-        btnAgregarCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAgregarCliente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAgregarCliente.setIconTextGap(-3);
-        btnAgregarCliente.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_3.png"))); // NOI18N
-        btnAgregarCliente.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_1.png"))); // NOI18N
-        btnAgregarCliente.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btnAgregarCliente.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnAgregarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarClienteActionPerformed(evt);
-            }
-        });
-
-        btnModificarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_2.png"))); // NOI18N
-        btnModificarCliente.setText("MODIFICAR");
-        btnModificarCliente.setBorderPainted(false);
-        btnModificarCliente.setContentAreaFilled(false);
-        btnModificarCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnModificarCliente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnModificarCliente.setIconTextGap(-3);
-        btnModificarCliente.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_3.png"))); // NOI18N
-        btnModificarCliente.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_1.png"))); // NOI18N
-        btnModificarCliente.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btnModificarCliente.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
-        btnBuscarClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_buscar_clientes_2.png"))); // NOI18N
-        btnBuscarClientes.setText("BUSCAR");
-        btnBuscarClientes.setBorderPainted(false);
-        btnBuscarClientes.setContentAreaFilled(false);
-        btnBuscarClientes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBuscarClientes.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnBuscarClientes.setIconTextGap(-3);
-        btnBuscarClientes.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_buscar_clientes_3.png"))); // NOI18N
-        btnBuscarClientes.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_buscar_clientes_1.png"))); // NOI18N
-        btnBuscarClientes.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btnBuscarClientes.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Clientes"));
 
@@ -127,7 +99,88 @@ public class Clientes extends javax.swing.JDialog {
                 return types [columnIndex];
             }
         });
+        jTable_DatosClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable_DatosClientesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable_DatosClientes);
+
+        jLabel1.setText("Cédula:");
+
+        jLabel2.setText("Nombre:");
+
+        jLabel3.setText("Apellido:");
+
+        jLabel4.setText("Dirección:");
+
+        jLabel5.setText("Teléfono:");
+
+        btnModificarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_2.png"))); // NOI18N
+        btnModificarCliente.setText("MODIFICAR");
+        btnModificarCliente.setBorderPainted(false);
+        btnModificarCliente.setContentAreaFilled(false);
+        btnModificarCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnModificarCliente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnModificarCliente.setIconTextGap(-3);
+        btnModificarCliente.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_3.png"))); // NOI18N
+        btnModificarCliente.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_1.png"))); // NOI18N
+        btnModificarCliente.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnModificarCliente.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnModificarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarClienteActionPerformed(evt);
+            }
+        });
+
+        jTextField_CedCli.setEnabled(false);
+
+        jTextField_NomCli.setEnabled(false);
+        jTextField_NomCli.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_NomCliKeyTyped(evt);
+            }
+        });
+
+        jTextField_ApeCli.setEnabled(false);
+        jTextField_ApeCli.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_ApeCliKeyTyped(evt);
+            }
+        });
+
+        jTextField_DirCli.setEnabled(false);
+        jTextField_DirCli.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_DirCliKeyTyped(evt);
+            }
+        });
+
+        jTextField_TelCli.setEnabled(false);
+        jTextField_TelCli.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_TelCliKeyTyped(evt);
+            }
+        });
+
+        btnAgregarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_2.png"))); // NOI18N
+        btnAgregarCliente.setText("AGREGAR");
+        btnAgregarCliente.setBorderPainted(false);
+        btnAgregarCliente.setContentAreaFilled(false);
+        btnAgregarCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAgregarCliente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAgregarCliente.setIconTextGap(-3);
+        btnAgregarCliente.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_3.png"))); // NOI18N
+        btnAgregarCliente.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_1.png"))); // NOI18N
+        btnAgregarCliente.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnAgregarCliente.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAgregarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarClienteActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Buscar:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -135,15 +188,66 @@ public class Clientes extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextField_CedCli, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField_NomCli, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                            .addComponent(jTextField_ApeCli)
+                            .addComponent(jTextField_DirCli)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                                .addComponent(jTextField_TelCli, javax.swing.GroupLayout.Alignment.LEADING)))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnModificarCliente)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAgregarCliente)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField_CedCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(jTextField_NomCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField_ApeCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jTextField_DirCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jTextField_TelCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnModificarCliente)
+                    .addComponent(btnAgregarCliente))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -152,14 +256,7 @@ public class Clientes extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAgregarCliente)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
-                        .addComponent(btnModificarCliente)
-                        .addGap(86, 86, 86)
-                        .addComponent(btnBuscarClientes)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -167,11 +264,6 @@ public class Clientes extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBuscarClientes)
-                    .addComponent(btnAgregarCliente)
-                    .addComponent(btnModificarCliente))
                 .addContainerGap())
         );
 
@@ -185,6 +277,17 @@ public class Clientes extends javax.swing.JDialog {
         modeloTabla.addColumn("Apellido");
         modeloTabla.addColumn("Dirección");
         modeloTabla.addColumn("Teléfono");
+    }
+
+    public void actualizarClientes() {
+        limpiarTabla();
+        cargarDatosClientes();
+    }
+
+    private void limpiarTabla() {
+        for (int i = jTable_DatosClientes.getRowCount() - 1; i >= 0; i--) {
+            modeloTabla.removeRow(i);
+        }
     }
 
     public void cargarDatosClientes() {
@@ -201,7 +304,7 @@ public class Clientes extends javax.swing.JDialog {
                 if (cli[0].toString().equals(jTable_DatosClientes.getValueAt(j, 0))) {
                     existe = true;
                     break;
-                }else{
+                } else {
                     existe = false;
                 }
             }
@@ -233,6 +336,7 @@ public class Clientes extends javax.swing.JDialog {
             }
             st.close();
             rs.close();
+            cn.getConexion().close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         } catch (java.lang.NullPointerException ex1) {
@@ -241,12 +345,108 @@ public class Clientes extends javax.swing.JDialog {
         return clientes;
     }
 
+    private void actualizarUnDato() throws HeadlessException {
+        // TODO add your handling code here:
+        Cliente c = new Cliente();
+
+        if (jTextField_ApeCli.getText().equals("")
+                || jTextField_NomCli.getText().equals("")
+                || jTextField_DirCli.getText().equals("")
+                || jTextField_TelCli.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Campos sin llenar", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Object[] datos = {jTextField_CedCli.getText(), jTextField_NomCli.getText(), jTextField_ApeCli.getText(),
+                jTextField_DirCli.getText(), jTextField_TelCli.getText()};
+            try {
+                cn.Conectar();
+                String sql = "UPDATE CLIENTES SET "
+                        + "NOM_CLI = '" + datos[1].toString() + "' , "
+                        + "APE_CLI = '" + datos[2].toString() + "' , "
+                        + "DIR_CLI = '" + datos[3].toString() + "' , "
+                        + "TEL_CLI = '" + datos[4].toString() + "' "
+                        + "WHERE CED_CLI = '" + datos[0].toString() + "'";
+                pst = cn.getConexion().prepareStatement(sql);
+                pst.executeUpdate();
+                limpiarCampos();
+                cargarDatosClientes();
+                deshabilitarComponentes();
+                actualizarClientes();
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al actualizar " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    public void habilitarComponentes() {
+        jTextField_ApeCli.setEnabled(true);
+        jTextField_NomCli.setEnabled(true);
+        jTextField_DirCli.setEnabled(true);
+        jTextField_TelCli.setEnabled(true);
+    }
+
+    public void deshabilitarComponentes() {
+        jTextField_ApeCli.setEnabled(false);
+        jTextField_NomCli.setEnabled(false);
+        jTextField_DirCli.setEnabled(false);
+        jTextField_TelCli.setEnabled(false);
+    }
+
+    public void limpiarCampos() {
+        jTextField_CedCli.setText("");
+        jTextField_ApeCli.setText("");
+        jTextField_NomCli.setText("");
+        jTextField_DirCli.setText("");
+        jTextField_TelCli.setText("");
+    }
+
     private void btnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarClienteActionPerformed
         // TODO add your handling code here:
 
         new ClientesIngreso(null, true).setVisible(true);
         cargarDatosClientes();
     }//GEN-LAST:event_btnAgregarClienteActionPerformed
+
+    private void jTable_DatosClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_DatosClientesMouseClicked
+        // TODO add your handling code here:
+        if (jTable_DatosClientes.getSelectedRow() != -1) {
+            habilitarComponentes();
+            int fila = jTable_DatosClientes.getSelectedRow();
+            jTextField_CedCli.setText(jTable_DatosClientes.getValueAt(fila, 0).toString());
+            jTextField_NomCli.setText(jTable_DatosClientes.getValueAt(fila, 1).toString());
+            jTextField_ApeCli.setText(jTable_DatosClientes.getValueAt(fila, 2).toString());
+            jTextField_DirCli.setText(jTable_DatosClientes.getValueAt(fila, 3).toString());
+            jTextField_TelCli.setText(jTable_DatosClientes.getValueAt(fila, 4).toString());
+        } else {
+            deshabilitarComponentes();
+        }
+    }//GEN-LAST:event_jTable_DatosClientesMouseClicked
+
+    private void jTextField_NomCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_NomCliKeyTyped
+        // TODO add your handling code here:
+        Metodos.validarLetras(evt, jTextField_NomCli);
+    }//GEN-LAST:event_jTextField_NomCliKeyTyped
+
+    private void jTextField_ApeCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_ApeCliKeyTyped
+        // TODO add your handling code here:
+        Metodos.validarLetras(evt, jTextField_ApeCli);
+    }//GEN-LAST:event_jTextField_ApeCliKeyTyped
+
+    private void jTextField_DirCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_DirCliKeyTyped
+        // TODO add your handling code here:
+        Metodos.validarLetras(evt, jTextField_DirCli);
+    }//GEN-LAST:event_jTextField_DirCliKeyTyped
+
+    private void jTextField_TelCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_TelCliKeyTyped
+        // TODO add your handling code here:
+        Metodos.validarTelefono(evt, jTextField_TelCli);
+    }//GEN-LAST:event_jTextField_TelCliKeyTyped
+
+    private void btnModificarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarClienteActionPerformed
+        actualizarUnDato();
+
+
+    }//GEN-LAST:event_btnModificarClienteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -292,10 +492,21 @@ public class Clientes extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarCliente;
-    private javax.swing.JButton btnBuscarClientes;
     private javax.swing.JButton btnModificarCliente;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable_DatosClientes;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField_ApeCli;
+    private javax.swing.JTextField jTextField_CedCli;
+    private javax.swing.JTextField jTextField_DirCli;
+    private javax.swing.JTextField jTextField_NomCli;
+    private javax.swing.JTextField jTextField_TelCli;
     // End of variables declaration//GEN-END:variables
 }

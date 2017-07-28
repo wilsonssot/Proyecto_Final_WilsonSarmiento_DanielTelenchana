@@ -40,6 +40,7 @@ public class Ventas extends javax.swing.JDialog {
     };
 
     Coneccion cn = new Coneccion();
+    
     PreparedStatement pst = null;
     Statement st = null;
     ResultSet rs = null;
@@ -104,6 +105,7 @@ public class Ventas extends javax.swing.JDialog {
             }
             st.close();
             rs.close();
+            cn.getConexion().close();
             if (cont == 0) {
                 JOptionPane.showMessageDialog(null, "Cliente no existe", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
@@ -118,7 +120,6 @@ public class Ventas extends javax.swing.JDialog {
     public Vector<Calzado> datosParaComboBox() {
         Vector<Calzado> zapatos = new Vector<Calzado>();
         Calzado cal;
-        jComboBox_Marcas.removeAllItems();
         try {
 
             cn.Conectar();
@@ -138,7 +139,7 @@ public class Ventas extends javax.swing.JDialog {
             }
             st.close();
             rs.close();
-
+            cn.getConexion().close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         } catch (java.lang.NullPointerException ex1) {
@@ -149,7 +150,7 @@ public class Ventas extends javax.swing.JDialog {
     }
 
     public void llenarComboBox() {
-
+        jComboBox_Marcas.removeAllItems();
         Vector<Calzado> cal = datosParaComboBox();
         DefaultComboBoxModel modeloProductos = new DefaultComboBoxModel(cal);
 //        for (int i = 0; i < cal.size(); i++) {
@@ -702,12 +703,16 @@ public class Ventas extends javax.swing.JDialog {
     private void jTextField_DirCliKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_DirCliKeyTyped
         // TODO add your handling code here:
         Metodos.validarLetras(evt, jTextField_DirCli);
-
     }//GEN-LAST:event_jTextField_DirCliKeyTyped
 
     private void jButton_CargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CargarActionPerformed
         // TODO add your handling code here:
-        CargarDatosCedula();
+        if (Metodos.verificadorCédula(jTextField_CedCli.getText())) {
+            CargarDatosCedula();
+        } else {
+            JOptionPane.showMessageDialog(null, "Cédula Incorrecta", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_jButton_CargarActionPerformed
 
     private void jButton_LimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_LimpiarActionPerformed
@@ -769,10 +774,12 @@ public class Ventas extends javax.swing.JDialog {
                 llenarDatosVendidos(zapatoVendido);
             } else if (existencia > 12) {
                 JOptionPane.showMessageDialog(null, "Quedan " + existencia + " artículos de este tipo", "AVISO!", JOptionPane.WARNING_MESSAGE);
+                llenarDatosVendidos(zapatoVendido);
             } else if (existencia == 0) {
                 JOptionPane.showMessageDialog(null, "Ya no quedan artículos de este tipo!", "ERROR!...", JOptionPane.ERROR_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "Quedan pocos artículos de este tipo : " + existencia, "AVISO!", JOptionPane.WARNING_MESSAGE);
+                llenarDatosVendidos(zapatoVendido);
             }
         }
     }
@@ -780,15 +787,11 @@ public class Ventas extends javax.swing.JDialog {
     private void jButtonFacturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFacturarActionPerformed
         int preg = JOptionPane.showConfirmDialog(this, "Realizar Venta?...", "Facturando...", JOptionPane.YES_NO_OPTION);
         if (preg == 0) {
-            try {
-                Facturar();
-            } catch (SQLException ex) {
-                Logger.getLogger(Ventas.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Facturar();
         }
     }//GEN-LAST:event_jButtonFacturarActionPerformed
 
-    private void Facturar() throws HeadlessException, NumberFormatException, SQLException {
+    private void Facturar(){
         // TODO add your handling code here:
 
         int codDetalle = 0;
@@ -809,6 +812,7 @@ public class Ventas extends javax.swing.JDialog {
 
                 if (affectedRows == 0) {
                     throw new SQLException("Creating user failed, no rows affected.");
+                    
                 }
 
                 try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
@@ -816,12 +820,14 @@ public class Ventas extends javax.swing.JDialog {
                         affectedRows = generatedKeys.getInt(1);
                         codDetalle = affectedRows;
                         System.out.println(codDetalle);
-//                        cn.getConexion().close();
+                        pst.close();
+                        cn.getConexion().close();
                     } else {
                         throw new SQLException("Creating user failed, no ID obtained.");
+                        
                     }
                 }
-
+                
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido un problema " + ex.toString());
             }
@@ -830,6 +836,14 @@ public class Ventas extends javax.swing.JDialog {
         }
 
         paraTablaDetalle(codDetalle);
+        actualizarExistencias();
+
+        JOptionPane.showMessageDialog(null, "Venta exitosa!...");
+        //////////////////////////////////////////
+        limpiarValores();
+        deshabilitarCancelar();
+        deshabilitarComponentes();
+        limpiarTabla();
 
     }
 
@@ -838,32 +852,67 @@ public class Ventas extends javax.swing.JDialog {
 
         //
         if (codigo != 0) {
+            int size = jTable_CarritoCompra.getRowCount();
             try {
                 cn.Conectar();
                 String query = "insert into detalle_venta (NUM_VER,COD_PRO_V,CANTIDAD) values (?,?,?)";
                 pst = cn.getConexion().prepareStatement(query);
-                boolean ok = false;
-                int size = jTable_CarritoCompra.getRowCount();
+
                 for (int i = 0; i < size; i++) {
                     pst.setInt(1, codigo);
                     pst.setString(2, jTable_CarritoCompra.getValueAt(i, 0).toString());
                     pst.setInt(3, Integer.valueOf(jTable_CarritoCompra.getValueAt(i, 2).toString()));
                     pst.executeUpdate();
-                    ok = true;
                 }
-                if (ok) {
-
-                    JOptionPane.showMessageDialog(null, "Venta exitosa!...");
-                    limpiarValores();
-                    deshabilitarCancelar();
-                    deshabilitarComponentes();
-                    limpiarTabla();
-                }
+                pst.close();
+                cn.getConexion().close();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido un problema " + ex.toString());
             }
-        }
 
+        } else {
+            JOptionPane.showMessageDialog(null, "No se ha realizado la venta", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        
+
+    }
+
+    private void actualizarExistencias() {
+        //obtener zapatosVendidos actual
+        Vector<Calzado> zapatos = datosParaComboBox();
+        Vector<Calzado> zapatosVendidos = new Vector<Calzado>();
+        int codZap;
+        for (int k = 0; k < zapatos.size(); k++) {
+            codZap = zapatos.get(k).getId();
+            for (int n = 0; n < jTable_CarritoCompra.getRowCount(); n++) {
+                if (codZap == Integer.valueOf(jTable_CarritoCompra.getValueAt(n, 0).toString())) {
+                    zapatosVendidos.add(zapatos.get(k));
+                }
+            }
+
+        }
+        // Actualizar existencia del producto
+        try {
+            cn.Conectar();
+            int existencia, cantidad;
+            for (int j = 0; j < jTable_CarritoCompra.getRowCount(); j++) {
+
+                existencia = zapatosVendidos.get(j).getExistencia();
+                cantidad = Integer.valueOf(jTable_CarritoCompra.getValueAt(j, 2).toString());
+                existencia = existencia - cantidad;
+                String sql = "update producto_calzado set"
+                        + "EXISTENCIA="+existencia+""
+                        + "where COD_PRO=' " + zapatosVendidos.get(j).getId() + "' ";
+                pst.setInt(1, existencia);
+                pst.executeUpdate();
+            }
+            pst.close();
+            cn.getConexion().close();
+
+        } catch (SQLException sqEx) {
+            JOptionPane.showMessageDialog(null, "Ha ocurrido un problema " + sqEx.toString());
+        }
     }
 
 
