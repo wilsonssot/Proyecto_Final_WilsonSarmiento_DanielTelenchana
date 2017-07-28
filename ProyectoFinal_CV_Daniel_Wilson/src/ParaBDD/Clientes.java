@@ -353,7 +353,6 @@ public class Clientes extends javax.swing.JDialog {
 
     private void actualizarUnDato() throws HeadlessException {
         // TODO add your handling code here:
-        Cliente c = new Cliente();
 
         if (jTextField_ApeCli.getText().equals("")
                 || jTextField_NomCli.getText().equals("")
@@ -373,6 +372,7 @@ public class Clientes extends javax.swing.JDialog {
                         + "WHERE CED_CLI = '" + datos[0].toString() + "'";
                 pst = cn.getConexion().prepareStatement(sql);
                 pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Datos actualizados correctamente!...");
                 limpiarCampos();
                 cargarDatosClientes();
                 deshabilitarComponentes();

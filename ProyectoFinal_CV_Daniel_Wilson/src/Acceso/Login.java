@@ -45,6 +45,7 @@ public class Login extends javax.swing.JFrame {
     private void obtenerUsuarios() {
         Usuario usu;
         try {
+            
             cn.Conectar();
             st = cn.getConexion().createStatement();
             String query = "select * from empleados";
@@ -65,6 +66,8 @@ public class Login extends javax.swing.JFrame {
 
         }
     }
+    
+    
 
     public static Usuario obtenerUsuarioConectado() {
         Usuario conectado = null;

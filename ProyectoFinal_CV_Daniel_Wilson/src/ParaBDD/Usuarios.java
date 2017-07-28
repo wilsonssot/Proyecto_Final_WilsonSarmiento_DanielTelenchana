@@ -77,7 +77,6 @@ public class Usuarios extends javax.swing.JDialog {
 
     private void actualizarUnDato() throws HeadlessException {
         // TODO add your handling code here:
-        Cliente c = new Cliente();
 
         if (jTextField_ApeUsu.getText().equals("")
                 || jTextField_NomUsu.getText().equals("")
@@ -98,6 +97,7 @@ public class Usuarios extends javax.swing.JDialog {
                         + "WHERE CED_EMP = '" + datos[0].toString() + "'";
                 pst = cn.getConexion().prepareStatement(sql);
                 pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Datos actualizados correctamente!...");
                 limpiarCampos();
                 cargarDatosUsuarios();
                 deshabilitarComponentes();
