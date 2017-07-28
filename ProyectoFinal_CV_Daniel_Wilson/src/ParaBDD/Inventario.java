@@ -91,7 +91,7 @@ public class Inventario extends javax.swing.JDialog {
                 jTextField_Modelo_cal.getText(), jTextField_Talla_Cal.getText(), jTextField_Pre_Cal.getText(), jTextField_Stock_Calz.getText()};
             try {
                 cn.Conectar();
-                String sql = "UPDATE EMPLEADOS SET "
+                String sql = "UPDATE PRODUCTO_CALZADO SET "
                         + "NOM_PRO = '" + datos[1].toString() + "' , "
                         + "MAR_PRO = '" + datos[2].toString() + "' , "
                         + "MOD_PRO = '" + datos[3].toString() + "' , "
@@ -127,7 +127,7 @@ public class Inventario extends javax.swing.JDialog {
             cal[6] = calzado.get(i).getExistencia();
             
             for (int j = 0; j < jTable_Inventario.getRowCount(); j++) {
-                if (cal[0].toString().equals(jTable_Inventario.getValueAt(j, 0))) {
+                if (Integer.valueOf(cal[0].toString()) == Integer.valueOf(jTable_Inventario.getValueAt(j, 0).toString())) {
                     existe = true;
                     break;
                 } else {

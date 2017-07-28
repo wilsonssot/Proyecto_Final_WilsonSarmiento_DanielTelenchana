@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
  */
 public class PoductosIngreso extends javax.swing.JDialog {
 
-     Coneccion cn = new Coneccion();
+    Coneccion cn = new Coneccion();
     ResultSet rs = null;
     PreparedStatement pst = null;
     Statement st = null;
@@ -33,6 +33,7 @@ public class PoductosIngreso extends javax.swing.JDialog {
     public PoductosIngreso(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
     }
     
      public void deshabilitarCancelar() {

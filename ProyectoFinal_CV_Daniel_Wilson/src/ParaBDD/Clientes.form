@@ -72,10 +72,8 @@
                               <Component id="jTextField_NomCli" alignment="0" pref="190" max="32767" attributes="0"/>
                               <Component id="jTextField_ApeCli" alignment="0" max="32767" attributes="0"/>
                               <Component id="jTextField_DirCli" alignment="0" max="32767" attributes="0"/>
-                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="jTextField_Buscar" alignment="0" pref="95" max="32767" attributes="0"/>
-                                  <Component id="jTextField_TelCli" alignment="0" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="jTextField_Buscar" alignment="0" pref="95" max="32767" attributes="0"/>
+                              <Component id="jTextField_TelCli" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="btnModificarCliente" min="-2" max="-2" attributes="0"/>
