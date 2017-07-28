@@ -41,6 +41,8 @@ public class Inventario extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(parent);
+        establecerModeloTabla();
+        cargarDatosCalzado();
 
     }
 
@@ -54,6 +56,7 @@ public class Inventario extends javax.swing.JDialog {
         modeloTabla.addColumn("Codigo");
         modeloTabla.addColumn("Nombre");
         modeloTabla.addColumn("Marca");
+        modeloTabla.addColumn("Modelo");
         modeloTabla.addColumn("Talla");
         modeloTabla.addColumn("Precio Venta");
         modeloTabla.addColumn("Stock");
@@ -62,15 +65,15 @@ public class Inventario extends javax.swing.JDialog {
     public void cargarDatosCalzado() {
         Vector<Calzado> calzado = DatosCalzado();
         boolean existe = false;
-        Object[] cal = new Object[6];
+        Object[] cal = new Object[7];
         for (int i = 0; i < calzado.size(); i++) {
             cal[0] = calzado.get(i).getId();
             cal[1] = calzado.get(i).getNombre();
             cal[2] = calzado.get(i).getMarca();
             cal[3] = calzado.get(i).getModelo();
             cal[4] = calzado.get(i).getTalla();
-            cal[4] = calzado.get(i).getPrecio();
-            cal[5] = calzado.get(i).getExistencia();
+            cal[5] = calzado.get(i).getPrecio();
+            cal[6] = calzado.get(i).getExistencia();
 
             for (int j = 0; j < jTable_Inventario.getRowCount(); j++) {
                 if (cal[0].toString().equals(jTable_Inventario.getValueAt(j, 0))) {
@@ -104,7 +107,7 @@ public class Inventario extends javax.swing.JDialog {
                 cal.setModelo(rs.getString(4));
                 cal.setTalla(rs.getString(5));
                 cal.setPrecio(rs.getFloat(6));
-                cal.setExistencia(rs.getInt(6));
+                cal.setExistencia(rs.getInt(7));
                 usuarios.add(cal);
             }
             st.close();
