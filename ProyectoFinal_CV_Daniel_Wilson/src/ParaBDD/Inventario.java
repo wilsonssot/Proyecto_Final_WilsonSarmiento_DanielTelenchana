@@ -7,6 +7,9 @@ package ParaBDD;
 
 import ClasesSecundarias.Coneccion;
 import ClasesSecundarias.Calzado;
+import ClasesSecundarias.Metodos;
+import Formularios.PoductosIngreso;
+import java.awt.HeadlessException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,15 +23,15 @@ import javax.swing.table.DefaultTableModel;
  * @author Usuario
  */
 public class Inventario extends javax.swing.JDialog {
-
+    
     DefaultTableModel modeloTabla = new DefaultTableModel() {
         @Override
         public boolean isCellEditable(int row, int column) {
             return false;
         }
-
+        
     };
-
+    
     Coneccion cn = new Coneccion();
     PreparedStatement pst = null;
     Statement st = null;
@@ -41,7 +44,9 @@ public class Inventario extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(parent);
-
+        establecerModeloTabla();
+        cargarDatosCalzado();
+        
     }
 
     /**
@@ -54,24 +59,73 @@ public class Inventario extends javax.swing.JDialog {
         modeloTabla.addColumn("Codigo");
         modeloTabla.addColumn("Nombre");
         modeloTabla.addColumn("Marca");
+        modeloTabla.addColumn("Modelo");
         modeloTabla.addColumn("Talla");
         modeloTabla.addColumn("Precio Venta");
         modeloTabla.addColumn("Stock");
     }
+    
+    private void limpiarTabla() {
+        for (int i = jTable_Inventario.getRowCount() - 1; i >= 0; i--) {
+            modeloTabla.removeRow(i);
+        }
+    }
+    
+    public void actualizarCalzado() {
+        limpiarTabla();
+        cargarDatosCalzado();
+    }
+    
+    private void actualizarUnDato() throws HeadlessException {
+        // TODO add your handling code here:
 
+        if (jTextField_Nom_Cal.getText().equals("")
+                || jTextField_Marca_Cal.getText().equals("")
+                || jTextField_Modelo_cal.getText().equals("")
+                || jTextField_Talla_Cal.getText().equals("")
+                || jTextField_Pre_Cal.getText().equals("")
+                || jTextField_Stock_Calz.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Campos sin llenar", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Object[] datos = {jTextField_Cod_Cal.getText(), jTextField_Nom_Cal.getText(), jTextField_Marca_Cal.getText(),
+                jTextField_Modelo_cal.getText(), jTextField_Talla_Cal.getText(), jTextField_Pre_Cal.getText(), jTextField_Stock_Calz.getText()};
+            try {
+                cn.Conectar();
+                String sql = "UPDATE EMPLEADOS SET "
+                        + "NOM_PRO = '" + datos[1].toString() + "' , "
+                        + "MAR_PRO = '" + datos[2].toString() + "' , "
+                        + "MOD_PRO = '" + datos[3].toString() + "' , "
+                        + "COD_TALL_P = '" + datos[4].toString() + "' , "
+                        + "PRE_PRO =" + Double.valueOf(datos[4].toString()) + ", "
+                        + "EXISTENCIA =" + Double.valueOf(datos[4].toString()) + "' "
+                        + "WHERE CED_EMP = '" + datos[0].toString() + "'";
+                pst = cn.getConexion().prepareStatement(sql);
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Datos actualizados correctamente!...");
+                limpiarCampos();
+                cargarDatosCalzado();
+                deshabilitarComponentes();
+                actualizarCalzado();
+                
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al actualizar " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
     public void cargarDatosCalzado() {
         Vector<Calzado> calzado = DatosCalzado();
         boolean existe = false;
-        Object[] cal = new Object[6];
+        Object[] cal = new Object[7];
         for (int i = 0; i < calzado.size(); i++) {
             cal[0] = calzado.get(i).getId();
             cal[1] = calzado.get(i).getNombre();
             cal[2] = calzado.get(i).getMarca();
             cal[3] = calzado.get(i).getModelo();
             cal[4] = calzado.get(i).getTalla();
-            cal[4] = calzado.get(i).getPrecio();
-            cal[5] = calzado.get(i).getExistencia();
-
+            cal[5] = calzado.get(i).getPrecio();
+            cal[6] = calzado.get(i).getExistencia();
+            
             for (int j = 0; j < jTable_Inventario.getRowCount(); j++) {
                 if (cal[0].toString().equals(jTable_Inventario.getValueAt(j, 0))) {
                     existe = true;
@@ -83,15 +137,15 @@ public class Inventario extends javax.swing.JDialog {
             if (!existe) {
                 modeloTabla.addRow(cal);
             }
-
+            
         }
     }
-
+    
     public Vector<Calzado> DatosCalzado() {
-        Vector<Calzado> usuarios = new Vector<Calzado>();
+        Vector<Calzado> calzados = new Vector<Calzado>();
         Calzado cal;
         try {
-
+            
             cn.Conectar();
             st = cn.getConexion().createStatement();
             String sql = "select * from producto_calzado";
@@ -104,8 +158,8 @@ public class Inventario extends javax.swing.JDialog {
                 cal.setModelo(rs.getString(4));
                 cal.setTalla(rs.getString(5));
                 cal.setPrecio(rs.getFloat(6));
-                cal.setExistencia(rs.getInt(6));
-                usuarios.add(cal);
+                cal.setExistencia(rs.getInt(7));
+                calzados.add(cal);
             }
             st.close();
             rs.close();
@@ -114,45 +168,108 @@ public class Inventario extends javax.swing.JDialog {
         } catch (java.lang.NullPointerException ex1) {
             JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex1.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
-        return usuarios;
+        return calzados;
+    }
+    
+    public void buscarDato() {
+        limpiarTabla();
+        try {
+            cn.Conectar();
+            String consulta = "SELECT * FROM PRODUCTO_CALZADO WHERE MOD_PRO LIKE " + "'" + jTextField_Buscar.getText() + "_%'";
+            st = cn.getConexion().prepareStatement(consulta);
+            rs = st.executeQuery(consulta);
+            String[] fila = new String[7];
+            while (rs.next()) {
+                fila[0] = rs.getString("COD_PRO");
+                fila[1] = rs.getString("NOM_PRO");
+                fila[2] = rs.getString("MAR_PRO");
+                fila[3] = rs.getString("MOD_PRO");
+                fila[4] = rs.getString("COD_TALL_P");
+                fila[5] = String.valueOf(rs.getDouble("PRE_PRO"));
+                fila[6] = String.valueOf(rs.getDouble("EXISTENCIA"));
+                modeloTabla.addRow(fila);
+            }
+            
+            rs.close();
+            st.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        
     }
 
+    public void habilitarComponentes() {
+        jTextField_Nom_Cal.setEnabled(true);
+        jTextField_Marca_Cal.setEnabled(true);
+        jTextField_Modelo_cal.setEnabled(true);
+        jTextField_Talla_Cal.setEnabled(true);
+        jTextField_Pre_Cal.setEnabled(true);
+        jTextField_Stock_Calz.setEnabled(true);
+    }
+    
+    public void deshabilitarComponentes() {
+        jTextField_Nom_Cal.setEnabled(false);
+        jTextField_Marca_Cal.setEnabled(false);
+        jTextField_Modelo_cal.setEnabled(false);
+        jTextField_Talla_Cal.setEnabled(false);
+        jTextField_Pre_Cal.setEnabled(false);
+        jTextField_Stock_Calz.setEnabled(false);
+    }
+    
+    public void limpiarCampos() {
+        jTextField_Cod_Cal.setText("");
+        jTextField_Nom_Cal.setText("");
+        jTextField_Marca_Cal.setText("");
+        jTextField_Modelo_cal.setText("");
+        jTextField_Talla_Cal.setText("");
+        jTextField_Pre_Cal.setText("");
+        jTextField_Stock_Calz.setText("");
+    }
+    
+    private void mostrarValores() {
+        // TODO add your handling code here:
+        if (jTable_Inventario.getSelectedRow() != -1) {
+            habilitarComponentes();
+            int fila = jTable_Inventario.getSelectedRow();
+            jTextField_Cod_Cal.setText(jTable_Inventario.getValueAt(fila, 0).toString());
+            jTextField_Nom_Cal.setText(jTable_Inventario.getValueAt(fila, 1).toString());
+            jTextField_Marca_Cal.setText(jTable_Inventario.getValueAt(fila, 2).toString());
+            jTextField_Modelo_cal.setText(jTable_Inventario.getValueAt(fila, 3).toString());
+            jTextField_Talla_Cal.setText(jTable_Inventario.getValueAt(fila, 4).toString());
+            jTextField_Pre_Cal.setText(jTable_Inventario.getValueAt(fila, 5).toString());
+            jTextField_Stock_Calz.setText(jTable_Inventario.getValueAt(fila, 6).toString());
+        } else {
+            deshabilitarComponentes();
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnAgregarCalzado = new javax.swing.JButton();
-        btnModificarCalzado = new javax.swing.JButton();
-        btnBuscarCalzado = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_Inventario = new javax.swing.JTable();
+        btnModificarProveedor = new javax.swing.JButton();
+        btnAgregarProveedor = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jTextField_Cod_Cal = new javax.swing.JTextField();
+        jTextField_Nom_Cal = new javax.swing.JTextField();
+        jTextField_Marca_Cal = new javax.swing.JTextField();
+        jTextField_Modelo_cal = new javax.swing.JTextField();
+        jTextField_Talla_Cal = new javax.swing.JTextField();
+        jTextField_Pre_Cal = new javax.swing.JTextField();
+        jTextField_Stock_Calz = new javax.swing.JTextField();
+        jTextField_Buscar = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        btnAgregarCalzado.setText("AGREGAR");
-        btnAgregarCalzado.setBorderPainted(false);
-        btnAgregarCalzado.setContentAreaFilled(false);
-        btnAgregarCalzado.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAgregarCalzado.setIconTextGap(-3);
-        btnAgregarCalzado.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btnAgregarCalzado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
-        btnModificarCalzado.setText("MODIFICAR");
-        btnModificarCalzado.setBorderPainted(false);
-        btnModificarCalzado.setContentAreaFilled(false);
-        btnModificarCalzado.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnModificarCalzado.setIconTextGap(-3);
-        btnModificarCalzado.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btnModificarCalzado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
-        btnBuscarCalzado.setText("BUSCAR");
-        btnBuscarCalzado.setBorderPainted(false);
-        btnBuscarCalzado.setContentAreaFilled(false);
-        btnBuscarCalzado.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnBuscarCalzado.setIconTextGap(-3);
-        btnBuscarCalzado.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btnBuscarCalzado.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Inventario"));
 
@@ -177,21 +294,186 @@ public class Inventario extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(jTable_Inventario);
 
+        btnModificarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_2.png"))); // NOI18N
+        btnModificarProveedor.setText("MODIFICAR");
+        btnModificarProveedor.setBorderPainted(false);
+        btnModificarProveedor.setContentAreaFilled(false);
+        btnModificarProveedor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnModificarProveedor.setIconTextGap(-3);
+        btnModificarProveedor.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_3.png"))); // NOI18N
+        btnModificarProveedor.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_editar_cliente_1.png"))); // NOI18N
+        btnModificarProveedor.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnModificarProveedor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnModificarProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarProveedorActionPerformed(evt);
+            }
+        });
+
+        btnAgregarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_2.png"))); // NOI18N
+        btnAgregarProveedor.setText("AGREGAR");
+        btnAgregarProveedor.setBorderPainted(false);
+        btnAgregarProveedor.setContentAreaFilled(false);
+        btnAgregarProveedor.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAgregarProveedor.setIconTextGap(-3);
+        btnAgregarProveedor.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_3.png"))); // NOI18N
+        btnAgregarProveedor.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Menu/boton_agregar_cliente_1.png"))); // NOI18N
+        btnAgregarProveedor.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnAgregarProveedor.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAgregarProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarProveedorActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Código:");
+
+        jLabel2.setText("Nombre:");
+
+        jLabel3.setText("Marca:");
+
+        jLabel4.setText("Modelo:");
+
+        jLabel5.setText("Talla:");
+
+        jLabel6.setText("Precio:");
+
+        jLabel7.setText("Stock:");
+
+        jLabel8.setText("Buscar:");
+
+        jTextField_Cod_Cal.setEnabled(false);
+
+        jTextField_Nom_Cal.setEnabled(false);
+        jTextField_Nom_Cal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Nom_CalKeyTyped(evt);
+            }
+        });
+
+        jTextField_Marca_Cal.setEnabled(false);
+        jTextField_Marca_Cal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Marca_CalKeyTyped(evt);
+            }
+        });
+
+        jTextField_Modelo_cal.setEnabled(false);
+        jTextField_Modelo_cal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Modelo_calKeyTyped(evt);
+            }
+        });
+
+        jTextField_Talla_Cal.setEnabled(false);
+        jTextField_Talla_Cal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Talla_CalKeyTyped(evt);
+            }
+        });
+
+        jTextField_Pre_Cal.setEnabled(false);
+        jTextField_Pre_Cal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Pre_CalKeyTyped(evt);
+            }
+        });
+
+        jTextField_Stock_Calz.setEnabled(false);
+        jTextField_Stock_Calz.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField_Stock_CalzKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextField_Cod_Cal, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField_Nom_Cal, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                                    .addComponent(jTextField_Marca_Cal))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jTextField_Pre_Cal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+                                        .addComponent(jTextField_Talla_Cal, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jTextField_Stock_Calz))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jTextField_Buscar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                                        .addComponent(jTextField_Modelo_cal)))
+                                .addGap(138, 138, 138)))
+                        .addComponent(btnModificarProveedor)
+                        .addGap(37, 37, 37)
+                        .addComponent(btnAgregarProveedor)
+                        .addGap(27, 27, 27)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField_Cod_Cal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jTextField_Nom_Cal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jTextField_Marca_Cal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jTextField_Modelo_cal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jTextField_Talla_Cal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jTextField_Pre_Cal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnModificarProveedor))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(jTextField_Stock_Calz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jTextField_Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnAgregarProveedor))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -200,31 +482,53 @@ public class Inventario extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAgregarCalzado)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnModificarCalzado)
-                        .addGap(224, 224, 224)
-                        .addComponent(btnBuscarCalzado)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBuscarCalzado)
-                    .addComponent(btnAgregarCalzado)
-                    .addComponent(btnModificarCalzado))
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextField_Nom_CalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Nom_CalKeyTyped
+        Metodos.validarLetras(evt, jTextField_Nom_Cal);
+    }//GEN-LAST:event_jTextField_Nom_CalKeyTyped
+
+    private void jTextField_Marca_CalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Marca_CalKeyTyped
+        Metodos.validarLetras(evt, jTextField_Marca_Cal);
+    }//GEN-LAST:event_jTextField_Marca_CalKeyTyped
+
+    private void jTextField_Modelo_calKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Modelo_calKeyTyped
+        
+    }//GEN-LAST:event_jTextField_Modelo_calKeyTyped
+
+    private void jTextField_Talla_CalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Talla_CalKeyTyped
+        Metodos.validarTelefono(evt, jTextField_Talla_Cal);
+    }//GEN-LAST:event_jTextField_Talla_CalKeyTyped
+
+    private void jTextField_Pre_CalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Pre_CalKeyTyped
+        Metodos.validarTelefono(evt, jTextField_Pre_Cal);
+    }//GEN-LAST:event_jTextField_Pre_CalKeyTyped
+
+    private void jTextField_Stock_CalzKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_Stock_CalzKeyTyped
+        Metodos.validarTelefono(evt, jTextField_Stock_Calz);
+    }//GEN-LAST:event_jTextField_Stock_CalzKeyTyped
+
+    private void btnModificarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarProveedorActionPerformed
+        actualizarUnDato();
+        
+    }//GEN-LAST:event_btnModificarProveedorActionPerformed
+
+    private void btnAgregarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarProveedorActionPerformed
+        new PoductosIngreso(null, true).setVisible(true);
+        cargarDatosCalzado();
+    }//GEN-LAST:event_btnAgregarProveedorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -272,11 +576,26 @@ public class Inventario extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregarCalzado;
-    private javax.swing.JButton btnBuscarCalzado;
-    private javax.swing.JButton btnModificarCalzado;
+    private javax.swing.JButton btnAgregarProveedor;
+    private javax.swing.JButton btnModificarProveedor;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable_Inventario;
+    private javax.swing.JTextField jTextField_Buscar;
+    private javax.swing.JTextField jTextField_Cod_Cal;
+    private javax.swing.JTextField jTextField_Marca_Cal;
+    private javax.swing.JTextField jTextField_Modelo_cal;
+    private javax.swing.JTextField jTextField_Nom_Cal;
+    private javax.swing.JTextField jTextField_Pre_Cal;
+    private javax.swing.JTextField jTextField_Stock_Calz;
+    private javax.swing.JTextField jTextField_Talla_Cal;
     // End of variables declaration//GEN-END:variables
 }
