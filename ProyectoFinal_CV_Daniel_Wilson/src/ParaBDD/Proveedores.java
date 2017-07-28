@@ -43,6 +43,8 @@ public class Proveedores extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(parent);
+        establecerModeloTabla();
+        cargarDatosProveedores();
     }
 
     /**

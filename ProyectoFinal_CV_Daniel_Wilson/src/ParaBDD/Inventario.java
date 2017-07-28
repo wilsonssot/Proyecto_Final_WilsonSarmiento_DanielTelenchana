@@ -7,6 +7,7 @@ package ParaBDD;
 
 import ClasesSecundarias.Coneccion;
 import ClasesSecundarias.Calzado;
+import java.awt.HeadlessException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -62,6 +63,54 @@ public class Inventario extends javax.swing.JDialog {
         modeloTabla.addColumn("Stock");
     }
 
+    private void limpiarTabla() {
+        for (int i = jTable_Inventario.getRowCount() - 1; i >= 0; i--) {
+            modeloTabla.removeRow(i);
+        }
+    }
+
+    public void actualizarCalzado() {
+        limpiarTabla();
+        cargarDatosCalzado();
+    }
+
+    private void actualizarUnDato() throws HeadlessException {
+        // TODO add your handling code here:
+
+        if (jTextField_Nom_Cal.getText().equals("")
+                || jTextField_Marca_Cal.getText().equals("")
+                || jTextField_Modelo_cal.getText().equals("")
+                || jTextField_Talla_Cal.getText().equals("")
+                || jTextField_Pre_Cal.getText().equals("")
+                || jTextField_Stock_Calz.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Campos sin llenar", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Object[] datos = {jTextField_Cod_Cal.getText(), jTextField_Nom_Cal.getText(), jTextField_Marca_Cal.getText(),
+                jTextField_Modelo_cal.getText(), jTextField_Talla_Cal.getText(), jTextField_Pre_Cal.getText(), jTextField_Stock_Calz.getText()};
+            try {
+                cn.Conectar();
+                String sql = "UPDATE EMPLEADOS SET "
+                        + "NOM_PRO = '" + datos[1].toString() + "' , "
+                        + "MAR_PRO = '" + datos[2].toString() + "' , "
+                        + "MOD_PRO = '" + datos[3].toString() + "' , "
+                        + "COD_TALL_P = '" + datos[4].toString() + "' , "
+                        + "PRE_PRO =" + Double.valueOf(datos[4].toString()) + ", "
+                        + "EXISTENCIA =" + Double.valueOf(datos[4].toString()) + "' "
+                        + "WHERE CED_EMP = '" + datos[0].toString() + "'";
+                pst = cn.getConexion().prepareStatement(sql);
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Datos actualizados correctamente!...");
+                limpiarCampos();
+                cargarDatosCalzado();
+                deshabilitarComponentes();
+                actualizarCalzado();
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al actualizar " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
     public void cargarDatosCalzado() {
         Vector<Calzado> calzado = DatosCalzado();
         boolean existe = false;
@@ -91,7 +140,7 @@ public class Inventario extends javax.swing.JDialog {
     }
 
     public Vector<Calzado> DatosCalzado() {
-        Vector<Calzado> usuarios = new Vector<Calzado>();
+        Vector<Calzado> calzados = new Vector<Calzado>();
         Calzado cal;
         try {
 
@@ -108,7 +157,7 @@ public class Inventario extends javax.swing.JDialog {
                 cal.setTalla(rs.getString(5));
                 cal.setPrecio(rs.getFloat(6));
                 cal.setExistencia(rs.getInt(7));
-                usuarios.add(cal);
+                calzados.add(cal);
             }
             st.close();
             rs.close();
@@ -117,9 +166,81 @@ public class Inventario extends javax.swing.JDialog {
         } catch (java.lang.NullPointerException ex1) {
             JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex1.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
-        return usuarios;
+        return calzados;
     }
 
+    public void buscarDato() {
+        limpiarTabla();
+        try {
+            cn.Conectar();
+            String consulta = "SELECT * FROM PRODUCTO_CALZADO WHERE MOD_PRO LIKE " + "'" + jTextField_Buscar.getText() + "_%'";
+            st = cn.getConexion().prepareStatement(consulta);
+            rs = st.executeQuery(consulta);
+            String[] fila = new String[7];
+            while (rs.next()) {
+                fila[0] = rs.getString("COD_PRO");
+                fila[1] = rs.getString("NOM_PRO");
+                fila[2] = rs.getString("MAR_PRO");
+                fila[3] = rs.getString("MOD_PRO");
+                fila[4] = rs.getString("COD_TALL_P");
+                fila[5] = String.valueOf(rs.getDouble("PRE_PRO"));
+                fila[6] = String.valueOf(rs.getDouble("EXISTENCIA"));
+                modeloTabla.addRow(fila);
+            }
+
+            rs.close();
+            st.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error : " + ex.toString(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+public void habilitarComponentes() {
+        jTextField_Nom_Cal.setEnabled(true);
+        jTextField_Marca_Cal.setEnabled(true);
+        jTextField_Modelo_cal.setEnabled(true);
+        jTextField_Talla_Cal.setEnabled(true);
+        jTextField_Pre_Cal.setEnabled(true);
+        jTextField_Stock_Calz.setEnabled(true);
+    }
+
+ public void deshabilitarComponentes() {
+        jTextField_Nom_Cal.setEnabled(false);
+        jTextField_Marca_Cal.setEnabled(false);
+        jTextField_Modelo_cal.setEnabled(false);
+        jTextField_Talla_Cal.setEnabled(false);
+        jTextField_Pre_Cal.setEnabled(false);
+        jTextField_Stock_Calz.setEnabled(false);
+    }
+    
+   public void limpiarCampos() {
+        jTextField_Cod_Cal.setText("");
+        jTextField_Nom_Cal.setText("");
+        jTextField_Marca_Cal.setText("");
+        jTextField_Modelo_cal.setText("");
+        jTextField_Talla_Cal.setText("");
+        jTextField_Pre_Cal.setText("");
+        jTextField_Stock_Calz.setText("");
+    }
+   
+    private void mostrarValores() {
+        // TODO add your handling code here:
+        if (jTable_Inventario.getSelectedRow() != -1) {
+            habilitarComponentes();
+            int fila = jTable_Inventario.getSelectedRow();
+            jTextField_Cod_Cal.setText(jTable_Inventario.getValueAt(fila, 0).toString());
+            jTextField_Nom_Cal.setText(jTable_Inventario.getValueAt(fila, 1).toString());
+            jTextField_Marca_Cal.setText(jTable_Inventario.getValueAt(fila, 2).toString());
+            jTextField_Modelo_cal.setText(jTable_Inventario.getValueAt(fila, 3).toString());
+            jTextField_Talla_Cal.setText(jTable_Inventario.getValueAt(fila, 4).toString());
+            jTextField_Pre_Cal.setText(jTable_Inventario.getValueAt(fila, 5).toString());
+            jTextField_Stock_Calz.setText(jTable_Inventario.getValueAt(fila, 5).toString());
+        } else {
+            deshabilitarComponentes();
+        }
+    }
+
+   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
