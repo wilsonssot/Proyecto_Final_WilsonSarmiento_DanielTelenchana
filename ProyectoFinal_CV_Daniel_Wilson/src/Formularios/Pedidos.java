@@ -59,8 +59,11 @@ public class Pedidos extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(parent);
         deshabilitarComponentes();
+        deshabilitarCancelar();
+        establecerModeloTabla();
         llenarComboBox();
         setearPrecioMaterial();
+        deshabilitarCancelar();
     }
 
     public void establecerModeloTabla() {
@@ -71,6 +74,36 @@ public class Pedidos extends javax.swing.JDialog {
         modeloTablaPedidos.addColumn("Valor/U");
         modeloTablaPedidos.addColumn("Valor/T");
 
+    }
+    public void deshabilitarCancelar() {
+        boolean res;
+
+        if (jTextField_Nom_Prov.getText().equals("")) {
+            res = true;
+        } else {
+            res = false;
+        }
+        if (jTextField_Dir_Prov.getText().equals("")) {
+            res = true;
+        } else {
+            res = false;
+        }
+        if (jTextField_Cod_Prov.getText().equals("")) {
+            res = true;
+        } else {
+            res = false;
+        }
+        if (jTextField_Tel_Prov.getText().equals("")) {
+            res = true;
+        } else {
+            res = false;
+        }
+
+        if (res) {
+            jButton_LimpiarDatos.setEnabled(false);
+        } else {
+            jButton_LimpiarDatos.setEnabled(true);
+        }
     }
     public void llenarDatosPedidos(Material producto) {
         Object[] prodPedido = new Object[5];
@@ -94,7 +127,6 @@ public class Pedidos extends javax.swing.JDialog {
         if (!jTextField_Cant_Material.getText().equals("")) {
            jButton_Cancelar_Pedido.setEnabled(true);
             jButton_Añadir_Pedido.setEnabled(true);
-           int existencia;
             Material productoPedido = ((Material) (jComboBox_Materiales.getSelectedItem()));
             llenarDatosPedidos(productoPedido);
     }
@@ -578,7 +610,7 @@ public class Pedidos extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_Añadir_PedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Añadir_PedidoActionPerformed
-        // AñadirMaterialTabla();
+        AñadirMaterialTabla();
 
        /* if (ValidarControlesIngresoPedidos()) {
 
@@ -604,7 +636,7 @@ public class Pedidos extends javax.swing.JDialog {
         }*/
     }//GEN-LAST:event_jButton_Añadir_PedidoActionPerformed
 
-    private void Facturar() throws HeadlessException, NumberFormatException, SQLException {
+    private void Facturar(){
         // TODO add your handling code here:
 
         int codDetalle = 0;
